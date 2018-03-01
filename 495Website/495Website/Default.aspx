@@ -5,7 +5,7 @@
     <div class="jumbotron">
         <h1>Crimson Clubs</h1>
         <p class="lead">Crimson Clubs is a mobile/web application desgined to help clubs and intramurals keep track of statistics and schedules.</p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+        <p><a href="About.aspx" class="btn btn-primary btn-lg">About Us &raquo;</a></p>
     </div>
 
     <div class="row">
@@ -15,7 +15,7 @@
                 Please click to obtain Crimson Clubs deliverables
             </p>
             <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301948">Deliverables &raquo;</a>
+                <a class="btn btn-default" href="Deliverables.aspx">Deliverables &raquo;</a>
             </p>
         </div>     
     </div>
