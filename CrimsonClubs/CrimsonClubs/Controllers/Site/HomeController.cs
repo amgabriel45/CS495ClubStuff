@@ -4,10 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace CrimsonClubs.Controllers
+namespace CrimsonClubs.Controllers.Site
 {
-    public class HomeController : Controller
+    public class HomeController : CCSiteController
     {
+        [HttpGet, Route]
         public ActionResult Index()
         {
             return View();
