@@ -52,7 +52,7 @@
             <div class="modal-body">
                 <div class="container">
                     <div id="bottomHalf">
-                        <input type="hidden" id="GrantId" data-field="GrantId" />
+                        <input type="hidden" id="ClubId" data-field="ClubId" />
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
                                 <div class="form-group form-material floating" data-plugin="formMaterial">
@@ -113,36 +113,25 @@
 
 @section scripts {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-    @*<script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
-        <script type="text/javascript" src="~/Content/site/commonPageScripts.js"></script>
+    <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
+        @*@<script type="text/javascript" src="~/Content/site/commonPageScripts.js"></script>
         <script type="text/javascript" src="~/Content/site/modalPageScripts.js"></script>*@
 
     <script type="text/javascript">
         $(document).ready(function () {
             $("#statusFilter").select2();
-            // page is ready
-            $('#calendar').fullCalendar({
-                // calendar properties
-            })
+            $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
         });
         var clients = [
-            { "Name": "Basketball", "Married": "Group Name" },
-            { "Name": "Football", "Married": true },
-            { "Name": "Golf", "Married": false },
-            { "Name": "Ultimate Frisbee", "Married": true },
-            { "Name": "Soccer", "Married": false }
-        ];
-
-        var countries = [
-            { Name: "", Id: 0 },
-            { Name: "United States", Id: 1 },
-            { Name: "Canada", Id: 2 },
-            { Name: "United Kingdom", Id: 3 }
+            { "Name": "Basketball", "Group": "Group Name", "Description": "This is a test" },
+            { "Name": "Football", "Group": "Big Team" },
+            { "Name": "Golf", "Group": "Bigger Team" },
+            { "Name": "Ultimate Frisbee", "Group": "Team" },
+            { "Name": "Soccer", "Group": "Team Team" }
         ];
 
         $("#jsGrid").jsGrid({
             width: "100%",
-            // height: "100%",
 
             inserting: false,
             editing: false,
@@ -152,19 +141,97 @@
 
             fields: [
                 { name: "Name", type: "text", width: 150, validate: "required", align: "center" },
-                //{ name: "Members", type: "number", width: 50, title: "# of Members" },
-                //{ name: "Address", type: "text", width: 200 },
-                //{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
-                { name: "Married", type: "text", title: "Group", align: "center" },
+                { name: "Group", type: "text", title: "Group", align: "center" },
                 {
                     type: "control", width: 65,
                     itemTemplate: function (value, item) {
                         var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
 
                         var $customButton = $("<i class=\"site-menu-icon md-calendar\" aria-hidden=\"true\"></i>")
-                            // .text("Schedule")
                             .click(function (e) {
                                 $('#mainModal').modal('toggle');
+                                $('#calendar').fullCalendar('today');
+                                $('#ClubName').removeClass('empty');
+                                $('#ClubName').val(item.Name);
+                                $('#Description').removeClass('empty');
+                                $('#Description').val(item.Description);
+
+                                var myCalendar = $('#calendar');
+                                myCalendar.fullCalendar({
+                                    defaultView: 'month',
+                                    defaultDate: '2018-03-12',
+                                    contentHeight: 500,
+                                    eventColor: '#9E1B32',
+                                    eventTextColor: '#FFFFFF',
+                                    eventRender: function (eventObj, $el) {
+                                        $el.popover({
+                                            title: eventObj.title,
+                                            content: eventObj.description,
+                                            trigger: 'hover',
+                                            placement: 'top',
+                                            container: 'body'
+                                        });
+                                    },
+
+                                    events: [
+                                        {
+                                            title: 'All Day Event Footaball Tourney',
+                                            description: 'Football Tour',
+                                            start: '2018-03-01'
+                                        },
+                                        {
+                                            title: 'Long Event',
+                                            description: 'description for Long Event',
+                                            start: '2018-03-07',
+                                            end: '2018-03-10'
+                                        },
+                                        {
+                                            id: 999,
+                                            title: 'Repeating Event',
+                                            description: 'description for Repeating Event',
+                                            start: '2018-03-09T16:00:00'
+                                        },
+                                        {
+                                            id: 999,
+                                            title: 'Repeating Event',
+                                            description: 'description for Repeating Event',
+                                            start: '2018-03-16T16:00:00'
+                                        },
+                                        {
+                                            title: 'Conference',
+                                            description: 'description for Conference',
+                                            start: '2018-03-11',
+                                            end: '2018-03-13'
+                                        },
+                                        {
+                                            title: 'Meeting',
+                                            description: 'description for Meeting',
+                                            start: '2018-03-12T10:30:00',
+                                            end: '2018-03-12T12:30:00'
+                                        },
+                                        {
+                                            title: 'Lunch',
+                                            description: 'description for Lunch',
+                                            start: '2018-03-12T12:00:00'
+                                        },
+                                        {
+                                            title: 'Meeting',
+                                            description: 'description for Meeting',
+                                            start: '2018-03-12T14:30:00'
+                                        },
+                                        {
+                                            title: 'Birthday Party',
+                                            description: 'description for Birthday Party',
+                                            start: '2018-03-13T07:00:00'
+                                        },
+                                        {
+                                            title: 'Click for Google',
+                                            description: 'description for Click for Google',
+                                            url: 'http://google.com/',
+                                            start: '2018-03-28'
+                                        }
+                                    ]
+                                })
                             });
 
                         return $customButton;
@@ -173,193 +240,12 @@
             ]
         });
 
-        
-        $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
         $("#createButton").click(function () {
             $('#mainModal').modal('toggle');
         });
         $("#cancelButton").click(function () {
             $('#mainModal').modal('toggle');
         });
-
-                   // $("#creatButton").on
-                            //$(document).ready(function () {
-                            //    $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
-                            //    $('#statusFilter').select2({ minimumResultsForSearch: Infinity });
-                            //});
-
-
-
-                            //var setupGrid = function () {
-
-                            //    //populate selects
-                            //    $.each(CFSRemark.getPeople(), function (i, item) {
-                            //        $('#PIId').append($('<option>', {
-                            //            value: item.id,
-                            //            text: item.text
-                            //        }));
-                            //    });
-                            //    $.each(CFSRemark.getPeople(), function (i, item) {
-                            //        $('#MAD').append($('<option>', {
-                            //            value: item.id,
-                            //            text: item.text
-                            //        }));
-                            //    });
-                            //    $.each(CFSRemark.getFundingSources(), function (i, item) {
-                            //        $('#SourceAgency').append($('<option>', {
-                            //            value: item.id,
-                            //            text: item.text
-                            //        }));
-                            //    });
-                            //    $.each(CFSRemark.getZoho(), function (i, item) {
-                            //        $('#ZohoName').append($('<option>', {
-                            //            value: item.id,
-                            //            text: item.text
-                            //        }));
-                            //    });
-                            //    $('#createButton').click(function () {
-                            //        $('#mainModal').one('CFS.page.showEdit', function () {
-                            //            $('#ServiceCenterGrant').iCheck('check');
-                            //        });
-
-                            //    });
-
-                            //    var fields = [
-                            //        { field: "Id", selector: "#GrantId", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "GrantNumber", selector: "#GrantNumber", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "Description", selector: "#Description", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "StartDate", selector: "#StartDate", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "EndDate", selector: "#EndDate", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "Amount", selector: "#Amount", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "PercentOverhead", selector: "#Overhead", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "BannerAccount", selector: "#BannerAccount", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "ProposalNumber", selector: "#ProposalNumber", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "QuarterlyReportReqd", selector: "#QuarterlyReport", type: CFSRemark.FormFieldType.Switch },
-                            //        { field: "ServiceCenter", selector: "#ServiceCenterGrant", type: CFSRemark.FormFieldType.Switch },
-                            //        { field: "ZoHoPotentialIndex", selector: "#ZohoName", type: CFSRemark.FormFieldType.Select },
-                            //        { field: "PrincipalInvestigatorId", selector: "#PIId", type: CFSRemark.FormFieldType.Select },
-                            //        { field: "SourceAgency", selector: "#SourceAgency", type: CFSRemark.FormFieldType.Select },
-                            //        { field: "ClientContact", selector: "#ClientContact", type: CFSRemark.FormFieldType.Input },
-                            //        { field: "ManagingAD", selector: "#MAD", type: CFSRemark.FormFieldType.Select },
-                            //    ];
-
-                            //    var modalManager = CFSRemark.ModalForm("Grant", "#mainModal", fields, {
-                            //        saveURL: "/Grants/EditGrant",
-                            //        deleteURL: "/Grants/DeleteGrant",
-                            //        deleteIdSelector: function (manager) { return $('#GrantId').val(); }
-                            //    });
-                            //    modalManager.setupListeners();
-                            //    $('#createButton').on("click", modalManager.createFunction);
-
-                            //    $('#mainModal').on("CFS.page.hide", function () {
-                            //        modalManager.pageManager.removeRowHighlight();
-                            //        $('#jsGrid').jsGrid('loadData');
-                            //    })
-
-                            //    $('#jsGrid').jsGrid({
-                            //        width: "100%",
-                            //        inserting: false,
-                            //        editing: false,
-                            //        sorting: true,
-                            //        paging: false,
-                            //        filtering: true,
-                            //        data: clients,
-
-                            //        fields: [
-                            //            { name: "GrantNumber", type: "text", title: "Grant Name" },
-                            //            { name: "Description", type: "text", title: "Description" },
-                            //            { name: "StartDate", type: "datefield", title: "Start Date" },
-                            //            { name: "EndDate", type: "datefield", title: "End Date" },
-                            //            { name: "PI", type: "text", title: "PI" },
-                            //            { name: "BannerAccount", type: "text", title: "Banner Number" },
-                            //            { name: "Amount", type: "moneyfield", title: "Amount" },
-                            //             {
-                            //                 name: "ServiceCenter", type: "dropdownfield", title: "Service Center", width: "80",
-                            //                 selectableItems: [{ id: "1", text: "Y" }, { id: "0", text: "N" }],
-                            //                 filterableItems: [{ id: "", text: "" }, { id: "1", text: "Y" }, { id: "0", text: "N" }]
-                            //             },
-                            //            { type: "modalformconfig", width: 70, formManager: modalManager, viewURL: "/Grants/ViewGrant", saveURL: "/Grants/EditGrant", deleteURL: "/Grants/DeleteGrant", showDetails: true, detailsURL: "/Expenses/GrantDetail/" },
-                            //            { name: "Id", visible: false }
-                            //        ],
-
-                            //        controller: {
-                            //            loadData: function (filter) {
-                            //                var params = {};
-                            //                if (filter.GrantNumber)
-                            //                    params["GrantNumber"] = filter.GrantNumber;
-                            //                if (filter.Description)
-                            //                    params["Description"] = filter.Description;
-                            //                if (filter.PI)
-                            //                    params["PI"] = filter.PI;
-                            //                if (filter.ServiceCenter)
-                            //                    params["ServiceCenter"] = filter.ServiceCenter;
-                            //                if (filter.BannerAccount)
-                            //                    params["Banner"] = filter.BannerAccount;
-                            //                params["Status"] = $('#statusFilter').val();
-
-
-                            //                var data = $.ajax({ type: "POST", url: "/Grants/GetGrants", data: params }).then(
-                            //                    function (arr) {
-                            //                        return arr;
-                            //                    })
-                            //                return data;
-                            //            }
-                            //        },
-                            //        autoload: true
-                            //    });
-
-                            //    $('#statusFilter').on('change', function () {
-                            //        $('#jsGrid').jsGrid("loadData");
-                            //    });
-
-                            //    $('#applyFilterButton').on('click', function (e) {
-                            //        $('#jsGrid').jsGrid("loadData");
-                            //    });
-
-                            //    $('#ZohoName').on('change', function () {
-                            //        var params = {};
-                            //        params["ZohoName"] = $('#ZohoName').val();
-                            //        $.ajax({
-                            //            url: '/Grants/GetZohoInformation',
-                            //            type: 'post',
-                            //            data: params,
-                            //            dataType: "json",
-                            //            async: true,
-                            //            success: function (html) {
-                            //                for (var i = 0; i < html.length; i++) {
-                            //                    var data = html[i];
-                            //                    if (data["zohoAccountName"] != '') {
-                            //                        $('#AccountName').val(data["zohoAccountName"]);
-                            //                        $('#AccountName').removeClass('empty');
-                            //                    }
-                            //                    if (data["zohoQuartleyReports"] == 'true') {
-                            //                        $('#QuarterlyReport').parent().addClass('checked');
-                            //                    }
-                            //                    //if (data["zohoFundNumber"] != '') {
-                            //                    //    $('#BannerAccount').val(data["zohoFundNumber"]);
-                            //                    //    $('#BannerAccount').removeClass('empty');
-                            //                    //}
-                            //                    if (data["zohoPI"] != '') {
-                            //                        $('#PIId').val(data["zohoPI"]);
-                            //                        $('#PIId').change();
-                            //                    }
-                            //                    if (data["zohoProposal"] != '') {
-                            //                        $('#ProposalNumber').val(data["zohoProposal"]);
-                            //                        $('#ProposalNumber').removeClass('empty');
-                            //                    }
-                            //                }
-                            //            },
-                            //            error: function (res) {
-
-                            //            },
-                            //            cache: false,
-
-                            //        });
-                            //    });
-
-                            //}
-
-                            //CFSRemark.requestDropdown(setupGrid, ["people", "fundingsources", "zoho"]);
 
     </script>
 }
