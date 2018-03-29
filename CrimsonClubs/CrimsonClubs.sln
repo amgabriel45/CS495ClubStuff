@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrimsonClubs", "CrimsonClubs\CrimsonClubs.csproj", "{B1880C81-DE93-42E4-AE18-81584BDD21CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		ReleaseDev|Any CPU = ReleaseDev|Any CPU
+		ReleaseProd|Any CPU = ReleaseProd|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.ReleaseDev|Any CPU.ActiveCfg = ReleaseDev|Any CPU
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.ReleaseDev|Any CPU.Build.0 = ReleaseDev|Any CPU
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.ReleaseProd|Any CPU.ActiveCfg = ReleaseProd|Any CPU
+		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.ReleaseProd|Any CPU.Build.0 = ReleaseProd|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

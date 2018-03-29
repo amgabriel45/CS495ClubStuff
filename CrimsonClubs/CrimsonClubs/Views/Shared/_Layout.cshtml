@@ -1,0 +1,358 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @*Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+    @*Bootstrap*@
+    <link rel="stylesheet" href="~/Content/global/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/global/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
+    @*Necessary plugin stylesheets*@
+    <link rel="stylesheet" href="~/Content/global/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="~/Content/global/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/global/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="~/Content/global/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="~/Content/global/vendor/flag-icon-css/flag-icon.css">
+    @*Icon stylesheets*@
+    <link rel="stylesheet" href="~/Content/global/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/global/fonts/brand-icons/brand-icons.min.css">
+    @*Font Stylesheets*@
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+    @*Extra fonts*@
+    <link rel="stylesheet" href="~/Content/global/fonts/material-design/material-design.min.css">
+    <link rel="stylesheet" href="~/Content/global/fonts/brand-icons/brand-icons.min.css">
+    @*Page specific*@
+    @RenderSection("stylesheets", required: false)
+    @*My Stylesheet*@
+    <link rel="stylesheet" href="~/Content/site.css" />
+    <link rel="stylesheet" href="~/Content/global/vendor/waves/waves.css" />
+    <link rel="stylesheet" href="~/Content/global/vendor/toastr/toastr.css" />
+    <link rel="stylesheet" href="~/Content/global/vendor/ladda/ladda.css" />
+    @*Breakpoints*@
+    <script src="~/Content/global/vendor/breakpoints/breakpoints.js"></script>
+    <script>
+        Breakpoints();
+    </script>
+</head>
+@*Page headers*@
+<body class="animsition site-menubar-unfold" style="animation-duration: 800ms; opacity: 1;">
+    <!--[if lt IE 8]>
+          <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+    <nav class="site-navbar navbar navbar-default navbar-inverse navbar-fixed-top navbar-mega" style="background-color: rgb(158,27,50)" role="navigation">
+        <div class="navbar-header" style="pointer-events:none">
+            <button type="button" class="navbar-toggler hamburger hamburger-close navbar-toggler-left hided" data-toggle="menubar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <button type="button" class="navbar-toggler collapsed" data-target="#site-navbar-collapse" data-toggle="collapse">
+                <i class="icon md-more" aria-hidden="true"></i>
+            </button>
+            <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" style="align-items:center" data-toggle="gridmenu">
+                <img class="navbar-brand-logo" style="padding-left:35px;" src="~/Content/ua.jpg">
+                @*<span class="navbar-brand-text hidden-xs-down"> CFS</span>*@
+            </div>
+            <button type="button" class="navbar-toggler collapsed" data-target="#site-navbar-search" data-toggle="collapse">
+                <span class="sr-only">Toggle Search</span>
+                <i class="icon md-search" aria-hidden="true"></i>
+            </button>
+            
+        </div>
+        @*<div class="navbar-container container-fluid">*@
+            <!-- Navbar Collapse -->
+            @*<div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">*@
+                <!-- Navbar Toolbar -->
+                @*<ul class="nav navbar-toolbar">
+
+                    <li class="nav-item hidden-float" id="toggleMenubar">
+
+                        <a class="nav-link waves-effect waves-light waves-round" data-toggle="menubar" href="#" role="button">
+                            <i class="icon hamburger hamburger-arrow-left">
+                                <span class="sr-only">Toggle menubar</span>
+                                <span class="hamburger-bar"></span>
+                            </i>
+                        </a>
+                    </li>
+                    <li class="nav-item hidden-sm-down" id="toggleFullscreen">
+                            <a class="nav-link icon icon-fullscreen waves-effect waves-light waves-round" data-toggle="fullscreen" href="#" role="button">
+                                <span class="sr-only">Toggle fullscreen</span>
+                            </a>
+                    </li> 
+                </ul>*@
+                <!-- End Navbar Toolbar -->
+                <!-- Navbar Toolbar Right -->
+        <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right" style="padding-right:10px; height: 20px; line-height:0px ">
+            <li class="nav-item dropdown" >
+                <br />
+                @*<p style="line-height:25px; padding-right:70px; font-family:Verdana,sans-serif; font-variant:small-caps; font-size:16px; color:white">Welcome, Max Livingston </p>*@
+                <a class="nav-link navbar-avatar waves-effect waves-light waves-round" data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button">
+                    <span class="avatar avatar-online">
+                        <img src="~/Content/UserIcon.png" alt="...">
+                        <i></i>
+                    </span>
+                </a>
+
+                <div class="dropdown-menu" role="menu">
+                    <a class="dropdown-item waves-effect waves-light waves-round" style="padding-bottom:15px;" href="javascript:void(0)" role="menuitem"><i aria-hidden="true"></i> Welcome, Max!</a>
+                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
+                   @* <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>*@
+                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
+                </div>
+            </li>
+        </ul>
+                <!-- End Navbar Toolbar Right -->
+                <br />
+               <p style="line-height:20px; padding-left:157px; font-family:'Book Antiqua'; font-variant:small-caps; font-style:oblique; font-size:22px; color:white" >Crimson Clubs</p>
+              
+            @*</div>*@
+            
+            <!-- End Navbar Collapse -->
+            <!-- Site Navbar Seach -->
+            @*<div class="collapse navbar-search-overlap" id="site-navbar-search">
+                    <form role="search">
+                        <div class="form-group">
+                            <div class="input-search">
+                                <i class="input-search-icon md-search" aria-hidden="true"></i>
+                                <input type="text" class="form-control" name="site-search" placeholder="Search...">
+                                <button type="button" class="input-search-close icon md-close" data-target="#site-navbar-search" data-toggle="collapse" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>*@
+            <!-- End Site Navbar Seach -->
+        @* </div>*@
+    </nav>
+    <div class="site-menubar site-menubar-dark">
+        <div class="site-menubar-body">
+            <div>
+                <div>
+                    <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -195px, 0px);">
+                        <li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="/Grants">
+                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                <span class="site-menu-title">Clubs</span>
+                            </a>
+                            <ul class="site-menu-sub">
+                                <li class="site-menu-item">
+                                    <a class="animstion-link" href="/Grants/FundingSources">
+                                        <span class="site-menu-title">Funding Sources</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="/LeaveHours">
+                                <i class="site-menu-icon md-calendar" aria-hidden="true"></i>
+                                <span class="site-menu-title">Schedules</span>
+                            </a>
+                            <ul class="site-menu-sub">
+                                <li class="site-menu-item">
+                                    <a class="animstion-link" href="/LeaveHours/Upload">
+                                        <span class="site-menu-title">Monthly Upload</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="/Projects">
+                                <i class="site-menu-icon md-n-1-square" aria-hidden="true"></i>
+                                <span class="site-menu-title">Scores</span>
+                            </a>
+                            <ul class="site-menu-sub">
+                                <li class="site-menu-item">
+                                    <a class="animstion-link" href="/Projects/Reports">
+                                        <span class="site-menu-title">Reports</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @*<li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="/Products">
+                                <i class="site-menu-icon md-shopping-basket" aria-hidden="true"></i>
+                                <span class="site-menu-title">Products</span>
+                            </a>
+                        </li>
+                        @if (SecurityHelper.GetAuthentication() == SecurityLevel.Admin)
+                        {
+                            <li class="site-menu-item has-sub" id="People">
+                                <a class="animsition-link waves-effect waves-classic" href="/People">
+                                    <i class="site-menu-icon md-account-circle" aria-hidden="true"></i>
+                                    <span class="site-menu-title">People</span>
+                                </a>
+                                <ul class="site-menu-sub">
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/People/Teams">
+                                            <span class="site-menu-title">Teams</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/People/PositionClasses">
+                                            <span class="site-menu-title">Position Classes</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/People/PositionNumberReport">
+                                            <span class="site-menu-title">Position Number Report</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a target="_blank" class="animstion-link" href="/People/GetLicenseReport">
+                                            <span class="site-menu-title">License Report</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/People/BirthDayReport">
+                                            <span class="site-menu-title">Birthday Report</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/People/NonLaboredReport">
+                                            <span class="site-menu-title">Labor Report</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/People/originalStartDate">
+                                            <span class="site-menu-title">Start Date Report</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/People/NonServiceCenterReport">
+                                            <span class="site-menu-title">Non-Service Center Report</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="site-menu-item" id="Expense">
+                                <a class="animsition-link waves-effect waves-classic" href="/Expenses">
+                                    <i class="site-menu-icon md-money" aria-hidden="true"></i>
+                                    <span class="site-menu-title">Expenses</span>
+                                </a>
+                                <ul class="site-menu-sub">
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/Expenses/AggregateExpenses">
+                                            <span class="site-menu-title">Aggregate/Forecasted Expenses</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="site-menu-item" id="Labor">
+                                <a class="animsition-link waves-effect waves-classic" href="/LaborDistributions">
+                                    <i class="site-menu-icon md-money-box" aria-hidden="true"></i>
+                                    <span class="site-menu-title">Distributions</span>
+                                </a>
+                                <ul class="site-menu-sub">
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/LaborDistributions/PercentOverTime">
+                                            <span class="site-menu-title">Percentage Over Time</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/LaborDistributions/PlannedWorkHours">
+                                            <span class="site-menu-title">Planned Work Hours</span>
+                                        </a>
+                                    </li>
+                                    <li class="site-menu-item">
+                                        <a class="animstion-link" href="/LaborDistributions/OSPReport">
+                                            <span class="site-menu-title">OSP Report</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        
+                        <li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="/Reports">
+                                <i class="site-menu-icon md-check-all" aria-hidden="true"></i>
+                                <span class="site-menu-title">Reports</span>
+                            </a>
+                        </li>
+                        <li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="/Holidays">
+                                <i class="site-menu-icon md-card-giftcard" aria-hidden="true"></i>
+                                <span class="site-menu-title">Holidays</span>
+                            </a>
+                        </li>*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="site-menubar-footer">
+            <a href="javascript: void(0);" class="fold-show" data-placement="top" data-toggle="tooltip" data-original-title="Settings">
+                <span class="icon md-settings" aria-hidden="true"></span>
+            </a>
+            <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Lock">
+                <span class="icon md-eye-off" aria-hidden="true"></span>
+            </a>
+            <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Logout">
+                <span class="icon md-power" aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+
+    @RenderBody()
+
+    @*<footer class="site-footer">
+            This is a test
+        </footer>*@
+
+    @*Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)*@
+
+    @*Core and plugin dependencies*@
+    <script src="~/Content/global/vendor/babel-external-helpers/babel-external-helpers.js"></script>
+    <script src="~/Content/global/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/global/vendor/tether/tether.js"></script>
+    <script src="~/Content/global/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/global/vendor/animsition/animsition.js"></script>
+    <script src="~/Content/global/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/global/vendor/asscrollbar/jquery-asScrollbar.js"></script>
+    <script src="~/Content/global/vendor/asscrollable/jquery-asScrollable.js"></script>
+    <script src="~/Content/global/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+    <script src="~/Content/global/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/global/vendor/slidepanel/jquery-slidePanel.js"></script>
+    <script src="~/Content/global/vendor/toastr/toastr.js"></script>
+    <script src="~/Content/global/vendor/ladda/spin.min.js"></script>
+    <script src="~/Content/global/vendor/ladda/ladda.min.js"></script>
+    @*Template Relating scripts*@
+    <script src="~/Content/global/js/State.js"></script>
+    <script src="~/Content/global/js/Component.js"></script>
+    <script src="~/Content/global/js/Plugin.js"></script>
+    <script src="~/Content/global/js/Base.js"></script>
+    <script src="~/Content/global/js/Config.js"></script>
+    <script src="~/Content/assets/js/Section/Menubar.js"></script>
+    @*<script src="~/Content/assets/js/Section/GridMenu.js"></script>*@
+    <script src="~/Content/assets/js/Section/Sidebar.js"></script>
+    <script src="~/Content/assets/js/Section/PageAside.js"></script>
+    <script src="~/Content/assets/js/Plugin/menu.js"></script>
+    <script src="~/Content/global/js/Plugin/material.js"></script>
+    @*<script src="~/Content/assets/js/Plugin/skintools.min.js"></script>*@
+    <script src="~/Content/global/js/Plugin/asscrollable.js"></script>
+    <script src="~/Content/global/vendor/waves/waves.js"></script>
+    @RenderSection("includescripts", required: false)
+    @*Template config scripts*@
+    <script src="~/Content/global/js/config/colors.js"></script>
+    <script src="~/Content/assets/js/Site.js"></script>
+    <script>
+        Config.set('assets', '~/Content/assets');
+    </script>
+    @*Template initialization script*@
+    <script>
+        (function (document, window, $) {
+            'use strict';
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+    </script>
+    <script src="~/Content/site.js"></script>
+    <script src="~/Content/site/dropdownManager.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
