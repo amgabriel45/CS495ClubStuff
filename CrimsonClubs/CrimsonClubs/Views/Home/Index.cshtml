@@ -114,8 +114,7 @@
 @section scripts {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
     <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
-        @*@<script type="text/javascript" src="~/Content/site/commonPageScripts.js"></script>
-        <script type="text/javascript" src="~/Content/site/modalPageScripts.js"></script>*@
+    
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -123,14 +122,7 @@
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
             $('#jsGrid').jsGrid("loadData");
         });
-        var clients = [
-            { "Name": "Basketball", "Group": "Group Name", "Description": "This is a test" },
-            { "Name": "Football", "Group": "Big Team" },
-            { "Name": "Golf", "Group": "Bigger Team" },
-            { "Name": "Ultimate Frisbee", "Group": "Team" },
-            { "Name": "Soccer", "Group": "Team Team" }
-        ];
-
+       
         $("#jsGrid").jsGrid({
             width: "100%",
 
@@ -172,8 +164,8 @@
                                         var myCalendar = $('#calendar');
                                         myCalendar.fullCalendar({
                                             defaultView: 'month',
-                                            defaultDate: '2018-03-12',
-                                            contentHeight: 350,
+                                           // defaultDate: '2018-03-12',
+                                            contentHeight: 400,
                                             eventColor: '#9E1B32',
                                             eventTextColor: '#FFFFFF',
                                             eventRender: function (eventObj, $el) {
