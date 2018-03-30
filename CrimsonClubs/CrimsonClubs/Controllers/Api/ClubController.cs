@@ -1,4 +1,4 @@
-﻿using CrimsonClubs.Models;
+﻿using CrimsonClubs.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,14 +14,14 @@ namespace CrimsonClubs.Controllers.Api
     public class ClubController : CCApiController
     {
         [HttpGet, Route]
-        [ResponseType(typeof(Club[]))]
+        [ResponseType(typeof(ClubDto[]))]
         public IHttpActionResult GetUserClubs()
         {
             int userId = 1;
 
-            var clubs = new List<Club>();
+            var clubs = new List<ClubDto>();
 
-            string sql = "SELECT c.Id, c.Name, c.Description, g.Name AS GroupName, ( SELECT COUNT(*) FROM MM_User_Club WHERE ClubId = c.Id ) AS MemberCount FROM [User] u JOIN MM_User_Club m ON u.Id = m.UserId JOIN Club c ON c.Id = m.ClubId LEFT JOIN [Group] g ON g.Id = c.GroupId WHERE u.Id = @UserId;";
+            string sql = "SELECT c.Id, c.Name, c.Description, ISNULL(g.Name,'') AS GroupName, ( SELECT COUNT(*) FROM MM_User_Club WHERE ClubId = c.Id ) AS MemberCount FROM [User] u JOIN MM_User_Club m ON u.Id = m.UserId JOIN Club c ON c.Id = m.ClubId LEFT JOIN [Group] g ON g.Id = c.GroupId WHERE u.Id = @UserId;";
             using (var conn = new SqlConnection(ConnectionString))
             using (var cmd = new SqlCommand(sql, conn))
             {
@@ -32,7 +32,7 @@ namespace CrimsonClubs.Controllers.Api
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    var club = new Club();
+                    var club = new ClubDto();
                     club.Id = (int)reader["Id"];
                     club.Name = (string)reader["Name"];
                     club.Description = (string)reader["Description"];
@@ -47,10 +47,10 @@ namespace CrimsonClubs.Controllers.Api
         }
 
         [HttpGet, Route("{clubId}/calendar")]
-        [ResponseType(typeof(Event[]))]
+        [ResponseType(typeof(EventDto[]))]
         public IHttpActionResult GetClubCalendar(int clubId)
         {
-            var events = new List<Event>();
+            var events = new List<EventDto>();
 
             string sql = "SELECT e.Id, e.Name, e.Description, e.Start, e.Finish, e.IsGroupEvent, c.Id AS ClubId, c.Name AS ClubName FROM Club c JOIN MM_Club_Event m2 ON m2.ClubId = c.Id JOIN [Event] e ON e.Id = m2.EventId WHERE c.Id = @ClubId;";
             using (var conn = new SqlConnection(ConnectionString))
@@ -63,7 +63,7 @@ namespace CrimsonClubs.Controllers.Api
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    var e = new Event();
+                    var e = new EventDto();
                     e.Id = (int)reader["Id"];
                     e.Name = (string)reader["Name"];
                     e.Description = (string)reader["Description"];

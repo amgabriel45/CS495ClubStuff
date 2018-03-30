@@ -1,4 +1,5 @@
 ﻿using CrimsonClubs.Models;
+using CrimsonClubs.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,12 +15,12 @@ namespace CrimsonClubs.Controllers.Api
     public class CalendarController : CCApiController
     {
         [HttpGet, Route]
-        [ResponseType(typeof(Event[]))]
+        [ResponseType(typeof(EventDto[]))]
         public IHttpActionResult GetUserCalendar()
         {
             int userId = 1;
 
-            var events = new List<Event>();
+            var events = new List<EventDto>();
 
             string sql = "SELECT e.Id, e.Name, e.Description, e.Start, e.Finish, e.IsGroupEvent, c.Id AS ClubId, c.Name AS ClubName FROM [User] u JOIN MM_User_Club m1 ON u.Id = m1.UserId JOIN Club c ON c.Id = m1.ClubId JOIN MM_Club_Event m2 ON m2.ClubId = c.Id JOIN [Event] e ON e.Id = m2.EventId WHERE u.Id = @UserId;";
             using (var conn = new SqlConnection(ConnectionString))
@@ -32,7 +33,7 @@ namespace CrimsonClubs.Controllers.Api
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    var e = new Event();
+                    var e = new EventDto();
                     e.Id = (int)reader["Id"];
                     e.Name = (string)reader["Name"];
                     e.Description = (string)reader["Description"];
