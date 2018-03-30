@@ -54,16 +54,21 @@
   <ItemGroup>
     <Compile Include="Dtos\ClubDto.cs" />
     <Compile Include="Dtos\EventDto.cs" />
-    <Compile Include="Models\Club.cs" />
-    <Compile Include="Models\CrimsonClubsDbContext.cs" />
-    <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\Group.cs" />
-    <Compile Include="Models\MMM_User_Event_Stat.cs" />
-    <Compile Include="Models\MM_Club_Event.cs" />
-    <Compile Include="Models\MM_User_Club.cs" />
-    <Compile Include="Models\Organization.cs" />
-    <Compile Include="Models\Stat.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Dtos\StatGroupDto.cs" />
+    <Compile Include="Dtos\StatDto.cs" />
+    <Compile Include="Dtos\StatClubDto.cs" />
+    <Compile Include="Dtos\UserStatsDto.cs" />
+    <Compile Include="Enums\StatType.cs" />
+    <Compile Include="Entities\Club.cs" />
+    <Compile Include="Entities\CrimsonClubsDbContext.cs" />
+    <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\Group.cs" />
+    <Compile Include="Entities\MMM_User_Event_Stat.cs" />
+    <Compile Include="Entities\MM_Club_Event.cs" />
+    <Compile Include="Entities\MM_User_Club.cs" />
+    <Compile Include="Entities\Organization.cs" />
+    <Compile Include="Entities\Stat.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -1,4 +1,4 @@
-namespace CrimsonClubs.Models.Models
+namespace CrimsonClubs.Models.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -6,13 +6,14 @@ namespace CrimsonClubs.Models.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Stat")]
-    public partial class Stat
+    [Table("Group")]
+    public partial class Group
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Stat()
+        public Group()
         {
-            MMM_User_Event_Stat = new HashSet<MMM_User_Event_Stat>();
+            Clubs = new HashSet<Club>();
+            Stats = new HashSet<Stat>();
         }
 
         public int Id { get; set; }
@@ -22,16 +23,14 @@ namespace CrimsonClubs.Models.Models
 
         public string Description { get; set; }
 
-        [Required]
-        public string Abbreviation { get; set; }
-
-        public int Type { get; set; }
+        public int OrganizationId { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MMM_User_Event_Stat> MMM_User_Event_Stat { get; set; }
+        public virtual ICollection<Club> Clubs { get; set; }
 
-        public virtual Club Club { get; set; }
+        public virtual Organization Organization { get; set; }
 
-        public virtual Group Group { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Stat> Stats { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CrimsonClubs.Models.Models;
+﻿using CrimsonClubs.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

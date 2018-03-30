@@ -1,4 +1,4 @@
-namespace CrimsonClubs.Models.Models
+namespace CrimsonClubs.Models.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,11 @@ namespace CrimsonClubs.Models.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class MMM_User_Event_Stat
+    public partial class MM_User_Club
     {
-        public int Value { get; set; }
+        public bool IsAdmin { get; set; }
+
+        public bool IsAccepted { get; set; }
 
         [Key]
         [Column(Order = 0)]
@@ -18,16 +20,9 @@ namespace CrimsonClubs.Models.Models
         [Key]
         [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int EventId { get; set; }
+        public int ClubId { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int StatId { get; set; }
-
-        public virtual Event Event { get; set; }
-
-        public virtual Stat Stat { get; set; }
+        public virtual Club Club { get; set; }
 
         public virtual User User { get; set; }
     }

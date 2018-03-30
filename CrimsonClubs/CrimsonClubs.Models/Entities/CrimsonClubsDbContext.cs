@@ -1,4 +1,4 @@
-namespace CrimsonClubs.Models.Models
+namespace CrimsonClubs.Models.Entities
 {
     using System;
     using System.Data.Entity;

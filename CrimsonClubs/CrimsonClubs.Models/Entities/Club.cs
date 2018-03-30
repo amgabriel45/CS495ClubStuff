@@ -1,4 +1,4 @@
-namespace CrimsonClubs.Models.Models
+namespace CrimsonClubs.Models.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -6,15 +6,15 @@ namespace CrimsonClubs.Models.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Organization")]
-    public partial class Organization
+    [Table("Club")]
+    public partial class Club
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Organization()
+        public Club()
         {
-            Clubs = new HashSet<Club>();
-            Groups = new HashSet<Group>();
-            Users = new HashSet<User>();
+            MM_Club_Event = new HashSet<MM_Club_Event>();
+            MM_User_Club = new HashSet<MM_User_Club>();
+            Stats = new HashSet<Stat>();
         }
 
         public int Id { get; set; }
@@ -22,13 +22,25 @@ namespace CrimsonClubs.Models.Models
         [Required]
         public string Name { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Club> Clubs { get; set; }
+        public string Description { get; set; }
+
+        public bool IsRequestToJoin { get; set; }
+
+        public int? GroupId { get; set; }
+
+        public int OrganizationId { get; set; }
+
+        public virtual Group Group { get; set; }
+
+        public virtual Organization Organization { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Group> Groups { get; set; }
+        public virtual ICollection<MM_Club_Event> MM_Club_Event { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<MM_User_Club> MM_User_Club { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Stat> Stats { get; set; }
     }
 }
