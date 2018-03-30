@@ -152,6 +152,8 @@
     <Compile Include="Controllers\Api\CCApiController.cs" />
     <Compile Include="Controllers\Api\EventController.cs" />
     <Compile Include="Controllers\Api\ClubController.cs" />
+    <Compile Include="Controllers\Site\AccountController.cs" />
+    <Compile Include="Controllers\Site\CalendarController.cs" />
     <Compile Include="Controllers\Site\HomeController.cs" />
     <Compile Include="Controllers\Site\CCSiteController.cs" />
     <Compile Include="Global.asax.cs">
@@ -2752,6 +2754,7 @@
     <None Include="Properties\PublishProfiles\LocalForDev.pubxml" />
     <None Include="Properties\PublishProfiles\LocalForProd.pubxml" />
     <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
     <None Include="Web.ReleaseDev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Clubs";
+    ViewBag.Title = "Calendar";
 }
 
 <div class="page fullHeight">
@@ -10,8 +10,8 @@
                     <span>Main Calendar</span>
                 </h2>
             </div>
-            <div class="panel-body panel-no-pad">
-                <div id='calendar'></div>
+            <div class="panel-body panel-no-pad" align="center">
+                <div id='calendar'  style="width: 1000px;"></div>
             </div>
         </div>
     </div>
@@ -53,21 +53,23 @@
             $("#statusFilter").select2();
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
             $('#jsGrid').jsGrid("loadData");
+            $('#calendar').fullCalendar('today');
         });
 
         var params = {};
         var events = [];
         var $data = $.ajax({
-            type: "GET", url: "api/club/" + item.id + "/calendar", data: params
+            type: "GET", url: "api/calendar", data: params
         }).then(
             function (arr) {
                 for (var i = 0; i < arr.length; i++) { events.push({ title: arr[i].name, start: arr[i].start, end: arr[i].finish, description: arr[i].description }) }
-                $('#calendar').fullCalendar('today');
+               
                 var myCalendar = $('#calendar');
                 myCalendar.fullCalendar({
                     defaultView: 'month',
                     defaultDate: '2018-03-12',
-                    contentHeight: 350,
+                    contentHeight: 600,
+                   // aspectRatio: 2,
                     eventColor: '#9E1B32',
                     eventTextColor: '#FFFFFF',
                     eventRender: function (eventObj, $el) {
