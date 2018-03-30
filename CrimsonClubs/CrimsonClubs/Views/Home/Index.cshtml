@@ -121,6 +121,7 @@
         $(document).ready(function () {
             $("#statusFilter").select2();
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
+            $('#jsGrid').jsGrid("loadData");
         });
         var clients = [
             { "Name": "Basketball", "Group": "Group Name", "Description": "This is a test" },
@@ -137,11 +138,22 @@
             editing: false,
             sorting: true,
             paging: true,
-            data: clients,
+
+            controller: {
+                loadData: function () {
+                    var params = {};
+                    var data = $.ajax({ type: "GET", url: "api/club", data: params }).then(
+                        function (arr) {
+                            return arr;
+                        })
+                    return data;
+                }
+            },
 
             fields: [
-                { name: "Name", type: "text", width: 150, validate: "required", align: "center" },
-                { name: "Group", type: "text", title: "Group", align: "center" },
+                { name: "name", title: "Name", type: "text", width: 150, align: "center" },
+                { name: "groupName", type: "text", title: "Group", align: "center" },
+                { name: "Id", visible: false },
                 {
                     type: "control", width: 65,
                     itemTemplate: function (value, item) {
@@ -149,95 +161,50 @@
 
                         var $customButton = $("<i class=\"site-menu-icon md-calendar\" aria-hidden=\"true\"></i>")
                             .click(function (e) {
-                                $('#mainModal').modal('toggle');
-                                $('#calendar').fullCalendar('today');
-                                $('#ClubName').removeClass('empty');
-                                $('#ClubName').val(item.Name);
-                                $('#Description').removeClass('empty');
-                                $('#Description').val(item.Description);
-
-                                var myCalendar = $('#calendar');
-                                myCalendar.fullCalendar({
-                                    defaultView: 'month',
-                                    defaultDate: '2018-03-12',
-                                    contentHeight: 500,
-                                    eventColor: '#9E1B32',
-                                    eventTextColor: '#FFFFFF',
-                                    eventRender: function (eventObj, $el) {
-                                        $el.popover({
-                                            title: eventObj.title,
-                                            content: eventObj.description,
-                                            trigger: 'hover',
-                                            placement: 'top',
-                                            container: 'body'
+                                var params = {};
+                                var events = [];
+                                var $data = $.ajax({
+                                    type: "GET", url: "api/club/" + item.id + "/calendar", data: params
+                                }).then(
+                                    function (arr) {
+                                        for (var i = 0; i < arr.length; i++) { events.push({ title: arr[i].name, start: arr[i].start, end: arr[i].finish, description: arr[i].description }) }
+                                        $('#calendar').fullCalendar('today');
+                                        var myCalendar = $('#calendar');
+                                        myCalendar.fullCalendar({
+                                            defaultView: 'month',
+                                            defaultDate: '2018-03-12',
+                                            contentHeight: 350,
+                                            eventColor: '#9E1B32',
+                                            eventTextColor: '#FFFFFF',
+                                            eventRender: function (eventObj, $el) {
+                                                $el.popover({
+                                                    title: eventObj.title,
+                                                    content: eventObj.description,
+                                                    trigger: 'hover',
+                                                    placement: 'top',
+                                                    container: 'body'
+                                                });
+                                            },
+                                            events: events
                                         });
-                                    },
+                                        return arr;
+                                    });
+                                $('#mainModal').modal('toggle');
+                                $('#ClubName').removeClass('empty');
+                                $('#ClubName').val(item.name);
+                                $('#Description').removeClass('empty');
+                                $('#Description').val(item.description);
 
-                                    events: [
-                                        {
-                                            title: 'All Day Event Footaball Tourney',
-                                            description: 'Football Tour',
-                                            start: '2018-03-01'
-                                        },
-                                        {
-                                            title: 'Long Event',
-                                            description: 'description for Long Event',
-                                            start: '2018-03-07',
-                                            end: '2018-03-10'
-                                        },
-                                        {
-                                            id: 999,
-                                            title: 'Repeating Event',
-                                            description: 'description for Repeating Event',
-                                            start: '2018-03-09T16:00:00'
-                                        },
-                                        {
-                                            id: 999,
-                                            title: 'Repeating Event',
-                                            description: 'description for Repeating Event',
-                                            start: '2018-03-16T16:00:00'
-                                        },
-                                        {
-                                            title: 'Conference',
-                                            description: 'description for Conference',
-                                            start: '2018-03-11',
-                                            end: '2018-03-13'
-                                        },
-                                        {
-                                            title: 'Meeting',
-                                            description: 'description for Meeting',
-                                            start: '2018-03-12T10:30:00',
-                                            end: '2018-03-12T12:30:00'
-                                        },
-                                        {
-                                            title: 'Lunch',
-                                            description: 'description for Lunch',
-                                            start: '2018-03-12T12:00:00'
-                                        },
-                                        {
-                                            title: 'Meeting',
-                                            description: 'description for Meeting',
-                                            start: '2018-03-12T14:30:00'
-                                        },
-                                        {
-                                            title: 'Birthday Party',
-                                            description: 'description for Birthday Party',
-                                            start: '2018-03-13T07:00:00'
-                                        },
-                                        {
-                                            title: 'Click for Google',
-                                            description: 'description for Click for Google',
-                                            url: 'http://google.com/',
-                                            start: '2018-03-28'
-                                        }
-                                    ]
-                                })
+                               
+                               
                             });
 
                         return $customButton;
                     }
                 }
-            ]
+            ],
+            autoload: true
+           
         });
 
         $("#createButton").click(function () {

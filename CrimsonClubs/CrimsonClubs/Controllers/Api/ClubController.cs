@@ -21,7 +21,7 @@ namespace CrimsonClubs.Controllers.Api
 
             var clubs = new List<Club>();
 
-            string sql = "SELECT c.Id, c.Name, c.Description, g.Name AS GroupName, ( SELECT COUNT(*) FROM MM_User_Club WHERE ClubId = c.Id ) AS MemberCount FROM [User] u JOIN MM_User_Club m ON u.Id = m.UserId JOIN Club c ON c.Id = m.ClubId LEFT JOIN [Group] g ON g.Id = c.GroupId WHERE u.Id = @UserId;";
+            string sql = "SELECT c.Id, c.Name, c.Description, ISNULL(g.Name,'') AS GroupName, ( SELECT COUNT(*) FROM MM_User_Club WHERE ClubId = c.Id ) AS MemberCount FROM [User] u JOIN MM_User_Club m ON u.Id = m.UserId JOIN Club c ON c.Id = m.ClubId LEFT JOIN [Group] g ON g.Id = c.GroupId WHERE u.Id = @UserId;";
             using (var conn = new SqlConnection(ConnectionString))
             using (var cmd = new SqlCommand(sql, conn))
             {

@@ -2750,6 +2750,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <None Include="Properties\PublishProfiles\LocalForDev.pubxml" />
     <None Include="Properties\PublishProfiles\LocalForProd.pubxml" />
+    <Content Include="Views\Calendar\Index.cshtml" />
     <None Include="Web.ReleaseDev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
