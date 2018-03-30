@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrimsonClubs", "CrimsonClubs\CrimsonClubs.csproj", "{B1880C81-DE93-42E4-AE18-81584BDD21CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrimsonClubs.Models", "CrimsonClubs.Models\CrimsonClubs.Models.csproj", "{72A5CEAB-E599-477A-A415-9A5636D631CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.ReleaseDev|Any CPU.Build.0 = ReleaseDev|Any CPU
 		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.ReleaseProd|Any CPU.ActiveCfg = ReleaseProd|Any CPU
 		{B1880C81-DE93-42E4-AE18-81584BDD21CC}.ReleaseProd|Any CPU.Build.0 = ReleaseProd|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.ReleaseDev|Any CPU.ActiveCfg = Release|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.ReleaseDev|Any CPU.Build.0 = Release|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.ReleaseProd|Any CPU.ActiveCfg = Release|Any CPU
+		{72A5CEAB-E599-477A-A415-9A5636D631CC}.ReleaseProd|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
