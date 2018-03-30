@@ -79,5 +79,21 @@ namespace CrimsonClubs.Controllers.Api
 
             return Ok(events);
         }
+
+        [HttpGet, Route("all")]
+        [ResponseType(typeof(ClubDto[]))]
+        public IHttpActionResult GetAllClubs()
+        {
+            var clubs = db.Clubs.Select(c => new ClubDto()
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Description = c.Description,
+                GroupName = c.Group.Name ?? "",
+                MemberCount = c.MM_User_Club.Count
+            });
+
+            return Ok(clubs);
+        }
     }
 }

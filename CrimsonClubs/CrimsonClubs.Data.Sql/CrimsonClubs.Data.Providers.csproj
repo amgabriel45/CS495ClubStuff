@@ -43,6 +43,16 @@
     <Compile Include="CrimsonClubsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CrimsonClubs.Data.Interfaces\CrimsonClubs.Data.Interfaces.csproj">
+      <Project>{f693afc1-ebe2-4e90-8301-6b1df7d23002}</Project>
+      <Name>CrimsonClubs.Data.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CrimsonClubs.Models\CrimsonClubs.Models.csproj">
+      <Project>{72a5ceab-e599-477a-a415-9a5636d631cc}</Project>
+      <Name>CrimsonClubs.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
