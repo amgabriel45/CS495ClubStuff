@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Clubs";
+}
+
+<div class="page fullHeight">
+    <div class="open-full-panel half-panel animate-panel" id="topPage">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <span>Main Calendar</span>
+                </h2>
+            </div>
+            <div class="panel-body panel-no-pad">
+                <div id='calendar'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section stylesheets {
+    @*<link type="text/css" rel="stylesheet" href="~/Content/global/vendor/jsgrid/jsgrid.css" />*@
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/select2/select2.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/icheck/icheck.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/dropify/dropify.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
+}
+
+@section includescripts {
+    <script type="text/javascript" src="~/Content/global/vendor/select2/select2.full.min.js"></script>
+    @*<script type="text/javascript" src="~/Content/global/vendor/jsgrid/jsgrid.js"></script>*@
+    <script type="text/javascript" src="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/icheck/icheck.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/dropify/dropify.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.js'></script>
+
+}
+
+@section scripts {
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
+    @*@<script type="text/javascript" src="~/Content/site/commonPageScripts.js"></script>
+        <script type="text/javascript" src="~/Content/site/modalPageScripts.js"></script>*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#statusFilter").select2();
+            $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
+            $('#jsGrid').jsGrid("loadData");
+        });
+
+        var params = {};
+        var events = [];
+        var $data = $.ajax({
+            type: "GET", url: "api/club/" + item.id + "/calendar", data: params
+        }).then(
+            function (arr) {
+                for (var i = 0; i < arr.length; i++) { events.push({ title: arr[i].name, start: arr[i].start, end: arr[i].finish, description: arr[i].description }) }
+                $('#calendar').fullCalendar('today');
+                var myCalendar = $('#calendar');
+                myCalendar.fullCalendar({
+                    defaultView: 'month',
+                    defaultDate: '2018-03-12',
+                    contentHeight: 350,
+                    eventColor: '#9E1B32',
+                    eventTextColor: '#FFFFFF',
+                    eventRender: function (eventObj, $el) {
+                        $el.popover({
+                            title: eventObj.title,
+                            content: eventObj.description,
+                            trigger: 'hover',
+                            placement: 'top',
+                            container: 'body'
+                        });
+                    },
+                    events: events
+                });
+                return arr;
+            });
+
+
+    </script>
+}
