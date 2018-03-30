@@ -151,6 +151,7 @@
     <Compile Include="Controllers\Api\CalendarController.cs" />
     <Compile Include="Controllers\Api\CCApiController.cs" />
     <Compile Include="Controllers\Api\ClubController.cs" />
+    <Compile Include="Controllers\Site\CalendarController.cs" />
     <Compile Include="Controllers\Site\HomeController.cs" />
     <Compile Include="Controllers\Site\CCSiteController.cs" />
     <Compile Include="Global.asax.cs">
