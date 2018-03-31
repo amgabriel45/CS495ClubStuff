@@ -18,7 +18,7 @@ namespace CrimsonClubs.Controllers.Api
         [ResponseType(typeof(EventDto[]))]
         public IHttpActionResult GetUserCalendar()
         {
-            int userId = 1;
+            int userId = CurrentUser.Id;
 
             var events = new List<EventDto>();
 

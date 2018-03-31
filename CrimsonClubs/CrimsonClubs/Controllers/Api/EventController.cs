@@ -17,7 +17,7 @@ namespace CrimsonClubs.Controllers.Api
         [HttpGet, Route("{eventId}")]
         [ResponseType(typeof(EventDto))]
         public IHttpActionResult GetEvent(int? eventId)
-        {           
+        {
             if (eventId == null)
             {
                 return BadRequest();

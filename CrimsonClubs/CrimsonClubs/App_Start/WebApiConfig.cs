@@ -12,6 +12,7 @@ namespace CrimsonClubs
         {
             config.MapHttpAttributeRoutes();
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Filters.Add(new HostAuthenticationFilter("Bearer"));
         }
     }
 }
