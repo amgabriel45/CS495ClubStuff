@@ -12,7 +12,7 @@ namespace CrimsonClubs.Controllers.Api
     [Authorize]
     public class CCApiController : ApiController
     {
-        public static readonly string ConnectionString = @"data source = (localdb)\MSSQLLocalDB; initial catalog = CrimsonClubs; persist security info = True; Integrated Security = SSPI;";
+        public static readonly string ConnectionString = @"Data Source=crimsonclubs.crzjft88gkn5.us-east-2.rds.amazonaws.com;Initial Catalog=CrimsonClubs;User ID=crimson;Password=boolean2018;App=EntityFramework";
         protected CrimsonClubsDbContext db = new CrimsonClubsDbContext();
 
         public CurrentUser CurrentUser => new CurrentUser(User);
