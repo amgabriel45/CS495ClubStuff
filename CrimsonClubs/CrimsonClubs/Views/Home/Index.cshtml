@@ -81,7 +81,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
-                <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Delete</span></button>
+                <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
                 <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
             </div>
         </div>
@@ -160,6 +160,7 @@
                                 }).then(
                                     function (arr) {
                                         for (var i = 0; i < arr.length; i++) { events.push({ title: arr[i].name, start: arr[i].start, end: arr[i].finish, description: arr[i].description }) }
+                                        $('#calendar').fullCalendar('destroy');
                                         $('#calendar').fullCalendar('today');
                                         var myCalendar = $('#calendar');
                                         myCalendar.fullCalendar({
@@ -186,9 +187,6 @@
                                 $('#ClubName').val(item.name);
                                 $('#Description').removeClass('empty');
                                 $('#Description').val(item.description);
-
-                               
-                               
                             });
 
                         return $customButton;
@@ -201,6 +199,9 @@
 
         $("#createButton").click(function () {
             $('#mainModal').modal('toggle');
+        });
+        $("#cancelButton").click(function () {
+            $('#calendar').fullCalendar('destroy');
         });
         $("#cancelButton").click(function () {
             $('#mainModal').modal('toggle');
