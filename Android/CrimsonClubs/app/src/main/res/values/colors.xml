@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="crimson">#7F0000</color>
+    <color name="crimson_light">#B03235</color>
+    <color name="iqagent_orange_dark">#DE7121</color>
+    <color name="iqagent_blue">#355BCE</color>
+    <color name="iqagent_blue_dark">#344AA0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="fuchsia">#FF00FF</color>
+    <color name ="black">#000000</color>
+    <color name = "light_gray">#9E9E9E</color>
+    <color name ="dark_gray">#2e2e2e</color>
+    <color name ="even_darker_gray">#1f1f1f</color>
+    <color name ="transparent">@android:color/transparent</color>
+    <color name ="err_red">#FF0000</color>
+</resources>
