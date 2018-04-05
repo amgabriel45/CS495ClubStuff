@@ -17,7 +17,7 @@ namespace CrimsonClubs.Controllers.Api
         [ResponseType(typeof(ClubDto[]))]
         public IHttpActionResult GetUserClubs()
         {
-            int userId = 1;
+            int userId = CurrentUser.Id;
 
             var clubs = new List<ClubDto>();
 

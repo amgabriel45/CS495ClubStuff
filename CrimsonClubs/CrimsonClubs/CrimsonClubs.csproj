@@ -219,6 +219,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\Api\AuthController.cs" />
     <Compile Include="Models\CurrentUser.cs" />
+    <Compile Include="Models\GoogleAuthResponse.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CalendarController.cs" />

@@ -52,11 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\ApiAuthDto.cs" />
     <Compile Include="Dtos\ClubDto.cs" />
     <Compile Include="Dtos\EventDto.cs" />
     <Compile Include="Dtos\StatGroupDto.cs" />
     <Compile Include="Dtos\StatDto.cs" />
     <Compile Include="Dtos\StatClubDto.cs" />
+    <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Dtos\UserStatsDto.cs" />
     <Compile Include="Enums\StatType.cs" />
     <Compile Include="Entities\Club.cs" />

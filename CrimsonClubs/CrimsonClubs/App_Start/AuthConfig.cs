@@ -18,6 +18,8 @@ namespace CrimsonClubs
     {
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
 
+        public static readonly string ClientId = "77421544828-k57594dl8a1rgmitclu6e0rj8970ved1.apps.googleusercontent.com";
+
         public void ConfigureAuth(IAppBuilder app)
         {
             OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
@@ -45,7 +47,7 @@ namespace CrimsonClubs
 
             var authenticationOptions = new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "77421544828-k57594dl8a1rgmitclu6e0rj8970ved1.apps.googleusercontent.com",
+                ClientId = ClientId,
                 ClientSecret = "m_3UUpAcinahC7R7m-4nzNZq",
                 CallbackPath = new PathString("/auth/signin-google")
             };
