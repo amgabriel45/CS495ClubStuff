@@ -1,4 +1,5 @@
 ﻿using CrimsonClubs.Models.Dtos;
+using CrimsonClubs.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,72 +11,63 @@ using System.Web.Http.Description;
 
 namespace CrimsonClubs.Controllers.Api
 {
-    [RoutePrefix("api/club")]
+    [RoutePrefix("api/clubs")]
     public class ClubController : CCApiController
     {
+        [HttpGet, Route("{id}")]
+        [ResponseType(typeof(int))]
+        public IHttpActionResult GetClub(int id)
+        {
+            var club = db.Clubs.Find(id);
+
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            bool hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted == true);
+
+            if (!hasPermission)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            var dto = new ClubDto(club, true);
+
+            return Ok(dto);
+        }
+
         [HttpGet, Route]
         [ResponseType(typeof(ClubDto[]))]
         public IHttpActionResult GetUserClubs()
         {
-            int userId = CurrentUser.Id;
-
-            var clubs = new List<ClubDto>();
-
-            string sql = "SELECT c.Id, c.Name, c.Description, ISNULL(g.Name,'') AS GroupName, ( SELECT COUNT(*) FROM MM_User_Club WHERE ClubId = c.Id ) AS MemberCount FROM [User] u JOIN MM_User_Club m ON u.Id = m.UserId JOIN Club c ON c.Id = m.ClubId LEFT JOIN [Group] g ON g.Id = c.GroupId WHERE u.Id = @UserId;";
-            using (var conn = new SqlConnection(ConnectionString))
-            using (var cmd = new SqlCommand(sql, conn))
-            {
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                conn.Open();
-
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    var club = new ClubDto();
-                    club.Id = (int)reader["Id"];
-                    club.Name = (string)reader["Name"];
-                    club.Description = (string)reader["Description"];
-                    club.GroupName = (string)reader["GroupName"];
-                    club.MemberCount = (int)reader["MemberCount"];
-
-                    clubs.Add(club);
-                }
-            }
+            var clubs = db.Users.Find(CurrentUser.Id)
+                .MM_User_Club
+                .Select(m => m.Club)
+                .Select(c => new ClubDto(c, false));
 
             return Ok(clubs);
         }
 
-        [HttpGet, Route("{clubId}/calendar")]
-        [ResponseType(typeof(EventDto[]))]
-        public IHttpActionResult GetClubCalendar(int clubId)
+        [HttpGet, Route("{id}/calendar")]
+        [ResponseType(typeof(DetailedEventDto[]))]
+        public IHttpActionResult GetClubCalendar(int id)
         {
-            var events = new List<EventDto>();
+            var club = db.Clubs.Find(id);
 
-            string sql = "SELECT e.Id, e.Name, e.Description, e.Start, e.Finish, e.IsGroupEvent, c.Id AS ClubId, c.Name AS ClubName FROM Club c JOIN MM_Club_Event m2 ON m2.ClubId = c.Id JOIN [Event] e ON e.Id = m2.EventId WHERE c.Id = @ClubId;";
-            using (var conn = new SqlConnection(ConnectionString))
-            using (var cmd = new SqlCommand(sql, conn))
+            if (club == null)
             {
-                cmd.Parameters.AddWithValue("@ClubId", clubId);
-
-                conn.Open();
-
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    var e = new EventDto();
-                    e.Id = (int)reader["Id"];
-                    e.Name = (string)reader["Name"];
-                    e.Description = (string)reader["Description"];
-                    e.Start = (DateTime)reader["Start"];
-                    e.Finish = (DateTime)reader["Finish"];
-                    e.IsGroupEvent = (bool)reader["IsGroupEvent"];
-                    e.ClubId = (int)reader["ClubId"];
-                    e.ClubName = (string)reader["ClubName"];
-
-                    events.Add(e);
-                }
+                return NotFound();
             }
+
+            var hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted);
+
+            if (!hasPermission)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            var events = club.MM_Club_Event.Select(m => new DetailedEventDto(m));
 
             return Ok(events);
         }
@@ -86,16 +78,124 @@ namespace CrimsonClubs.Controllers.Api
         {
             var clubs = db.Clubs
                 .OrderBy(c => c.Group.Name)
-                .Select(c => new ClubDto()
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Description = c.Description,
-                    GroupName = c.Group.Name ?? "",
-                    MemberCount = c.MM_User_Club.Count
-                });
+                .Select(c => new ClubDto(c, false));
 
             return Ok(clubs);
+        }
+
+        [HttpPost, Route]
+        [ResponseType(typeof(Club))]
+        public IHttpActionResult AddClub(AddClubDto dto)
+        {
+            var club = new Club()
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                IsRequestToJoin = dto.IsRequestToJoin,
+                GroupId = dto.GroupId,
+                OrganizationId = 1
+            };
+
+            var relation = new MM_User_Club();
+            relation.Club = club;
+            relation.UserId = CurrentUser.Id;
+            relation.IsAccepted = true;
+            relation.IsAdmin = true;
+
+            db.Clubs.Add(club);
+            db.MM_User_Club.Add(relation);
+
+            db.SaveChanges();
+
+            return Ok(club);
+        }
+
+        [HttpPut, Route]
+        [ResponseType(typeof(Club))]
+        public IHttpActionResult EditClub(EditClubDto dto)
+        {
+            var club = db.Clubs.Find(dto.Id);
+
+            if (club == null)
+            {
+                return BadRequest();
+            }
+            
+            club.Name = dto.Name;
+            club.Description = dto.Description;
+            club.IsRequestToJoin = dto.IsRequestToJoin;
+            club.GroupId = dto.GroupId;
+
+            if (!club.IsRequestToJoin)
+            {
+                var joinRequests = club.MM_User_Club.Where(m => !m.IsAccepted);
+
+                foreach (var request in joinRequests)
+                {
+                    request.IsAccepted = true;
+                }
+
+                db.SaveChanges();
+            }
+
+            return Ok(club);
+        }
+
+        [HttpDelete, Route("{id}")]
+        [ResponseType(typeof(Club))]
+        public IHttpActionResult DeleteClub(int id)
+        {
+            var club = db.Clubs.Find(id);
+
+            if (club == null)
+            {
+                return BadRequest();
+            }
+
+            bool HasPermission = club.MM_User_Club.FirstOrDefault(m => m.UserId == CurrentUser.Id)?.IsAdmin ?? false;
+
+            if (!HasPermission)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            db.Clubs.Remove(club);
+
+            return Ok(club);
+        }
+
+        [HttpPost, Route("{id}/join")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult JoinClub(int id)
+        {
+            var club = db.Clubs.Find(id);
+
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            bool isInClub = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id);
+
+            if (isInClub)
+            {
+                return BadRequest();
+            }
+
+            var relation = new MM_User_Club()
+            {
+                UserId = CurrentUser.Id,
+                ClubId = club.Id,
+                IsAdmin = false,
+                IsAccepted = !club.IsRequestToJoin
+            };
+
+            db.MM_User_Club.Add(relation);
+            db.SaveChanges();
+
+            var message = relation.IsAccepted ? "joined" : "requested";
+
+            return Ok(message);
         }
     }
 }

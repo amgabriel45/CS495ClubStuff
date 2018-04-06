@@ -134,7 +134,7 @@
             controller: {
                 loadData: function () {
                     var params = {};
-                    var data = $.ajax({ type: "GET", url: "api/club", data: params }).then(
+                    var data = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
                         function (arr) {
                             return arr;
                         })
@@ -156,7 +156,7 @@
                                 var params = {};
                                 var events = [];
                                 var $data = $.ajax({
-                                    type: "GET", url: "api/club/" + item.id + "/calendar", data: params
+                                    type: "GET", url: "api/clubs/" + item.id + "/calendar", data: params
                                 }).then(
                                     function (arr) {
                                         for (var i = 0; i < arr.length; i++) { events.push({ title: arr[i].name, start: arr[i].start, end: arr[i].finish, description: arr[i].description }) }

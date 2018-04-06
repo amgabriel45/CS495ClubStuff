@@ -85,5 +85,24 @@ namespace CrimsonClubs.Controllers.Api
 
             return Ok(dto);
         }
+
+        [AllowAnonymous]
+        [HttpGet, Route("test/{userId}")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult GetAuthTest(int userId)
+        {
+            var identity = new ClaimsIdentity(Startup.OAuthBearerOptions.AuthenticationType);
+            identity.AddClaim(new Claim("UserId", userId.ToString(), ClaimValueTypes.Integer));
+
+            var currentUtc = new SystemClock().UtcNow;
+
+            var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
+            ticket.Properties.IssuedUtc = currentUtc;
+            ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromMinutes(30));
+
+            string accessToken = Startup.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
+
+            return Ok(accessToken);
+        }
     }
 }

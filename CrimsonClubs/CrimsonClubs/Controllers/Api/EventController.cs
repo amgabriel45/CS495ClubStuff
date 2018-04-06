@@ -15,7 +15,7 @@ namespace CrimsonClubs.Controllers.Api
     public class EventController : CCApiController
     {
         [HttpGet, Route("{eventId}")]
-        [ResponseType(typeof(EventDto))]
+        [ResponseType(typeof(DetailedEventDto))]
         public IHttpActionResult GetEvent(int? eventId)
         {
             if (eventId == null)
@@ -30,31 +30,12 @@ namespace CrimsonClubs.Controllers.Api
                 return NotFound();
             }
 
-            var dto = new EventDto()
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Description,
-                Start = e.Start,
-                Finish = e.Finish,
-                IsGroupEvent = e.IsGroupEvent
-            };
+            var dbo = db.Users.Find(CurrentUser.Id)
+                .MM_User_Club.Where(m => m.IsAccepted)
+                .SelectMany(m => m.Club.MM_Club_Event)
+                .FirstOrDefault(m => m.EventId == eventId);
 
-            dto.Clubs = e.MM_Club_Event
-                .Select(m => m.Club)
-                .Select(c => new ClubDto()
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Description = c.Description,
-                    GroupName = c.Group.Name ?? "",
-                    MemberCount = c.MM_User_Club.Count
-                })
-                .ToList();
-
-            //dto.ClubStats = db.Stats
-            //    .Where(s => s.Type == (int)StatType.Club)
-            //    .Select(a => a.)
+            var dto = new DetailedEventDto(dbo);
 
             return Ok(dto);
         }
