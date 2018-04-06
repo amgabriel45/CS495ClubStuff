@@ -15,6 +15,11 @@ namespace CrimsonClubs.Models.Dtos
         public string Last { get; set; }
         public bool IsGroupAdmin { get; set; }
 
+        public MemberDto()
+        {
+
+        }
+
         public MemberDto(MM_User_Club dbo)
         {
             Id = dbo.User.Id;

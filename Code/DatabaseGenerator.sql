@@ -93,8 +93,8 @@ CREATE TABLE [MM_Club_Event]
   [ClubId] INT NOT NULL,
   [EventId] INT NOT NULL,
   PRIMARY KEY (ClubId, EventId),
-  FOREIGN KEY (ClubId) REFERENCES [Event](Id),
-  FOREIGN KEY (EventId) REFERENCES [Club](Id)
+  FOREIGN KEY (ClubId) REFERENCES [Club](Id),
+  FOREIGN KEY (EventId) REFERENCES [Event](Id)
 );
 
 CREATE TABLE [Stat_Club]

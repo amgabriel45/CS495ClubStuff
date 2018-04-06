@@ -24,6 +24,11 @@ namespace CrimsonClubs.Models.Dtos
         public List<UserStatsDto> UsersClubStats { get; set; }
         public List<UserStatsDto> UsersGroupStats { get; set; }
 
+        public DetailedEventDto()
+        {
+
+        }
+
         public DetailedEventDto(MM_Club_Event dbo)
         {
             var e = dbo.Event;
@@ -37,7 +42,7 @@ namespace CrimsonClubs.Models.Dtos
             IsGroupEvent = e.IsGroupEvent;
             ClubId = club.Id;
             ClubName = club.Name;
-            Clubs = e.MM_Club_Event.Select(m => new ClubDto(m.Club, false)).ToList();
+            Clubs = e.MM_Club_Event.Select(m => new ClubDto(m.Club)).ToList();
         }
     }
 }

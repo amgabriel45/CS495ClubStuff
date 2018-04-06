@@ -18,16 +18,10 @@ namespace CrimsonClubs.Controllers.Api
         [ResponseType(typeof(DetailedEventDto[]))]
         public IHttpActionResult GetUserCalendar()
         {
-            var a = db.Users.Find(CurrentUser.Id)
+            var events = db.Users.Find(CurrentUser.Id)
                 .MM_User_Club
-                .Where(m => m.IsAccepted);
-
-            var b = a.Select(m => m.Club);
-
-            var c = b
-                .SelectMany(m => m.MM_Club_Event);
-
-            var events = c
+                .Where(m => m.IsAccepted)
+                .SelectMany(m => m.Club.MM_Club_Event)
                 .Select(m => new DetailedEventDto(m));
 
             return Ok(events);

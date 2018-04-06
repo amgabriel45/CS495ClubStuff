@@ -15,7 +15,7 @@ namespace CrimsonClubs.Controllers.Api
     public class ClubController : CCApiController
     {
         [HttpGet, Route("{id}")]
-        [ResponseType(typeof(int))]
+        [ResponseType(typeof(DetailedClubDto))]
         public IHttpActionResult GetClub(int id)
         {
             var club = db.Clubs.Find(id);
@@ -32,7 +32,7 @@ namespace CrimsonClubs.Controllers.Api
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            var dto = new ClubDto(club, true);
+            var dto = new DetailedClubDto(club);
 
             return Ok(dto);
         }
@@ -42,34 +42,10 @@ namespace CrimsonClubs.Controllers.Api
         public IHttpActionResult GetUserClubs()
         {
             var clubs = db.Users.Find(CurrentUser.Id)
-                .MM_User_Club
-                .Select(m => m.Club)
-                .Select(c => new ClubDto(c, false));
+                .MM_User_Club.Select(m => m.Club)
+                .Select(c => new ClubDto(c));
 
             return Ok(clubs);
-        }
-
-        [HttpGet, Route("{id}/calendar")]
-        [ResponseType(typeof(DetailedEventDto[]))]
-        public IHttpActionResult GetClubCalendar(int id)
-        {
-            var club = db.Clubs.Find(id);
-
-            if (club == null)
-            {
-                return NotFound();
-            }
-
-            var hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted);
-
-            if (!hasPermission)
-            {
-                return StatusCode(HttpStatusCode.Forbidden);
-            }
-
-            var events = club.MM_Club_Event.Select(m => new DetailedEventDto(m));
-
-            return Ok(events);
         }
 
         [HttpGet, Route("all")]
@@ -78,7 +54,8 @@ namespace CrimsonClubs.Controllers.Api
         {
             var clubs = db.Clubs
                 .OrderBy(c => c.Group.Name)
-                .Select(c => new ClubDto(c, false));
+                .ToList()
+                .Select(c => new ClubDto(c));
 
             return Ok(clubs);
         }
@@ -134,9 +111,9 @@ namespace CrimsonClubs.Controllers.Api
                 {
                     request.IsAccepted = true;
                 }
-
-                db.SaveChanges();
             }
+
+            db.SaveChanges();
 
             return Ok(club);
         }
@@ -160,6 +137,7 @@ namespace CrimsonClubs.Controllers.Api
             }
 
             db.Clubs.Remove(club);
+            db.SaveChanges();
 
             return Ok(club);
         }
@@ -196,6 +174,29 @@ namespace CrimsonClubs.Controllers.Api
             var message = relation.IsAccepted ? "joined" : "requested";
 
             return Ok(message);
+        }
+
+        [HttpGet, Route("{id}/calendar")]
+        [ResponseType(typeof(DetailedEventDto[]))]
+        public IHttpActionResult GetClubCalendar(int id)
+        {
+            var club = db.Clubs.Find(id);
+
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            var hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted);
+
+            if (!hasPermission)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            var events = club.MM_Club_Event.Select(m => new DetailedEventDto(m));
+
+            return Ok(events);
         }
     }
 }

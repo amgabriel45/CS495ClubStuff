@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\DetailedClubDto.cs" />
     <Compile Include="Dtos\EventDto.cs" />
     <Compile Include="Dtos\MemberDto.cs" />
     <Compile Include="Dtos\EditClubDto.cs" />
@@ -64,7 +65,6 @@
     <Compile Include="Dtos\StatClubDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Dtos\UserStatsDto.cs" />
-    <Compile Include="Enums\StatType.cs" />
     <Compile Include="Entities\Club.cs" />
     <Compile Include="Entities\CrimsonClubsDbContext.cs" />
     <Compile Include="Entities\Event.cs" />
@@ -75,6 +75,7 @@
     <Compile Include="Entities\Organization.cs" />
     <Compile Include="Entities\Stat.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Enums\StatType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

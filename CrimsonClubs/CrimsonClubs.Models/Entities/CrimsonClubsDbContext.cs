@@ -27,7 +27,6 @@ namespace CrimsonClubs.Models.Entities
             modelBuilder.Entity<Club>()
                 .HasMany(e => e.MM_Club_Event)
                 .WithRequired(e => e.Club)
-                .HasForeignKey(e => e.EventId)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Club>()
@@ -46,7 +45,6 @@ namespace CrimsonClubs.Models.Entities
             modelBuilder.Entity<Event>()
                 .HasMany(e => e.MM_Club_Event)
                 .WithRequired(e => e.Event)
-                .HasForeignKey(e => e.ClubId)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Event>()
