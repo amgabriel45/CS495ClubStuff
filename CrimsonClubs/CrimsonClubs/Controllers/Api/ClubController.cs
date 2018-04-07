@@ -61,7 +61,7 @@ namespace CrimsonClubs.Controllers.Api
         }
 
         [HttpPost, Route]
-        [ResponseType(typeof(Club))]
+        [ResponseType(typeof(ClubDto))]
         public IHttpActionResult AddClub(AddClubDto dto)
         {
             var club = new Club()
@@ -84,11 +84,11 @@ namespace CrimsonClubs.Controllers.Api
 
             db.SaveChanges();
 
-            return Ok(club);
+            return Created($"api/clubs/{club.Id}", new ClubDto(club));
         }
 
         [HttpPut, Route]
-        [ResponseType(typeof(Club))]
+        [ResponseType(typeof(ClubDto))]
         public IHttpActionResult EditClub(EditClubDto dto)
         {
             var club = db.Clubs.Find(dto.Id);
@@ -115,18 +115,18 @@ namespace CrimsonClubs.Controllers.Api
 
             db.SaveChanges();
 
-            return Ok(club);
+            return Ok(new ClubDto(club));
         }
 
         [HttpDelete, Route("{id}")]
-        [ResponseType(typeof(Club))]
+        [ResponseType(typeof(string))]
         public IHttpActionResult DeleteClub(int id)
         {
             var club = db.Clubs.Find(id);
 
             if (club == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             bool HasPermission = club.MM_User_Club.FirstOrDefault(m => m.UserId == CurrentUser.Id)?.IsAdmin ?? false;
@@ -139,7 +139,7 @@ namespace CrimsonClubs.Controllers.Api
             db.Clubs.Remove(club);
             db.SaveChanges();
 
-            return Ok(club);
+            return Ok();
         }
 
         [HttpPost, Route("{id}/join")]
@@ -174,6 +174,30 @@ namespace CrimsonClubs.Controllers.Api
             var message = relation.IsAccepted ? "joined" : "requested";
 
             return Ok(message);
+        }
+
+        [HttpPost, Route("{id}/leave")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult LeaveClub(int id)
+        {
+            var club = db.Clubs.Find(id);
+
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            var relation = club.MM_User_Club.FirstOrDefault(m => m.UserId == CurrentUser.Id);
+
+            if (relation == null)
+            {
+                return BadRequest();
+            }
+
+            db.MM_User_Club.Remove(relation);
+            db.SaveChanges();
+
+            return Ok();
         }
 
         [HttpGet, Route("{id}/calendar")]

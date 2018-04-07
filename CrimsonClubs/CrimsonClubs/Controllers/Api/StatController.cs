@@ -11,7 +11,7 @@ using System.Web.Http.Description;
 
 namespace CrimsonClubs.Controllers.Api
 {
-    [RoutePrefix("api/stat")]
+    [RoutePrefix("api/groups/{id}/stats")]
     public class StatController : CCApiController
     {
         [HttpGet, Route]

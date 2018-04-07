@@ -20,6 +20,8 @@ namespace CrimsonClubs.Models.Entities
         public virtual DbSet<MMM_User_Event_Stat> MMM_User_Event_Stat { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<Stat> Stats { get; set; }
+        public virtual DbSet<Stat_Club> Stat_Club { get; set; }
+        public virtual DbSet<Stat_Group> Stat_Group { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -31,6 +33,11 @@ namespace CrimsonClubs.Models.Entities
 
             modelBuilder.Entity<Club>()
                 .HasMany(e => e.MM_User_Club)
+                .WithRequired(e => e.Club)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Club>()
+                .HasMany(e => e.Stat_Club)
                 .WithRequired(e => e.Club)
                 .WillCascadeOnDelete(false);
 
@@ -52,6 +59,11 @@ namespace CrimsonClubs.Models.Entities
                 .WithRequired(e => e.Event)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Group>()
+                .HasMany(e => e.Stat_Group)
+                .WithRequired(e => e.Group)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Organization>()
                 .HasMany(e => e.Clubs)
                 .WithRequired(e => e.Organization)
@@ -71,6 +83,14 @@ namespace CrimsonClubs.Models.Entities
                 .HasMany(e => e.MMM_User_Event_Stat)
                 .WithRequired(e => e.Stat)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Stat>()
+                .HasOptional(e => e.Stat_Club)
+                .WithRequired(e => e.Stat);
+
+            modelBuilder.Entity<Stat>()
+                .HasOptional(e => e.Stat_Group)
+                .WithRequired(e => e.Stat);
 
             modelBuilder.Entity<User>()
                 .HasMany(e => e.MM_User_Club)

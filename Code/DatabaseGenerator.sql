@@ -145,13 +145,13 @@ INSERT INTO Stat
 
 INSERT INTO Stat_Club
 (StatId, ClubId) VALUES
-(4, 1);
+(1, 1);
 
 INSERT INTO Stat_Group
 (StatId, GroupId) VALUES
-(1, 1),
 (2, 1),
-(3, 1);
+(3, 1),
+(4, 1);
 
 INSERT INTO dbo.[Event]
 (Name, Description, Start, Finish, IsGroupEvent) VALUES

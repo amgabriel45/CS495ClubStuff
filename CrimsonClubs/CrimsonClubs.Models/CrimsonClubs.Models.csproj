@@ -52,8 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\EditGroupDto.cs" />
     <Compile Include="Dtos\DetailedClubDto.cs" />
     <Compile Include="Dtos\EventDto.cs" />
+    <Compile Include="Dtos\AddGroupDto.cs" />
+    <Compile Include="Dtos\GroupDto.cs" />
     <Compile Include="Dtos\MemberDto.cs" />
     <Compile Include="Dtos\EditClubDto.cs" />
     <Compile Include="Dtos\AddClubDto.cs" />
@@ -74,14 +77,18 @@
     <Compile Include="Entities\MM_User_Club.cs" />
     <Compile Include="Entities\Organization.cs" />
     <Compile Include="Entities\Stat.cs" />
+    <Compile Include="Entities\Stat_Club.cs" />
+    <Compile Include="Entities\Stat_Group.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Enums\StatType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

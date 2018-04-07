@@ -1,5 +1,4 @@
 ﻿using CrimsonClubs.Models.Entities;
-using CrimsonClubs.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,26 +7,26 @@ using System.Threading.Tasks;
 
 namespace CrimsonClubs.Models.Dtos
 {
-    public class StatDto
+    public class GroupDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Abbreviation { get; set; }
-        public StatType Type { get; set; }
+        public int OrganizationId { get; set; }
+        public int ClubCount { get; set; }
 
-        public StatDto()
+        public GroupDto()
         {
 
         }
 
-        public StatDto(Stat dbo)
+        public GroupDto(Group dbo)
         {
             Id = dbo.Id;
             Name = dbo.Name;
             Description = dbo.Description;
-            Abbreviation = dbo.Abbreviation;
-            Type = (StatType)dbo.Type;
+            OrganizationId = dbo.OrganizationId;
+            ClubCount = dbo.Clubs.Count;
         }
     }
 }

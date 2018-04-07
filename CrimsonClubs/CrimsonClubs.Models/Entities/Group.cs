@@ -13,7 +13,7 @@ namespace CrimsonClubs.Models.Entities
         public Group()
         {
             Clubs = new HashSet<Club>();
-            Stats = new HashSet<Stat>();
+            Stat_Group = new HashSet<Stat_Group>();
         }
 
         public int Id { get; set; }
@@ -31,6 +31,6 @@ namespace CrimsonClubs.Models.Entities
         public virtual Organization Organization { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Stat> Stats { get; set; }
+        public virtual ICollection<Stat_Group> Stat_Group { get; set; }
     }
 }

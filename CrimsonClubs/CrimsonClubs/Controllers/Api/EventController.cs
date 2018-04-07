@@ -11,7 +11,7 @@ using System.Web.Http.Description;
 
 namespace CrimsonClubs.Controllers.Api
 {
-    [RoutePrefix("api/event")]
+    [RoutePrefix("api/events")]
     public class EventController : CCApiController
     {
         [HttpGet, Route("{eventId}")]

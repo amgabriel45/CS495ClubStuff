@@ -30,8 +30,8 @@ namespace CrimsonClubs.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MMM_User_Event_Stat> MMM_User_Event_Stat { get; set; }
 
-        public virtual Club Club { get; set; }
+        public virtual Stat_Club Stat_Club { get; set; }
 
-        public virtual Group Group { get; set; }
+        public virtual Stat_Group Stat_Group { get; set; }
     }
 }
