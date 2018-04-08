@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PointF;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Keep;
@@ -22,6 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -70,6 +77,8 @@ public class MainActivity extends AppCompatActivity
 
 {
 
+    public Toolbar toolbar;
+    public static GoogleSignInClient mGoogleSignInClient;
 
     public static OkHttpClient client;
     public static boolean hasConnected = false; //set true when app first connects to a server, set back to false when host is changed
@@ -78,6 +87,8 @@ public class MainActivity extends AppCompatActivity
     public Drawer bookmarkDrawer = null;
 
     public Stack<Integer> navStack = new Stack<>();
+
+
 
     //private static SQLiteDatabaseHandler db;
 
@@ -88,24 +99,19 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        initDrawers(toolbar); //build nav drawer and bookmark drawer
-
-
-        setUpDemoDrawer();
-
 
 
         client = getUnsafeOkHttpClient(); //sets up client that accepts any SSL certificate
 
-        //db = new SQLiteDatabaseHandler(this);
+        initDrawers(toolbar); //build nav drawer and bookmark drawer
 
-       // db.getReadableDatabase();
+        setUpDemoDrawer();
 
-      //  db.close();
+
     }
+
 
     private  Drawer.OnDrawerItemClickListener listener(){ //handles what happens when poi draweritem is clicked
 
@@ -263,8 +269,10 @@ public class MainActivity extends AppCompatActivity
 
        // db.close();
 
-        if(!navDrawer.isDrawerOpen()) {
-            updateNavDrawer(); //populates drawer w/ top level navObjects info
+        if(navDrawer != null) {
+            if (!navDrawer.isDrawerOpen()) {
+                updateNavDrawer(); //populates drawer w/ top level navObjects info
+            }
         }
     }
 
@@ -387,18 +395,16 @@ public class MainActivity extends AppCompatActivity
 
     private void initDrawers(Toolbar toolbar){ //sets up the drawers
 
+
+
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.side_nav_bar)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("Taylor Meads").withEmail("tfmeads@crimson.ua.edu").withIcon(getResources().getDrawable(R.drawable.pro))
+                        new ProfileDrawerItem()
+                                .withName(getIntent().getStringExtra("name"))
+                                .withEmail(getIntent().getStringExtra("email"))
                 )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-                        return false;
-                    }
-                })
                 .build();
 
         navDrawer = new DrawerBuilder()
