@@ -40,7 +40,9 @@ namespace CrimsonClubs.Controllers.Api
             string json = await response.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<GoogleAuthResponse>(json);
 
-            if (data.ClientId != Startup.ClientId)
+            //string androidClientId = "77421544828-33rdp50mrdtpeje5dpbal37s63e5ojco.apps.googleusercontent.com";
+
+            if (data.ClientIdWeb != Startup.ClientId) // && data.ClientIdApp != androidClientId
             {
                 return BadRequest("Invalid Token Origin");
             }

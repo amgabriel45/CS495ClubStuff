@@ -18,6 +18,9 @@ namespace CrimsonClubs.Models
         public string Last { get; set; }
 
         [JsonProperty("aud")]
-        public string ClientId { get; set; }
+        public string ClientIdWeb { get; set; }
+
+        [JsonProperty("azp")]
+        public string ClientIdApp { get; set; }
     }
 }
