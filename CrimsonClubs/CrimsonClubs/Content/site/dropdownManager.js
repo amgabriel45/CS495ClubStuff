@@ -10,31 +10,26 @@
     }
 
     //Grant dropdown helpers
-    var grants = [];
-    container.refreshGrants = function (callback) {
-        $.ajax({ method: "get", url: "/Shared/GetGrantDropdown" }).done(
+    var groups = [];
+    container.refreshGroups = function (callback) {
+        $.ajax({ method: "get", url: "api/groups" }).done(
                 function (data) {
-                    grants = data;
-                    dropdownsLoaded.push("grants");
+                    groups = data;
+                    dropdownsLoaded.push("groups");
                     callback();
                 });
     }
-    container.getGrants = function (options) {
+    container.getGroups = function (options) {
         options = options || {};
-        var list = $.map(grants, function (obj) {
-            obj.id = obj.GrantId.toString();
-            //Helen's change reverted...
-            //if (options.includeBanner)
-            //    obj.text = obj.BannerAccount + " - " + obj.GrantNumber;
-            //else
-            //    obj.text = obj.GrantNumber;
-            obj.text = obj.BannerAccount + " - " + obj.GrantNumber;
+        var list = $.map(groups, function (obj) {
+            obj.id = obj.Id.toString();
+            obj.text = obj.Name;
             return obj;
         });
         return processOptions(list, options)
     }
-    container.getGrantsWithEmpty = function (options) {
-        return [{ "id": "", "text": " " }].concat(container.getGrants(options));
+    container.getGroupsWithEmpty = function (options) {
+        return [{ "id": "", "text": " " }].concat(container.getGroups(options));
     }
 
     //Active Grant dropdown helpers
@@ -259,8 +254,8 @@
     }
 
     var findRefreshMethod = function (method) {
-        if (method === "grants")
-            return container.refreshGrants;
+        if (method === "groups")
+            return container.refreshGroups;
         else if (method === "activeGrants")
             return container.refreshActiveGrants;
         else if (method === "projects")

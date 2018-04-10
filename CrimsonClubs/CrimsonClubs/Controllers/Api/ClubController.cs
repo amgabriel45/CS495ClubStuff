@@ -41,8 +41,10 @@ namespace CrimsonClubs.Controllers.Api
         [ResponseType(typeof(ClubDto[]))]
         public IHttpActionResult GetUserClubs()
         {
-            var clubs = db.Users.Find(CurrentUser.Id)
+            var a = db.Users.Find(CurrentUser.Id);
+            var clubs = a
                 .MM_User_Club.Select(m => m.Club)
+                .Where(m => m != null)
                 .Select(c => new ClubDto(c));
 
             return Ok(clubs);
@@ -136,6 +138,7 @@ namespace CrimsonClubs.Controllers.Api
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
+            db.MM_User_Club.RemoveRange(club.MM_User_Club);
             db.Clubs.Remove(club);
             db.SaveChanges();
 

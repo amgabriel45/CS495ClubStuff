@@ -9,13 +9,13 @@
                 <h2 class="panel-title">
                     <span>Clubs</span>
                     <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Club</span></button>
-                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
+                    @*<a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
                         Advanced Search Options
-                    </a>
+                    </a>*@
                 </h2>
             </div>
             <div class="panel-body panel-no-pad">
-                <div class="collapse" id="collapseSearch">
+                @*<div class="collapse" id="collapseSearch">
                     <div class="panel">
                         <div class="panel-body container">
                             <div class="row">
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
                 <div id="jsGrid" class="fullHeight"></div>
             </div>
         </div>
@@ -62,32 +62,98 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group form-material floating" data-plugin="formMaterial">
-                                    <input type="text" class="form-control empty" id="Description" name="Description" data-field="Description" />
-                                    <label class="form-control-label floating-label">Description</label>
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material" data-plugin="formMaterial">
+                                    <label class="form-control-label">Group Name</label>
+                                    <select class="combobox" id="Group" data-field="Group">
+                                        <option value="">Select an Option</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group form-material floating" data-plugin="formMaterial">
-                                    <div id='calendar'></div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <input type="text" class="form-control empty" id="Description" name="Description" data-field="Description" />
+                                        <label class="form-control-label floating-label">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <div id='calendar'></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+            </div>
+                <div class="modal-footer">
+                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
+                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
-                <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
-                <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
-            </div>
         </div>
     </div>
 </div>
-
+<div class="modal modal-primary" tabindex="-1" role="dialog" id="mainModal">
+    <div class="modal-dialog modal-center modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: rgb(158,27,50)">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="bottomTitle">View Club</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div id="bottomHalf">
+                        <input type="hidden" id="ClubId" data-field="ClubId" />
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <input type="text" class="form-control empty" id="ClubName" name="ClubName" data-field="ClubName" />
+                                    <label class="form-control-label floating-label">Club Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material" data-plugin="formMaterial">
+                                    <label class="form-control-label">Group Name</label>
+                                    <select class="combobox" id="Group" data-field="Group">
+                                        <option value="">Select an Option</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <input type="text" class="form-control empty" id="Description" name="Description" data-field="Description" />
+                                        <label class="form-control-label floating-label">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <div id='calendar'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                <div class="modal-footer">
+                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
+                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
+                </div>
+        </div>
+    </div>
+</div>
 @section stylesheets {
     @*<link type="text/css" rel="stylesheet" href="~/Content/global/vendor/jsgrid/jsgrid.css" />*@
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
@@ -121,6 +187,18 @@
             $("#statusFilter").select2();
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
             $('#jsGrid').jsGrid("loadData");
+            var params = {};
+            var data = $.ajax({ type: "GET", url: "api/groups/", data: params }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#Group").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                    }
+                    return arr;
+                })
         });
        
         $("#jsGrid").jsGrid({
@@ -153,6 +231,9 @@
 
                         var $customButton = $("<i class=\"site-menu-icon md-calendar\" aria-hidden=\"true\"></i>")
                             .click(function (e) {
+                                $('#deleteButton').show();
+                                $("#saveNewButton").hide();
+                                $("#saveButton").show();
                                 var params = {};
                                 var events = [];
                                 var $data = $.ajax({
@@ -187,6 +268,9 @@
                                 $('#ClubName').val(item.name);
                                 $('#Description').removeClass('empty');
                                 $('#Description').val(item.description);
+                                $('#ClubId').val(item.id);
+                                $('#Group').val(item.groupName);
+                                $('#Group').change();
                             });
 
                         return $customButton;
@@ -198,14 +282,71 @@
         });
 
         $("#createButton").click(function () {
+            $('#calendar').fullCalendar('destroy');
+            $("#saveNewButton").show();
+            $("#saveButton").hide();
+            $('#ClubName').addClass('empty');
+            $('#ClubName').val('');
+            $('#Description').addClass('empty');
+            $('#Description').val('');
+            $('#Group').val('');
+            $('#Group').change();
+            $('#deleteButton').hide();
             $('#mainModal').modal('toggle');
         });
+
+        $("#deleteButton").click(function () {
+            var params = {};
+            var id = $('#ClubId').val();
+            var data = $.ajax({ type: "DELETE", url: "api/clubs/" + id , data: params }).then(
+                function (arr) {
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+            $('#jsGrid').jsGrid("loadData");
+        });
+
+        $("#saveNewButton").click(function () {
+            var params = {};
+            params["name"] = $("#ClubName").val();
+            params["description"] = $("#Description").val();
+            params["isRequestToJoin"] = true;
+            params["groupId"] = $("#Group").val();
+            var $data = $.ajax({
+                type: "POST", url: "api/clubs/", data: params
+            }).then(
+                function (arr) {
+                    
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+
+            location.reload();
+            //$('#jsGrid').jsGrid("loadData");
+        });
+        $("#saveButton").click(function () {
+            var params = {};
+            params["id"] = $("#ClubId").val();
+            params["name"] = $("#ClubName").val();
+            params["description"] = $("#Description").val();
+            params["groupId"] = $("#Group").val();
+
+            var $data = $.ajax({
+                type: "PUT", url: "api/clubs/", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+            $('#jsGrid').jsGrid("loadData");
+        });
+
         $("#cancelButton").click(function () {
             $('#calendar').fullCalendar('destroy');
-        });
-        $("#cancelButton").click(function () {
             $('#mainModal').modal('toggle');
         });
+
 
     </script>
 }
