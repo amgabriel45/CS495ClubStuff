@@ -1,6 +1,7 @@
 ﻿using CrimsonClubs.Models;
 using CrimsonClubs.Models.Dtos;
 using CrimsonClubs.Models.Entities;
+using CrimsonClubs.Start;
 using Microsoft.Owin.Infrastructure;
 using Microsoft.Owin.Security;
 using Newtonsoft.Json;
@@ -42,7 +43,7 @@ namespace CrimsonClubs.Controllers.Api
 
             //string androidClientId = "77421544828-33rdp50mrdtpeje5dpbal37s63e5ojco.apps.googleusercontent.com";
 
-            if (data.ClientIdWeb != Startup.ClientId) // && data.ClientIdApp != androidClientId
+            if (data.ClientIdWeb != AuthConfig.ClientId) // && data.ClientIdApp != androidClientId
             {
                 return BadRequest("Invalid Token Origin");
             }
@@ -62,8 +63,10 @@ namespace CrimsonClubs.Controllers.Api
                 db.SaveChanges();
             }
 
-            var identity = new ClaimsIdentity(Startup.OAuthBearerOptions.AuthenticationType);
+            var identity = new ClaimsIdentity(AuthConfig.OAuthBearerOptions.AuthenticationType);
             identity.AddClaim(new Claim("UserId", user.Id.ToString(), ClaimValueTypes.Integer));
+            identity.AddClaim(new Claim("FirstName", user.First));
+            identity.AddClaim(new Claim("LastName", user.Last));
 
             var currentUtc = new SystemClock().UtcNow;
 
@@ -71,7 +74,7 @@ namespace CrimsonClubs.Controllers.Api
             ticket.Properties.IssuedUtc = currentUtc;
             ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromMinutes(30));
 
-            string accessToken = Startup.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
+            string accessToken = AuthConfig.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
 
             var dto = new ApiAuthDto();
             dto.Token = accessToken;
@@ -93,7 +96,7 @@ namespace CrimsonClubs.Controllers.Api
         [ResponseType(typeof(ApiAuthDto))]
         public IHttpActionResult GetAuthTest(int userId)
         {
-            var identity = new ClaimsIdentity(Startup.OAuthBearerOptions.AuthenticationType);
+            var identity = new ClaimsIdentity(AuthConfig.OAuthBearerOptions.AuthenticationType);
             identity.AddClaim(new Claim("UserId", userId.ToString(), ClaimValueTypes.Integer));
 
             var currentUtc = new SystemClock().UtcNow;
@@ -102,7 +105,7 @@ namespace CrimsonClubs.Controllers.Api
             ticket.Properties.IssuedUtc = currentUtc;
             ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromMinutes(30));
 
-            string accessToken = Startup.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
+            string accessToken = AuthConfig.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
 
             var user = db.Users.Find(userId);
 

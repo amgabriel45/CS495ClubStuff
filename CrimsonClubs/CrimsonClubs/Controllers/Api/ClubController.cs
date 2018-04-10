@@ -41,10 +41,8 @@ namespace CrimsonClubs.Controllers.Api
         [ResponseType(typeof(ClubDto[]))]
         public IHttpActionResult GetUserClubs()
         {
-            var a = db.Users.Find(CurrentUser.Id);
-            var clubs = a
+            var clubs = db.Users.Find(CurrentUser.Id)
                 .MM_User_Club.Select(m => m.Club)
-                .Where(m => m != null)
                 .Select(c => new ClubDto(c));
 
             return Ok(clubs);

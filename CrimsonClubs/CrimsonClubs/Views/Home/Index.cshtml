@@ -97,63 +97,7 @@
         </div>
     </div>
 </div>
-<div class="modal modal-primary" tabindex="-1" role="dialog" id="mainModal">
-    <div class="modal-dialog modal-center modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: rgb(158,27,50)">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="bottomTitle">View Club</h4>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div id="bottomHalf">
-                        <input type="hidden" id="ClubId" data-field="ClubId" />
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <div class="form-group form-material floating" data-plugin="formMaterial">
-                                    <input type="text" class="form-control empty" id="ClubName" name="ClubName" data-field="ClubName" />
-                                    <label class="form-control-label floating-label">Club Name</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-3">
-                                <div class="form-group form-material" data-plugin="formMaterial">
-                                    <label class="form-control-label">Group Name</label>
-                                    <select class="combobox" id="Group" data-field="Group">
-                                        <option value="">Select an Option</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group form-material floating" data-plugin="formMaterial">
-                                        <input type="text" class="form-control empty" id="Description" name="Description" data-field="Description" />
-                                        <label class="form-control-label floating-label">Description</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group form-material floating" data-plugin="formMaterial">
-                                        <div id='calendar'></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-                <div class="modal-footer">
-                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
-                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
-                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
-                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
-                </div>
-        </div>
-    </div>
-</div>
+
 @section stylesheets {
     @*<link type="text/css" rel="stylesheet" href="~/Content/global/vendor/jsgrid/jsgrid.css" />*@
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
@@ -269,7 +213,7 @@
                                 $('#Description').removeClass('empty');
                                 $('#Description').val(item.description);
                                 $('#ClubId').val(item.id);
-                                $('#Group').val(item.groupName);
+                                $('#Group').val(item.groupId);
                                 $('#Group').change();
                             });
 
@@ -300,10 +244,10 @@
             var id = $('#ClubId').val();
             var data = $.ajax({ type: "DELETE", url: "api/clubs/" + id , data: params }).then(
                 function (arr) {
+                    $('#mainModal').modal('toggle');
+                    $('#jsGrid').jsGrid("loadData");
                     return arr;
                 });
-            $('#mainModal').modal('toggle');
-            $('#jsGrid').jsGrid("loadData");
         });
 
         $("#saveNewButton").click(function () {

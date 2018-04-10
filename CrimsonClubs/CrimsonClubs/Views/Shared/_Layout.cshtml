@@ -1,4 +1,5 @@
-﻿
+﻿@using CrimsonClubs.Models;
+@{ var user = new CurrentUser(Context.User); }
 <!DOCTYPE html>
 <html>
 <head>
@@ -97,12 +98,12 @@
                 </a>
 
                 <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item waves-effect waves-light waves-round" style="padding-bottom:15px;" href="javascript:void(0)" role="menuitem"><i aria-hidden="true"></i> Welcome, Max!</a>
+                    <a class="dropdown-item waves-effect waves-light waves-round" style="padding-bottom:15px;" href="javascript:void(0)" role="menuitem"><i aria-hidden="true"></i> Welcome, @user.First!</a>
                     <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
                    @* <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>*@
                     <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
+                    <a class="dropdown-item waves-effect waves-light waves-round" href="~/auth/logout" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
                 </div>
             </li>
         </ul>
