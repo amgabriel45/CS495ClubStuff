@@ -133,5 +133,26 @@ namespace CrimsonClubs.Controllers.Api
 
             return Ok();
         }
+
+        [HttpPost, Route("{eventId}/stats")]
+        [ResponseType(typeof(IHttpActionResult))]
+        public IHttpActionResult AddStatValuesToEvent(int eventId, StatValueDto[] values)
+        {
+            var e = db.Events.Find(eventId);
+
+            if (e == null)
+            {
+                return NotFound();
+            }
+
+            db.MMM_User_Event_Stat.RemoveRange(e.MMM_User_Event_Stat);
+
+            var entities = values.Select(v => v.ToEntity());
+            db.MMM_User_Event_Stat.AddRange(entities);
+
+            db.SaveChanges();
+
+            return Ok();
+        }
     }
 }
