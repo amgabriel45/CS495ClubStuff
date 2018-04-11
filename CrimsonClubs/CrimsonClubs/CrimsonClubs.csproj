@@ -18,7 +18,7 @@
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
@@ -185,6 +185,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Site\EventController.cs" />
     <Compile Include="Start\AuthConfig.cs" />
     <Compile Include="Start\BundleConfig.cs" />
     <Compile Include="Start\FilterConfig.cs" />
@@ -2849,6 +2850,7 @@
     <None Include="Properties\PublishProfiles\LocalForDev.pubxml" />
     <None Include="Properties\PublishProfiles\LocalForProd.pubxml" />
     <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
     <None Include="Web.ReleaseDev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
