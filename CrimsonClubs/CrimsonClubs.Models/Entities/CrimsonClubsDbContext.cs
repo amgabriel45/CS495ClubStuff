@@ -26,21 +26,6 @@ namespace CrimsonClubs.Models.Entities
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Club>()
-                .HasMany(e => e.MM_Club_Event)
-                .WithRequired(e => e.Club)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Club>()
-                .HasMany(e => e.MM_User_Club)
-                .WithRequired(e => e.Club)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Club>()
-                .HasMany(e => e.Stat_Club)
-                .WithRequired(e => e.Club)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Event>()
                 .Property(e => e.Start)
                 .HasPrecision(0);
@@ -49,58 +34,20 @@ namespace CrimsonClubs.Models.Entities
                 .Property(e => e.Finish)
                 .HasPrecision(0);
 
-            modelBuilder.Entity<Event>()
-                .HasMany(e => e.MM_Club_Event)
-                .WithRequired(e => e.Event)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Event>()
-                .HasMany(e => e.MMM_User_Event_Stat)
-                .WithRequired(e => e.Event)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Group>()
-                .HasMany(e => e.Stat_Group)
-                .WithRequired(e => e.Group)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Organization>()
                 .HasMany(e => e.Clubs)
                 .WithRequired(e => e.Organization)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Organization>()
-                .HasMany(e => e.Groups)
-                .WithRequired(e => e.Organization)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Organization>()
-                .HasMany(e => e.Users)
-                .WithRequired(e => e.Organization)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Stat>()
-                .HasMany(e => e.MMM_User_Event_Stat)
-                .WithRequired(e => e.Stat)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<Stat>()
                 .HasOptional(e => e.Stat_Club)
-                .WithRequired(e => e.Stat);
+                .WithRequired(e => e.Stat)
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<Stat>()
                 .HasOptional(e => e.Stat_Group)
-                .WithRequired(e => e.Stat);
-
-            modelBuilder.Entity<User>()
-                .HasMany(e => e.MM_User_Club)
-                .WithRequired(e => e.User)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<User>()
-                .HasMany(e => e.MMM_User_Event_Stat)
-                .WithRequired(e => e.User)
-                .WillCascadeOnDelete(false);
+                .WithRequired(e => e.Stat)
+                .WillCascadeOnDelete();
         }
     }
 }
