@@ -18,7 +18,7 @@
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
@@ -186,7 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Site\EventController.cs" />
-    <Compile Include="Controllers\Api\ClubStatController.cs" />
+    <Compile Include="Controllers\Api\StatController.cs" />
     <Compile Include="Start\AuthConfig.cs" />
     <Compile Include="Start\BundleConfig.cs" />
     <Compile Include="Start\FilterConfig.cs" />

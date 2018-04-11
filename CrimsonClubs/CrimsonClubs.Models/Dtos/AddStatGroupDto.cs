@@ -16,6 +16,7 @@ namespace CrimsonClubs.Models.Dtos
         {
             var stat = new Stat_Group();
             stat.Stat = base.ToEntity();
+            stat.Stat.Type = (int)StatType.Group;
             stat.GroupId = GroupId;
 
             return stat;

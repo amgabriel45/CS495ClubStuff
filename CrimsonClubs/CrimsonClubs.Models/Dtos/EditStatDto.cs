@@ -8,20 +8,18 @@ using System.Threading.Tasks;
 
 namespace CrimsonClubs.Models.Dtos
 {
-    public class AddStatDto
+    public class EditStatDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Abbreviation { get; set; }
 
-        public Stat ToEntity()
+        public void Edit(ref Stat dbo)
         {
-            var stat = new Stat();
-            stat.Name = Name;
-            stat.Description = Description;
-            stat.Abbreviation = Abbreviation;
-
-            return stat;
+            dbo.Name = Name;
+            dbo.Description = Description;
+            dbo.Abbreviation = Abbreviation;
         }
     }
 }
