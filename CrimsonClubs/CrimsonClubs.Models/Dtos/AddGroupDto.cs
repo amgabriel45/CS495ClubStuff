@@ -17,7 +17,7 @@ namespace CrimsonClubs.Models.Dtos
 
         }
 
-        public Group FromDto()
+        public Group ToEntity()
         {
             var group = new Group()
             {

@@ -200,28 +200,5 @@ namespace CrimsonClubs.Controllers.Api
 
             return Ok();
         }
-
-        [HttpGet, Route("{id}/calendar")]
-        [ResponseType(typeof(DetailedEventDto[]))]
-        public IHttpActionResult GetClubCalendar(int id)
-        {
-            var club = db.Clubs.Find(id);
-
-            if (club == null)
-            {
-                return NotFound();
-            }
-
-            var hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted);
-
-            if (!hasPermission)
-            {
-                return StatusCode(HttpStatusCode.Forbidden);
-            }
-
-            var events = club.MM_Club_Event.Select(m => new DetailedEventDto(m));
-
-            return Ok(events);
-        }
     }
 }
