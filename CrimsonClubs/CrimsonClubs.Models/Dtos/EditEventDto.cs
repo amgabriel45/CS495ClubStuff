@@ -37,12 +37,15 @@ namespace CrimsonClubs.Models.Dtos
 
             dbo.MM_Club_Event.Add(relation);
 
-            foreach (var id in ClubIds)
+            if (ClubIds != null)
             {
-                relation = new MM_Club_Event();
-                relation.ClubId = id;
+                foreach (var id in ClubIds)
+                {
+                    relation = new MM_Club_Event();
+                    relation.ClubId = id;
 
-                dbo.MM_Club_Event.Add(relation);
+                    dbo.MM_Club_Event.Add(relation);
+                }
             }
         }
     }

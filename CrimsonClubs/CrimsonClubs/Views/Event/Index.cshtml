@@ -189,7 +189,7 @@
 
                 controller: {
                     loadData: function () {
-                        var data = $.ajax({ type: "GET", url: "api/calendar" }).then(
+                        var data = $.ajax({ type: "GET", url: "api/events" }).then(
                             function (arr) {
                                 return arr;
                             })
@@ -198,7 +198,8 @@
                 },
 
                 fields: [
-                    { name: "name", title: "Name", type: "text", width: 150, align: "center" },
+                    { name: "clubName", title: "Club Name", type: "text", width: 100, align: "center" },
+                    { name: "name", title: "Name", type: "text", width: 100, align: "center" },
                     { name: "start", type: "date", title: "Start", align: "center" },
                     { name: "finish", type: "date", title: "Finish", align: "center" },
                     { name: "id", visible: false },
@@ -243,51 +244,55 @@
 
             //Delete Event
             $("#deleteButton").click(function () {
-                //var id = $('#EventId').val();
-                //var data = $.ajax({ type: "DELETE", url: "api/Events/" + id }).then(
-                //    function (arr) {
-                //        $('#mainModal').modal('toggle');
-                //        $('#jsGrid').jsGrid("loadData");
-                //        return arr;
-                //    });
+                var id = $('#EventId').val();
+                var data = $.ajax({ type: "DELETE", url: "api/Events/" + id }).then(
+                    function (arr) {
+                        $('#mainModal').modal('toggle');
+                        $('#jsGrid').jsGrid("loadData");
+                        return arr;
+                    });
             });
 
             //Create New Event
             $("#saveNewButton").click(function () {
-                //var params = {};
-                //params["name"] = $("#EventName").val();
-                //params["description"] = $("#Description").val();
-                //params["isRequestToJoin"] = true;
-                //params["groupId"] = $("#Group").val();
-                //var $data = $.ajax({
-                //    type: "POST", url: "api/Events/", data: params
-                //}).then(
-                //    function (arr) {
+                var params = {};
+                params["name"] = $("#EventName").val();
+                params["start"] = $("#StartDate").val();
+                params["finsih"] = $("#EndDate").val();
+                params["description"] = $("#Description").val();
+                params["isGroupEvent"] = true;
+                params["clubId"] = $("#Club").val();
+                var $data = $.ajax({
+                    type: "POST", url: "api/events/", data: params
+                }).then(
+                    function (arr) {
 
-                //        return arr;
-                //    });
-                //$('#mainModal').modal('toggle');
+                        return arr;
+                    });
+                $('#mainModal').modal('toggle');
 
-                //location.reload();
+                location.reload();
             });
 
             //Edit Existing Event
             $("#saveButton").click(function () {
-                //var params = {};
-                //params["id"] = $("#EventId").val();
-                //params["name"] = $("#EventName").val();
-                //params["description"] = $("#Description").val();
-                //params["clubId"] = $("#Club").val();
+                var params = {};
+                params["Id"] = $("#EventId").val();
+                params["name"] = $("#EventName").val();
+                params["start"] = $("#StartDate").val();
+                params["Finish"] = $("#EndDate").val();
+                params["description"] = $("#Description").val();
+                params["isGroupEvent"] = true;
+                params["clubId"] = $("#Club").val();
+                var $data = $.ajax({
+                    type: "PUT", url: "api/events/", data: params
+                }).then(
+                    function (arr) {
 
-                //var $data = $.ajax({
-                //    type: "PUT", url: "api/Events/", data: params
-                //}).then(
-                //    function (arr) {
-
-                //        return arr;
-                //    });
-                //$('#mainModal').modal('toggle');
-                //$('#jsGrid').jsGrid("loadData");
+                        return arr;
+                    });
+                $('#mainModal').modal('toggle');
+                $('#jsGrid').jsGrid("loadData");
             });
 
             //Close Event Modal

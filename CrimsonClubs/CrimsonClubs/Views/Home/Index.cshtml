@@ -366,33 +366,33 @@
 
         //Delete Event
         $("#deleteEventButton").click(function () {
-            //var params = {};
-            //var id = $('#ClubId').val();
-            //var data = $.ajax({ type: "DELETE", url: "api/clubs/" + id, data: params }).then(
-            //    function (arr) {
-            //        $('#mainModal').modal('toggle');
-            //        $('#jsGrid').jsGrid("loadData");
-            //        return arr;
-            //    });
+            var id = $('#EventId').val();
+            var data = $.ajax({ type: "DELETE", url: "api/Events/" + id }).then(
+                function (arr) {
+                    $('#mainModal').modal('toggle');
+                    $('#jsGrid').jsGrid("loadData");
+                    return arr;
+                });
         });
 
         //Edit Existing Event
         $("#saveEventButton").click(function () {
-            //var params = {};
-            //params["id"] = $("#ClubId").val();
-            //params["name"] = $("#ClubName").val();
-            //params["description"] = $("#Description").val();
-            //params["groupId"] = $("#Group").val();
+            var params = {};
+            params["Id"] = $("#EventId").val();
+            params["name"] = $("#EventName").val();
+            params["start"] = $("#StartDate").val();
+            params["Finish"] = $("#EndDate").val();
+            params["description"] = $("#eventDescription").val();
+            params["isGroupEvent"] = true;
+            params["clubId"] = $("#Club").val();
+            var $data = $.ajax({
+                type: "PUT", url: "api/events/", data: params
+            }).then(
+                function (arr) {
 
-            //var $data = $.ajax({
-            //    type: "PUT", url: "api/clubs/", data: params
-            //}).then(
-            //    function (arr) {
-
-            //        return arr;
-            //    });
-            //$('#mainModal').modal('toggle');
-            //$('#jsGrid').jsGrid("loadData");
+                    return arr;
+                });
+            $('#eventModal').modal('toggle');
         });
 
         //Close Event Modal
