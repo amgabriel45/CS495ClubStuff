@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\EditStatDto.cs" />
     <Compile Include="Dtos\AddStatGroupDto.cs" />
     <Compile Include="Dtos\AddStatClubDto.cs" />
     <Compile Include="Dtos\EditEventDto.cs" />
