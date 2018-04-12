@@ -60,6 +60,24 @@ namespace CrimsonClubs.Controllers.Api
             return Ok(clubs);
         }
 
+        [HttpGet, Route]
+        [ResponseType(typeof(ClubDto[]))]
+        public IHttpActionResult GetClubsInGroup(int groupId)
+        {
+            var group = db.Groups.Find(groupId);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            var clubs = group.Clubs
+                .ToList()
+                .Select(c => new ClubDto(c));
+
+            return Ok(clubs);
+        }
+
         [HttpPost, Route]
         [ResponseType(typeof(ClubDto))]
         public IHttpActionResult AddClub(AddClubDto dto)

@@ -72,6 +72,7 @@
     <Compile Include="Dtos\StatGroupDto.cs" />
     <Compile Include="Dtos\StatDto.cs" />
     <Compile Include="Dtos\StatClubDto.cs" />
+    <Compile Include="Dtos\StatValueDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Dtos\UserStatsDto.cs" />
     <Compile Include="Entities\Club.cs" />
