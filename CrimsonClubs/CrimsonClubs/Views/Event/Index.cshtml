@@ -17,29 +17,52 @@
             </div>
             <div class="panel-body panel-no-pad">
                 @*<div class="collapse" id="collapseSearch">
-                        <div class="panel">
-                            <div class="panel-body container">
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-6 col-lg-4">
-                                        <div class="form-group form-material" data-plugin="formMaterial">
-                                            <label class="form-control-label">Status:</label>
-                                            <select class="combobox" id="statusFilter">
-                                                <option selected="selected" value="current">Current</option>
-                                                <option value="all">All</option>
-                                                <option value="future">Future</option>
-                                                <option value="expired">Expired</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="panel">
+                <div class="panel-body container">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6 col-lg-4">
+                            <div class="form-group form-material" data-plugin="formMaterial">
+                                <label class="form-control-label">Status:</label>
+                                <select class="combobox" id="statusFilter">
+                                    <option selected="selected" value="current">Current</option>
+                                    <option value="all">All</option>
+                                    <option value="future">Future</option>
+                                    <option value="expired">Expired</option>
+                                </select>
                             </div>
                         </div>
-                    </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>*@
                 <div id="jsGrid" class="fullHeight"></div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal modal-primary" tabindex="-1" role="dialog" id="statModal">
+    <div class="modal-dialog modal-center modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: rgb(158,27,50)">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="bottomTitle">View Club Stats</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div id="bottomHalf">
+                        <div id="dvTable" class="fullHeight"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelStatButton">Cancel</div>
+                </div>
+            </div>
+            </div>
+        </div>
+ </div>
 
 <div class="modal modal-primary" tabindex="-1" role="dialog" id="mainModal">
     <div class="modal-dialog modal-center modal-xl" role="document">
@@ -188,7 +211,7 @@
         function addItem(data) {
             var ul = document.getElementById("dynamic-list");
             var candidate = document.getElementById("MultiClub");
-            var text = candidate[candidate.value].text;
+            var text = candidate[candidate.selectedIndex].text;
             var li = document.createElement("li");
             li.setAttribute('id', candidate.value);
             li.appendChild(document.createTextNode(text));
@@ -246,7 +269,7 @@
                 { name: "finish", type: "date", title: "Finish", align: "center" },
                 { name: "id", visible: false },
                 {
-                    type: "control", width: 65,
+                    type: "control", width: 70,
                     itemTemplate: function (value, item) {
                         var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
 
@@ -264,7 +287,60 @@
                                 $('#Club').val(item.clubId).change();
                             });
 
-                        return $customButton;
+                        var $customStatButton = $("<i class=\"site-menu-icon md-format-list-numbered\" aria-hidden=\"true\"></i>")
+                            .click(function (e) {
+                                
+                                var customers = new Array();
+                                customers.push(["Name"]);
+                                for (var i = 0; i < item.clubStats.length; i++) {
+                                    customers[0].push(item.clubStats[i].name);
+                                }
+                                for (var i = 0; i < item.usersClubStats.length; i++) {
+
+                                    customers.push([item.usersClubStats[i].first]);
+                                    for (var x = 0; x < item.clubStats.length; x++) {
+                                        customers[i+1].push(item.usersClubStats[x].stats[item.clubStats[i].id]);
+                                    }
+                                }
+                               
+                                //Create a HTML Table element.
+                                var table = document.createElement("TABLE");
+                                table.border = "1";
+                                table.width = 500;
+                                table.cellpadding = 5;
+                                table.align = "center";
+
+                                //Get the count of columns.
+                                var columnCount = customers[0].length;
+
+                                //Add the header row.
+                                var row = table.insertRow(-1);
+                                row.align = "center";
+                                for (var i = 0; i < columnCount; i++) {
+                                    var headerCell = document.createElement("TH");
+                                    headerCell.align = "center";
+                                    headerCell.innerHTML = customers[0][i];
+                                    
+                                    row.appendChild(headerCell);
+                                   
+                                }
+
+                                //Add the data rows.
+                                for (var i = 1; i < customers.length; i++) {
+                                    row = table.insertRow(-1);
+                                    for (var j = 0; j < columnCount; j++) {
+                                        var cell = row.insertCell(-1);
+                                        cell.innerHTML = customers[i][j];
+                                    }
+                                }
+
+                                var dvTable = document.getElementById("dvTable");
+                                dvTable.innerHTML = "";
+                                dvTable.appendChild(table);
+
+                                $('#statModal').modal('toggle');
+                            });
+                        return $("<i>").add($customButton).add($customStatButton);
                     }
                 }
             ],
@@ -339,10 +415,13 @@
 
         //Close Event Modal
         $("#cancelButton").click(function () {
-            $('#calendar').fullCalendar('destroy');
             $('#mainModal').modal('toggle');
         });
 
+        //Close Stat Event Modal
+        $("#cancelStatButton").click(function () {
+            $('#statModal').modal('toggle');
+        });
         //Datetime now function
         $.fn.setNow = function (onlyBlank) {
             var now = new Date($.now())
