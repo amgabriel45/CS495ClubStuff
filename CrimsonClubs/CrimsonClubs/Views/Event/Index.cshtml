@@ -10,31 +10,62 @@
                 <h2 class="panel-title">
                     <span>Events</span>
                     <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Event</span></button>
-                    @*<a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
-                            Advanced Search Options
-                        </a>*@
+                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseClubStat">
+                        Club Stats
+                    </a>
                 </h2>
             </div>
             <div class="panel-body panel-no-pad">
-                @*<div class="collapse" id="collapseSearch">
-            <div class="panel">
-                <div class="panel-body container">
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6 col-lg-4">
-                            <div class="form-group form-material" data-plugin="formMaterial">
-                                <label class="form-control-label">Status:</label>
-                                <select class="combobox" id="statusFilter">
-                                    <option selected="selected" value="current">Current</option>
-                                    <option value="all">All</option>
-                                    <option value="future">Future</option>
-                                    <option value="expired">Expired</option>
-                                </select>
+                <div class="collapse" id="collapseClubStat">
+                    <div class="panel">
+                        <div class="panel-body container">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <input type="text" class="form-control empty" id="StatName" />
+                                        <label class="form-control-label floating-label">Club Stat Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <input type="text" class="form-control empty" id="StatAbb" />
+                                        <label class="form-control-label floating-label">Club Stat Abbreviation</label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="form-group form-material" data-plugin="formMaterial">
+                                        <label class="form-control-label">Club Name</label>
+                                        <select class="combobox" id="StatClubList" data-field="Group">
+                                            <option value="">Select an Option</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="form-group form-material" data-plugin="formMaterial">
+                                        <label class="form-control-label">Stat Name</label>
+                                        <select class="combobox" id="StatList" data-field="Group">
+                                            <option value="">Select an Option</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="btn btn-icon btn-warning" id="DeleteClubStat" style="margin-top:25px">Delete Club Stat</button>
+                                *Select a club to delete a stat*
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group form-material floating" data-plugin="formMaterial">
+                                            <input type="text" class="form-control empty" id="StatDescription" name="Description" data-field="Description" />
+                                            <label class="form-control-label floating-label">Description</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-icon btn-success" id="AddClubStat">Add Club Stat</button>
+                               
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>*@
                 <div id="jsGrid" class="fullHeight"></div>
             </div>
         </div>
@@ -60,9 +91,9 @@
                     <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelStatButton">Cancel</div>
                 </div>
             </div>
-            </div>
         </div>
- </div>
+    </div>
+</div>
 
 <div class="modal modal-primary" tabindex="-1" role="dialog" id="mainModal">
     <div class="modal-dialog modal-center modal-xl" role="document">
@@ -140,15 +171,15 @@
 
                     </div>
                 </div>
-            <div class="modal-footer">
-                <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
-                <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
-                <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
-                <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
+                <div class="modal-footer">
+                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
+                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 @section stylesheets {
@@ -176,13 +207,12 @@
 
 @section scripts {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-    <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
-    <script type="text/javascript" src="~/Content/site/dynamicList.js"></script>
 
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#statusFilter").select2();
+            $("#StatClubList").select2();
+            $("#StatList").select2();
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
             $('#jsGrid').jsGrid("loadData");
 
@@ -201,47 +231,16 @@
                                 .text(arr[i].name)
                                 .val(arr[i].id)
                         );
+                        $("#StatClubList").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
                     }
                     return arr;
                 });
-
             $('input[type=datetime-local]').setNow();
         });
-
-        function addItem(data) {
-            var ul = document.getElementById("dynamic-list");
-            var candidate = document.getElementById("MultiClub");
-            var text = candidate[candidate.selectedIndex].text;
-            var li = document.createElement("li");
-            li.setAttribute('id', candidate.value);
-            li.appendChild(document.createTextNode(text));
-            ul.appendChild(li);
-        }
-
-        function removeItem() {
-            var ul = document.getElementById("dynamic-list");
-            var candidate = document.getElementById("MultiClub");
-            var item = document.getElementById(candidate.value);
-            ul.removeChild(item);
-        }
-        var DateField = function (config) {
-            jsGrid.Field.call(this, config);
-        };
-
-        DateField.prototype = new jsGrid.Field({
-            sorter: function (date1, date2) {
-                return new Date(date1) - new Date(date2);
-            },
-
-            itemTemplate: function (value) {
-                return new Date(value).toUTCString();
-            },
-
-
-        });
-
-        jsGrid.fields.date = DateField;
-
 
         //Create Grid and Populate Event Modals
         $("#jsGrid").jsGrid({
@@ -261,7 +260,6 @@
                     return data;
                 }
             },
-
             fields: [
                 { name: "clubName", title: "Club Name", type: "text", width: 100, align: "center" },
                 { name: "name", title: "Name", type: "text", width: 100, align: "center" },
@@ -289,7 +287,6 @@
 
                         var $customClubStatButton = $("<i class=\"site-menu-icon md-evernote\" aria-hidden=\"true\"></i>")
                             .click(function (e) {
-
 
                                 if (item.usersClubStats.length > 0) {
                                     var customers = new Array();
@@ -410,6 +407,22 @@
 
         });
 
+        //Populate Stat List for Deletion
+        $('#StatClubList').on('change', function () {
+            var clubSelect = $('#StatClubList').val();
+            var data = $.ajax({ type: "GET", url: "api/stats?clubId=" + clubSelect }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#StatList").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                    }
+                    return arr;
+                });
+        });
+
         //Create Event Modal
         $("#createButton").click(function () {
             $('#calendar').fullCalendar('destroy');
@@ -484,6 +497,7 @@
         $("#cancelStatButton").click(function () {
             $('#statModal').modal('toggle');
         });
+
         //Datetime now function
         $.fn.setNow = function (onlyBlank) {
             var now = new Date($.now())
@@ -513,5 +527,42 @@
 
             return this;
         }
+
+        //Dynamic List Functions
+        function addItem(data) {
+            var ul = document.getElementById("dynamic-list");
+            var candidate = document.getElementById("MultiClub");
+            var text = candidate[candidate.selectedIndex].text;
+            var li = document.createElement("li");
+            li.setAttribute('id', candidate.value);
+            li.appendChild(document.createTextNode(text));
+            ul.appendChild(li);
+        }
+
+        function removeItem() {
+            var ul = document.getElementById("dynamic-list");
+            var candidate = document.getElementById("MultiClub");
+            var item = document.getElementById(candidate.value);
+            ul.removeChild(item);
+        }
+
+        //Formats Date Time on Grid
+        var DateField = function (config) {
+            jsGrid.Field.call(this, config);
+        };
+
+        DateField.prototype = new jsGrid.Field({
+            sorter: function (date1, date2) {
+                return new Date(date1) - new Date(date2);
+            },
+
+            itemTemplate: function (value) {
+                return new Date(value).toUTCString();
+            },
+
+
+        });
+
+        jsGrid.fields.date = DateField;
     </script>
 }
