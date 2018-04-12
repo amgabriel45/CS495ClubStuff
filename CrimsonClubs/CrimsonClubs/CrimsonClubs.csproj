@@ -18,7 +18,7 @@
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
@@ -2812,9 +2812,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\global\vendor\toastr\toastr.js.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\TabListComponent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\global\vendor\chartist\chartist.min.js.map" />

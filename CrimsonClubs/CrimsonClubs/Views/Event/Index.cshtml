@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Event";
 }
 
@@ -70,6 +71,24 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-xs-12 col-md-5" data-plugin="formMaterial">
+                                <label class="form-control-label">Club List</label>
+                                <ul class="dynamic-list" id="dynamic-list">
+                                    <li class="floating firstli">
+                                        <div class="input-group" style="display:inline-table">
+                                            <select class="combobox" id="MultiClub" data-field="Group">
+                                                <option value="">Select an Option</option>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-icon btn-success" onclick="addItem()">Add Club</button>
+                                                <button class="btn btn-icon btn-danger md-delete" type="button" onclick="removeItem()"></button>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xs-12 col-md-3">
                                 <div class="form-group form-material floating" data-plugin="formMaterial">
                                     <label class="form-control-label floating-label">Start Date</label>
@@ -82,7 +101,7 @@
                                 <div class="form-group form-material floating" data-plugin="formMaterial">
                                     <label class="form-control-label floating-label">End Date</label>
                                     <br />
-                                    <input type="datetime-local" class="form-control" id="EndDate" name="EndDate"  data-field="EndDate" />
+                                    <input type="datetime-local" class="form-control" id="EndDate" name="EndDate" data-field="EndDate" />
 
                                 </div>
                             </div>
@@ -95,240 +114,263 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
-                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
-                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
-                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
-                </div>
+            <div class="modal-footer">
+                <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
+                <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
+                <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
+                <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
             </div>
         </div>
     </div>
 </div>
+</div>
 
-    @section stylesheets {
-        @*<link type="text/css" rel="stylesheet" href="~/Content/global/vendor/jsgrid/jsgrid.css" />*@
-        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-        <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/select2/select2.css" />
-        <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" />
-        <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/icheck/icheck.css" />
-        <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/dropify/dropify.css" />
-        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
-    }
+@section stylesheets {
+    @*<link type="text/css" rel="stylesheet" href="~/Content/global/vendor/jsgrid/jsgrid.css" />*@
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/select2/select2.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/icheck/icheck.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/dropify/dropify.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
+}
 
-    @section includescripts {
-        <script type="text/javascript" src="~/Content/global/vendor/select2/select2.full.min.js"></script>
-        @*<script type="text/javascript" src="~/Content/global/vendor/jsgrid/jsgrid.js"></script>*@
-        <script type="text/javascript" src="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-        <script type="text/javascript" src="~/Content/global/vendor/icheck/icheck.js"></script>
-        <script type="text/javascript" src="~/Content/global/vendor/dropify/dropify.js"></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js'></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.js'></script>
+@section includescripts {
+    <script type="text/javascript" src="~/Content/global/vendor/select2/select2.full.min.js"></script>
+    @*<script type="text/javascript" src="~/Content/global/vendor/jsgrid/jsgrid.js"></script>*@
+    <script type="text/javascript" src="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/icheck/icheck.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/dropify/dropify.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.js'></script>
 
-    }
+}
 
-    @section scripts {
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-        <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
-
-
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#statusFilter").select2();
-                $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
-                $('#jsGrid').jsGrid("loadData");
-
-                //Populate Dropdown
-                var params = {};
-                var data = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
-                    function (arr) {
-                        for (var i = 0; i < arr.length; i++) {
-                            $("#Club").append( // Append an object to the inside of the select box
-                                $("<option></option>") // Yes you can do this.
-                                    .text(arr[i].name)
-                                    .val(arr[i].id)
-                            );
-                        }
-                        return arr;
-                    });
-
-                $('input[type=datetime-local]').setNow();
-            });
-
-            var DateField = function (config) {
-                jsGrid.Field.call(this, config);
-            };
-
-            DateField.prototype = new jsGrid.Field({
-                sorter: function (date1, date2) {
-                    return new Date(date1) - new Date(date2);
-                },
-
-                itemTemplate: function (value) {
-                    return new Date(value).toUTCString();
-                },
+@section scripts {
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
+    <script type="text/javascript" src="~/Content/site/dynamicList.js"></script>
 
 
-            });
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#statusFilter").select2();
+            $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
+            $('#jsGrid').jsGrid("loadData");
 
-            jsGrid.fields.date = DateField;
-
-
-            //Create Grid and Populate Event Modals
-            $("#jsGrid").jsGrid({
-                width: "100%",
-
-                inserting: false,
-                editing: false,
-                sorting: true,
-                paging: true,
-
-                controller: {
-                    loadData: function () {
-                        var data = $.ajax({ type: "GET", url: "api/events" }).then(
-                            function (arr) {
-                                return arr;
-                            })
-                        return data;
+            //Populate Dropdown
+            var params = {};
+            var data = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#Club").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                        $("#MultiClub").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
                     }
-                },
+                    return arr;
+                });
 
-                fields: [
-                    { name: "clubName", title: "Club Name", type: "text", width: 100, align: "center" },
-                    { name: "name", title: "Name", type: "text", width: 100, align: "center" },
-                    { name: "start", type: "date", title: "Start", align: "center" },
-                    { name: "finish", type: "date", title: "Finish", align: "center" },
-                    { name: "id", visible: false },
-                    {
-                        type: "control", width: 65,
-                        itemTemplate: function (value, item) {
-                            var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+            $('input[type=datetime-local]').setNow();
+        });
 
-                            var $customButton = $("<i class=\"site-menu-icon md-calendar\" aria-hidden=\"true\"></i>")
-                                .click(function (e) {
-                                    $('#deleteButton').show();
-                                    $("#saveNewButton").hide();
-                                    $("#saveButton").show();
-                                    $('#mainModal').modal('toggle');
-                                    $('#EventName').removeClass('empty').val(item.name);
-                                    $('#Description').removeClass('empty').val(item.description);
-                                    $('#EventId').val(item.id);
-                                    $('#StartDate').val(item.start);
-                                    $('#EndDate').val(item.finish);
-                                    $('#Club').val(item.clubId).change();
-                                });
+        function addItem(data) {
+            var ul = document.getElementById("dynamic-list");
+            var candidate = document.getElementById("MultiClub");
+            var text = candidate[candidate.value].text;
+            var li = document.createElement("li");
+            li.setAttribute('id', candidate.value);
+            li.appendChild(document.createTextNode(text));
+            ul.appendChild(li);
+        }
 
-                            return $customButton;
-                        }
-                    }
-                ],
-                autoload: true
+        function removeItem() {
+            var ul = document.getElementById("dynamic-list");
+            var candidate = document.getElementById("MultiClub");
+            var item = document.getElementById(candidate.value);
+            ul.removeChild(item);
+        }
+        var DateField = function (config) {
+            jsGrid.Field.call(this, config);
+        };
 
-            });
+        DateField.prototype = new jsGrid.Field({
+            sorter: function (date1, date2) {
+                return new Date(date1) - new Date(date2);
+            },
 
-            //Create Event Modal
-            $("#createButton").click(function () {
-                $('#calendar').fullCalendar('destroy');
-                $("#saveNewButton").show();
-                $("#saveButton").hide();
-                $('#EventName').addClass('empty').val('');
-                $('#Description').addClass('empty').val('');
-                $('#Club').val('').change();
-                $('#deleteButton').hide();
-                $('#mainModal').modal('toggle');
-            });
+            itemTemplate: function (value) {
+                return new Date(value).toUTCString();
+            },
 
-            //Delete Event
-            $("#deleteButton").click(function () {
-                var id = $('#EventId').val();
-                var data = $.ajax({ type: "DELETE", url: "api/Events/" + id }).then(
-                    function (arr) {
-                        $('#mainModal').modal('toggle');
-                        $('#jsGrid').jsGrid("loadData");
-                        return arr;
-                    });
-            });
 
-            //Create New Event
-            $("#saveNewButton").click(function () {
-                var params = {};
-                params["name"] = $("#EventName").val();
-                params["start"] = $("#StartDate").val();
-                params["finsih"] = $("#EndDate").val();
-                params["description"] = $("#Description").val();
-                params["isGroupEvent"] = true;
-                params["clubId"] = $("#Club").val();
-                var $data = $.ajax({
-                    type: "POST", url: "api/events/", data: params
-                }).then(
-                    function (arr) {
+        });
 
-                        return arr;
-                    });
-                $('#mainModal').modal('toggle');
+        jsGrid.fields.date = DateField;
 
-                location.reload();
-            });
 
-            //Edit Existing Event
-            $("#saveButton").click(function () {
-                var params = {};
-                params["Id"] = $("#EventId").val();
-                params["name"] = $("#EventName").val();
-                params["start"] = $("#StartDate").val();
-                params["Finish"] = $("#EndDate").val();
-                params["description"] = $("#Description").val();
-                params["isGroupEvent"] = true;
-                params["clubId"] = $("#Club").val();
-                var $data = $.ajax({
-                    type: "PUT", url: "api/events/", data: params
-                }).then(
-                    function (arr) {
+        //Create Grid and Populate Event Modals
+        $("#jsGrid").jsGrid({
+            width: "100%",
 
-                        return arr;
-                    });
-                $('#mainModal').modal('toggle');
-                $('#jsGrid').jsGrid("loadData");
-            });
+            inserting: false,
+            editing: false,
+            sorting: true,
+            paging: true,
 
-            //Close Event Modal
-            $("#cancelButton").click(function () {
-                $('#calendar').fullCalendar('destroy');
-                $('#mainModal').modal('toggle');
-            });
-
-            //Datetime now function
-            $.fn.setNow = function (onlyBlank) {
-                var now = new Date($.now())
-                    , year
-                    , month
-                    , date
-                    , hours
-                    , minutes
-                    , seconds
-                    , formattedDateTime
-                    ;
-
-                year = now.getFullYear();
-                month = now.getMonth().toString().length === 1 ? '0' + (now.getMonth() + 1).toString() : now.getMonth() + 1;
-                date = now.getDate().toString().length === 1 ? '0' + (now.getDate()).toString() : now.getDate();
-                hours = now.getHours().toString().length === 1 ? '0' + now.getHours().toString() : now.getHours();
-                minutes = now.getMinutes().toString().length === 1 ? '0' + now.getMinutes().toString() : now.getMinutes();
-                seconds = now.getSeconds().toString().length === 1 ? '0' + now.getSeconds().toString() : now.getSeconds();
-
-                formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
-
-                if (onlyBlank === true && $(this).val()) {
-                    return this;
+            controller: {
+                loadData: function () {
+                    var data = $.ajax({ type: "GET", url: "api/events" }).then(
+                        function (arr) {
+                            return arr;
+                        })
+                    return data;
                 }
+            },
 
-                $(this).val(formattedDateTime);
+            fields: [
+                { name: "clubName", title: "Club Name", type: "text", width: 100, align: "center" },
+                { name: "name", title: "Name", type: "text", width: 100, align: "center" },
+                { name: "start", type: "date", title: "Start", align: "center" },
+                { name: "finish", type: "date", title: "Finish", align: "center" },
+                { name: "id", visible: false },
+                {
+                    type: "control", width: 65,
+                    itemTemplate: function (value, item) {
+                        var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
 
+                        var $customButton = $("<i class=\"site-menu-icon md-calendar\" aria-hidden=\"true\"></i>")
+                            .click(function (e) {
+                                $('#deleteButton').show();
+                                $("#saveNewButton").hide();
+                                $("#saveButton").show();
+                                $('#mainModal').modal('toggle');
+                                $('#EventName').removeClass('empty').val(item.name);
+                                $('#Description').removeClass('empty').val(item.description);
+                                $('#EventId').val(item.id);
+                                $('#StartDate').val(item.start);
+                                $('#EndDate').val(item.finish);
+                                $('#Club').val(item.clubId).change();
+                            });
+
+                        return $customButton;
+                    }
+                }
+            ],
+            autoload: true
+
+        });
+
+        //Create Event Modal
+        $("#createButton").click(function () {
+            $('#calendar').fullCalendar('destroy');
+            $("#saveNewButton").show();
+            $("#saveButton").hide();
+            $('#EventName').addClass('empty').val('');
+            $('#Description').addClass('empty').val('');
+            $('#Club').val('').change();
+            $('#deleteButton').hide();
+            $('#mainModal').modal('toggle');
+        });
+
+        //Delete Event
+        $("#deleteButton").click(function () {
+            var id = $('#EventId').val();
+            var data = $.ajax({ type: "DELETE", url: "api/Events/" + id }).then(
+                function (arr) {
+                    $('#mainModal').modal('toggle');
+                    $('#jsGrid').jsGrid("loadData");
+                    return arr;
+                });
+        });
+
+        //Create New Event
+        $("#saveNewButton").click(function () {
+            var params = {};
+            params["name"] = $("#EventName").val();
+            params["start"] = $("#StartDate").val();
+            params["finsih"] = $("#EndDate").val();
+            params["description"] = $("#Description").val();
+            params["isGroupEvent"] = true;
+            params["clubId"] = $("#Club").val();
+            var $data = $.ajax({
+                type: "POST", url: "api/events/", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+
+            location.reload();
+        });
+
+        //Edit Existing Event
+        $("#saveButton").click(function () {
+            var params = {};
+            params["Id"] = $("#EventId").val();
+            params["name"] = $("#EventName").val();
+            params["start"] = $("#StartDate").val();
+            params["Finish"] = $("#EndDate").val();
+            params["description"] = $("#Description").val();
+            params["isGroupEvent"] = true;
+            params["clubId"] = $("#Club").val();
+            var $data = $.ajax({
+                type: "PUT", url: "api/events/", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+            $('#jsGrid').jsGrid("loadData");
+        });
+
+        //Close Event Modal
+        $("#cancelButton").click(function () {
+            $('#calendar').fullCalendar('destroy');
+            $('#mainModal').modal('toggle');
+        });
+
+        //Datetime now function
+        $.fn.setNow = function (onlyBlank) {
+            var now = new Date($.now())
+                , year
+                , month
+                , date
+                , hours
+                , minutes
+                , seconds
+                , formattedDateTime
+                ;
+
+            year = now.getFullYear();
+            month = now.getMonth().toString().length === 1 ? '0' + (now.getMonth() + 1).toString() : now.getMonth() + 1;
+            date = now.getDate().toString().length === 1 ? '0' + (now.getDate()).toString() : now.getDate();
+            hours = now.getHours().toString().length === 1 ? '0' + now.getHours().toString() : now.getHours();
+            minutes = now.getMinutes().toString().length === 1 ? '0' + now.getMinutes().toString() : now.getMinutes();
+            seconds = now.getSeconds().toString().length === 1 ? '0' + now.getSeconds().toString() : now.getSeconds();
+
+            formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
+
+            if (onlyBlank === true && $(this).val()) {
                 return this;
             }
-        </script>
-    }
+
+            $(this).val(formattedDateTime);
+
+            return this;
+        }
+    </script>
+}
