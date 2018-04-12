@@ -185,6 +185,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Site\GroupController.cs" />
     <Compile Include="Controllers\Site\EventController.cs" />
     <Compile Include="Controllers\Api\StatController.cs" />
     <Compile Include="Start\AuthConfig.cs" />
@@ -2847,6 +2848,7 @@
     <None Include="Properties\PublishProfiles\LocalForProd.pubxml" />
     <Content Include="Views\Calendar\Index.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
     <None Include="Web.ReleaseDev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
