@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
 
-[assembly: OwinStartupAttribute(typeof(CrimsonClubs.Startup))]
+[assembly: OwinStartupAttribute(typeof(CrimsonClubs.Start.Startup))]
 
-namespace CrimsonClubs
+namespace CrimsonClubs.Start
 {
     public partial class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
+            AuthConfig.ConfigureAuth(app);
         }
     }
 }

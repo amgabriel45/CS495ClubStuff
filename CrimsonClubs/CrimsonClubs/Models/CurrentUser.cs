@@ -12,5 +12,7 @@ namespace CrimsonClubs.Models
         public CurrentUser(IPrincipal principal) : base(principal as ClaimsPrincipal) { }
         
         public int Id => int.Parse(FindFirst("UserId").Value);
+        public string First => FindFirst("FirstName").Value;
+        public string Last => FindFirst("LastName").Value;
     }
 }

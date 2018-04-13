@@ -16,10 +16,10 @@ namespace CrimsonClubs.Models.Dtos
 
         }
 
-        public DetailedClubDto(Club dbo) : base(dbo)
+        public DetailedClubDto(Club dbo, int userId) : base(dbo, userId)
         {
             Members = dbo.MM_User_Club.Where(m => m.IsAccepted).Select(m => new MemberDto(m)).ToList();
-            Events = dbo.MM_Club_Event.Select(m => new DetailedEventDto(m)).ToList();
+            Events = dbo.MM_Club_Event.Select(m => new DetailedEventDto(m, userId)).ToList();
         }
     }
 }

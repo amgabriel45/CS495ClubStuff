@@ -1,4 +1,5 @@
-﻿
+﻿@using CrimsonClubs.Models;
+@{ var user = new CurrentUser(Context.User); }
 <!DOCTYPE html>
 <html>
 <head>
@@ -97,12 +98,12 @@
                 </a>
 
                 <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item waves-effect waves-light waves-round" style="padding-bottom:15px;" href="javascript:void(0)" role="menuitem"><i aria-hidden="true"></i> Welcome, Max!</a>
-                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
-                   @* <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>*@
-                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a>
+                    <a class="dropdown-item waves-effect waves-light waves-round" style="padding-bottom:15px;" href="javascript:void(0)" role="menuitem"><i aria-hidden="true"></i> Welcome, @user.First!</a>
+                    @*<a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
+                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>
+                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a>*@
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
+                    <a class="dropdown-item waves-effect waves-light waves-round" href="~/auth/logout" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
                 </div>
             </li>
         </ul>
@@ -133,9 +134,10 @@
             <div>
                 <div>
                     <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -195px, 0px);">
+
                         <li class="site-menu-item">
                             <a class="animsition-link waves-effect waves-classic" href="~/">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                <i class="site-menu-icon md-evernote" aria-hidden="true"></i>
                                 <span class="site-menu-title">Clubs</span>
                             </a>
                             <ul class="site-menu-sub">
@@ -145,6 +147,12 @@
                                     </a>
                                 </li>
                             </ul>
+                        </li>
+                        <li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="~/group">
+                                <i class="site-menu-icon md-account-circle" aria-hidden="true"></i>
+                                <span class="site-menu-title">Groups</span>
+                            </a>
                         </li>
                         <li class="site-menu-item">
                             <a class="animsition-link waves-effect waves-classic" href="~/calendar">
@@ -160,9 +168,9 @@
                             </ul>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/Projects">
-                                <i class="site-menu-icon md-n-1-square" aria-hidden="true"></i>
-                                <span class="site-menu-title">Scores</span>
+                            <a class="animsition-link waves-effect waves-classic" href="~/event">
+                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                <span class="site-menu-title">Events</span>
                             </a>
                             <ul class="site-menu-sub">
                                 <li class="site-menu-item">
@@ -173,111 +181,111 @@
                             </ul>
                         </li>
                         @*<li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/Products">
-                                <i class="site-menu-icon md-shopping-basket" aria-hidden="true"></i>
-                                <span class="site-menu-title">Products</span>
-                            </a>
-                        </li>
-                        @if (SecurityHelper.GetAuthentication() == SecurityLevel.Admin)
-                        {
-                            <li class="site-menu-item has-sub" id="People">
-                                <a class="animsition-link waves-effect waves-classic" href="/People">
-                                    <i class="site-menu-icon md-account-circle" aria-hidden="true"></i>
-                                    <span class="site-menu-title">People</span>
-                                </a>
-                                <ul class="site-menu-sub">
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/People/Teams">
-                                            <span class="site-menu-title">Teams</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/People/PositionClasses">
-                                            <span class="site-menu-title">Position Classes</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/People/PositionNumberReport">
-                                            <span class="site-menu-title">Position Number Report</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a target="_blank" class="animstion-link" href="/People/GetLicenseReport">
-                                            <span class="site-menu-title">License Report</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/People/BirthDayReport">
-                                            <span class="site-menu-title">Birthday Report</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/People/NonLaboredReport">
-                                            <span class="site-menu-title">Labor Report</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/People/originalStartDate">
-                                            <span class="site-menu-title">Start Date Report</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/People/NonServiceCenterReport">
-                                            <span class="site-menu-title">Non-Service Center Report</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="site-menu-item" id="Expense">
-                                <a class="animsition-link waves-effect waves-classic" href="/Expenses">
-                                    <i class="site-menu-icon md-money" aria-hidden="true"></i>
-                                    <span class="site-menu-title">Expenses</span>
-                                </a>
-                                <ul class="site-menu-sub">
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/Expenses/AggregateExpenses">
-                                            <span class="site-menu-title">Aggregate/Forecasted Expenses</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="site-menu-item" id="Labor">
-                                <a class="animsition-link waves-effect waves-classic" href="/LaborDistributions">
-                                    <i class="site-menu-icon md-money-box" aria-hidden="true"></i>
-                                    <span class="site-menu-title">Distributions</span>
-                                </a>
-                                <ul class="site-menu-sub">
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/LaborDistributions/PercentOverTime">
-                                            <span class="site-menu-title">Percentage Over Time</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/LaborDistributions/PlannedWorkHours">
-                                            <span class="site-menu-title">Planned Work Hours</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animstion-link" href="/LaborDistributions/OSPReport">
-                                            <span class="site-menu-title">OSP Report</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-                        
-                        <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/Reports">
-                                <i class="site-menu-icon md-check-all" aria-hidden="true"></i>
-                                <span class="site-menu-title">Reports</span>
-                            </a>
-                        </li>
-                        <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/Holidays">
-                                <i class="site-menu-icon md-card-giftcard" aria-hidden="true"></i>
-                                <span class="site-menu-title">Holidays</span>
-                            </a>
-                        </li>*@
+            <a class="animsition-link waves-effect waves-classic" href="/Products">
+                <i class="site-menu-icon md-shopping-basket" aria-hidden="true"></i>
+                <span class="site-menu-title">Products</span>
+            </a>
+        </li>
+        @if (SecurityHelper.GetAuthentication() == SecurityLevel.Admin)
+        {
+            <li class="site-menu-item has-sub" id="People">
+                <a class="animsition-link waves-effect waves-classic" href="/People">
+                    <i class="site-menu-icon md-account-circle" aria-hidden="true"></i>
+                    <span class="site-menu-title">People</span>
+                </a>
+                <ul class="site-menu-sub">
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/People/Teams">
+                            <span class="site-menu-title">Teams</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/People/PositionClasses">
+                            <span class="site-menu-title">Position Classes</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/People/PositionNumberReport">
+                            <span class="site-menu-title">Position Number Report</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a target="_blank" class="animstion-link" href="/People/GetLicenseReport">
+                            <span class="site-menu-title">License Report</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/People/BirthDayReport">
+                            <span class="site-menu-title">Birthday Report</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/People/NonLaboredReport">
+                            <span class="site-menu-title">Labor Report</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/People/originalStartDate">
+                            <span class="site-menu-title">Start Date Report</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/People/NonServiceCenterReport">
+                            <span class="site-menu-title">Non-Service Center Report</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="site-menu-item" id="Expense">
+                <a class="animsition-link waves-effect waves-classic" href="/Expenses">
+                    <i class="site-menu-icon md-money" aria-hidden="true"></i>
+                    <span class="site-menu-title">Expenses</span>
+                </a>
+                <ul class="site-menu-sub">
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/Expenses/AggregateExpenses">
+                            <span class="site-menu-title">Aggregate/Forecasted Expenses</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="site-menu-item" id="Labor">
+                <a class="animsition-link waves-effect waves-classic" href="/LaborDistributions">
+                    <i class="site-menu-icon md-money-box" aria-hidden="true"></i>
+                    <span class="site-menu-title">Distributions</span>
+                </a>
+                <ul class="site-menu-sub">
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/LaborDistributions/PercentOverTime">
+                            <span class="site-menu-title">Percentage Over Time</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/LaborDistributions/PlannedWorkHours">
+                            <span class="site-menu-title">Planned Work Hours</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animstion-link" href="/LaborDistributions/OSPReport">
+                            <span class="site-menu-title">OSP Report</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
+
+        <li class="site-menu-item">
+            <a class="animsition-link waves-effect waves-classic" href="/Reports">
+                <i class="site-menu-icon md-check-all" aria-hidden="true"></i>
+                <span class="site-menu-title">Reports</span>
+            </a>
+        </li>
+        <li class="site-menu-item">
+            <a class="animsition-link waves-effect waves-classic" href="/Holidays">
+                <i class="site-menu-icon md-card-giftcard" aria-hidden="true"></i>
+                <span class="site-menu-title">Holidays</span>
+            </a>
+        </li>*@
                     </ul>
                 </div>
             </div>

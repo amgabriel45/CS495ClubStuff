@@ -9,31 +9,12 @@
                 <h2 class="panel-title">
                     <span>Clubs</span>
                     <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Club</span></button>
-                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
+                    @*<a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
                         Advanced Search Options
-                    </a>
+                    </a>*@
                 </h2>
             </div>
             <div class="panel-body panel-no-pad">
-                <div class="collapse" id="collapseSearch">
-                    <div class="panel">
-                        <div class="panel-body container">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6 col-lg-4">
-                                    <div class="form-group form-material" data-plugin="formMaterial">
-                                        <label class="form-control-label">Status:</label>
-                                        <select class="combobox" id="statusFilter">
-                                            <option selected="selected" value="current">Current</option>
-                                            <option value="all">All</option>
-                                            <option value="future">Future</option>
-                                            <option value="expired">Expired</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div id="jsGrid" class="fullHeight"></div>
             </div>
         </div>
@@ -62,27 +43,104 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material" data-plugin="formMaterial">
+                                    <label class="form-control-label">Group Name</label>
+                                    <select class="combobox" id="Group" data-field="Group">
+                                        <option value="">Select an Option</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <input type="text" class="form-control empty" id="Description" name="Description" data-field="Description" />
+                                        <label class="form-control-label floating-label">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group form-material floating" data-plugin="formMaterial">
+                                        <div id='calendar'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
+                        <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
+                        <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
+                        <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-primary" tabindex="-1" role="dialog" id="eventModal">
+    <div class="modal-dialog modal-center modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: rgb(158,27,50)">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="bottomTitle">View Event</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div id="bottomHalf">
+                        <input type="hidden" id="EventId" data-field="EventId" />
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
                                 <div class="form-group form-material floating" data-plugin="formMaterial">
-                                    <input type="text" class="form-control empty" id="Description" name="Description" data-field="Description" />
-                                    <label class="form-control-label floating-label">Description</label>
+                                    <input type="text" class="form-control empty" id="EventName" name="EventName" data-field="EventName" />
+                                    <label class="form-control-label floating-label">Event Name</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material" data-plugin="formMaterial">
+                                    <label class="form-control-label">Club Name</label>
+                                    <select class="combobox" id="Club" data-field="Group">
+                                        <option value="">Select an Option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <label class="form-control-label floating-label">Start Date</label>
+                                    <br />
+                                    <input type="datetime-local" class="form-control" id="StartDate" name="StartDate" data-field="StartDate" />
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <label class="form-control-label floating-label">End Date</label>
+                                    <br />
+                                    <input type="datetime-local" class="form-control" id="EndDate" name="EndDate" data-field="EndDate" />
+
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group form-material floating" data-plugin="formMaterial">
-                                    <div id='calendar'></div>
+                                    <input type="text" class="form-control empty" id="eventDescription" name="Description" data-field="Description" />
+                                    <label class="form-control-label floating-label">Description</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
-                <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
-                <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
+                <div class="modal-footer">
+                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelEventButton">Cancel</div>
+                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteEventButton"><span class="ladda-label">Delete</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveEventButton"><span class="ladda-label">Save</span></button>
+                </div>
             </div>
         </div>
     </div>
@@ -120,9 +178,36 @@
         $(document).ready(function () {
             $("#statusFilter").select2();
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
+            $("#eventModal").find(".combobox").select2({ dropdownParent: $("#eventModal") });
             $('#jsGrid').jsGrid("loadData");
+
+            //Populate Dropdown
+            var groups = $.ajax({ type: "GET", url: "api/groups/" }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#Group").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                    }
+                    return arr;
+                });
+            var clubs = $.ajax({ type: "GET", url: "api/clubs/" }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#Club").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                    }
+                    return arr;
+                });
         });
-       
+
+
+        //Create Grid and Populate Club Modals
         $("#jsGrid").jsGrid({
             width: "100%",
 
@@ -153,17 +238,22 @@
 
                         var $customButton = $("<i class=\"site-menu-icon md-calendar\" aria-hidden=\"true\"></i>")
                             .click(function (e) {
-                                var params = {};
+                                $('#deleteButton').show();
+                                $("#saveNewButton").hide();
+                                $("#saveButton").show();
                                 var events = [];
                                 var $data = $.ajax({
-                                    type: "GET", url: "api/clubs/" + item.id + "/calendar", data: params
+                                    type: "GET", url: "api/clubs/" + item.id + "/calendar"
                                 }).then(
                                     function (arr) {
-                                        for (var i = 0; i < arr.length; i++) { events.push({ title: arr[i].name, start: arr[i].start, end: arr[i].finish, description: arr[i].description }) }
+                                        for (var i = 0; i < arr.length; i++) {
+                                            events.push({ id: arr[i].id, clubId: arr[i].clubId, title: arr[i].name, start: arr[i].start, finish: arr[i].finish, description: arr[i].description })
+                                        }
                                         $('#calendar').fullCalendar('destroy');
                                         $('#calendar').fullCalendar('today');
                                         var myCalendar = $('#calendar');
                                         myCalendar.fullCalendar({
+                                            editable: true,
                                             defaultView: 'month',
                                            // defaultDate: '2018-03-12',
                                             contentHeight: 400,
@@ -178,15 +268,25 @@
                                                     container: 'body'
                                                 });
                                             },
-                                            events: events
+                                            events: events,
+                                            eventClick: function (calEvent, jsEvent, view) {
+                                                $('#mainModal').modal('toggle');
+                                                $('#eventModal').modal('toggle');
+                                                $('#EventName').removeClass('empty').val(calEvent.title);
+                                                $('#eventDescription').removeClass('empty').val(calEvent.description);
+                                                $('#EventId').val(calEvent.id);
+                                                $('#StartDate').val(calEvent.start.toISOString());
+                                                $('#EndDate').val(calEvent.finish);
+                                                $('#Club').val(calEvent.clubId).change();
+                                            }
                                         });
                                         return arr;
                                     });
                                 $('#mainModal').modal('toggle');
-                                $('#ClubName').removeClass('empty');
-                                $('#ClubName').val(item.name);
-                                $('#Description').removeClass('empty');
-                                $('#Description').val(item.description);
+                                $('#ClubName').removeClass('empty').val(item.name);
+                                $('#Description').removeClass('empty').val(item.description);
+                                $('#ClubId').val(item.id);
+                                $('#Group').val(item.groupId).change();
                             });
 
                         return $customButton;
@@ -197,15 +297,110 @@
            
         });
 
+        //Create Club Modal
         $("#createButton").click(function () {
+            $('#calendar').fullCalendar('destroy');
+            $("#saveNewButton").show();
+            $("#saveButton").hide();
+            $('#ClubName').addClass('empty').val('');
+            $('#Description').addClass('empty').val('');
+            $('#Group').val('').change();
+            $('#deleteButton').hide();
             $('#mainModal').modal('toggle');
         });
+
+        //Delete Club
+        $("#deleteButton").click(function () {
+            var id = $('#ClubId').val();
+            var data = $.ajax({ type: "DELETE", url: "api/clubs/" + id  }).then(
+                function (arr) {
+                    $('#mainModal').modal('toggle');
+                    $('#jsGrid').jsGrid("loadData");
+                    return arr;
+                });
+        });
+
+        //Create New Club
+        $("#saveNewButton").click(function () {
+            var params = {};
+            params["name"] = $("#ClubName").val();
+            params["description"] = $("#Description").val();
+            params["isRequestToJoin"] = true;
+            params["groupId"] = $("#Group").val();
+            var $data = $.ajax({
+                type: "POST", url: "api/clubs/", data: params
+            }).then(
+                function (arr) {
+                    
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+
+            location.reload();
+        });
+
+        //Edit Existing CLub
+        $("#saveButton").click(function () {
+            var params = {};
+            params["id"] = $("#ClubId").val();
+            params["name"] = $("#ClubName").val();
+            params["description"] = $("#Description").val();
+            params["groupId"] = $("#Group").val();
+
+            var $data = $.ajax({
+                type: "PUT", url: "api/clubs/", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+            $('#jsGrid').jsGrid("loadData");
+        });
+
+        //Close Club Modal
         $("#cancelButton").click(function () {
             $('#calendar').fullCalendar('destroy');
-        });
-        $("#cancelButton").click(function () {
             $('#mainModal').modal('toggle');
         });
+
+        //Delete Event
+        $("#deleteEventButton").click(function () {
+            var id = $('#EventId').val();
+            var data = $.ajax({ type: "DELETE", url: "api/Events/" + id }).then(
+                function (arr) {
+                    $('#mainModal').modal('toggle');
+                    $('#jsGrid').jsGrid("loadData");
+                    return arr;
+                });
+        });
+
+        //Edit Existing Event
+        $("#saveEventButton").click(function () {
+            var params = {};
+            params["Id"] = $("#EventId").val();
+            params["name"] = $("#EventName").val();
+            params["start"] = $("#StartDate").val();
+            params["Finish"] = $("#EndDate").val();
+            params["description"] = $("#eventDescription").val();
+            params["isGroupEvent"] = true;
+            params["clubId"] = $("#Club").val();
+            var $data = $.ajax({
+                type: "PUT", url: "api/events/", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+            $('#eventModal').modal('toggle');
+        });
+
+        //Close Event Modal
+        $("#cancelEventButton").click(function () {
+            $('#eventModal').modal('toggle');
+            $('#mainModal').modal('toggle');
+        });
+
 
     </script>
 }

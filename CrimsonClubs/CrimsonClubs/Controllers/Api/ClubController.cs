@@ -32,7 +32,7 @@ namespace CrimsonClubs.Controllers.Api
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            var dto = new DetailedClubDto(club);
+            var dto = new DetailedClubDto(club, CurrentUser.Id);
 
             return Ok(dto);
         }
@@ -43,7 +43,7 @@ namespace CrimsonClubs.Controllers.Api
         {
             var clubs = db.Users.Find(CurrentUser.Id)
                 .MM_User_Club.Select(m => m.Club)
-                .Select(c => new ClubDto(c));
+                .Select(c => new ClubDto(c, CurrentUser.Id));
 
             return Ok(clubs);
         }
@@ -55,7 +55,25 @@ namespace CrimsonClubs.Controllers.Api
             var clubs = db.Clubs
                 .OrderBy(c => c.Group.Name)
                 .ToList()
-                .Select(c => new ClubDto(c));
+                .Select(c => new ClubDto(c, CurrentUser.Id));
+
+            return Ok(clubs);
+        }
+
+        [HttpGet, Route]
+        [ResponseType(typeof(ClubDto[]))]
+        public IHttpActionResult GetClubsInGroup(int groupId)
+        {
+            var group = db.Groups.Find(groupId);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            var clubs = group.Clubs
+                .ToList()
+                .Select(c => new ClubDto(c, CurrentUser.Id));
 
             return Ok(clubs);
         }
@@ -84,7 +102,7 @@ namespace CrimsonClubs.Controllers.Api
 
             db.SaveChanges();
 
-            return Created($"api/clubs/{club.Id}", new ClubDto(club));
+            return Created($"api/clubs/{club.Id}", new ClubDto(club, CurrentUser.Id));
         }
 
         [HttpPut, Route]
@@ -115,7 +133,7 @@ namespace CrimsonClubs.Controllers.Api
 
             db.SaveChanges();
 
-            return Ok(new ClubDto(club));
+            return Ok(new ClubDto(club, CurrentUser.Id));
         }
 
         [HttpDelete, Route("{id}")]
@@ -136,6 +154,7 @@ namespace CrimsonClubs.Controllers.Api
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
+            db.MM_User_Club.RemoveRange(club.MM_User_Club);
             db.Clubs.Remove(club);
             db.SaveChanges();
 
@@ -154,10 +173,16 @@ namespace CrimsonClubs.Controllers.Api
             }
 
             bool isInClub = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id);
+            bool isInGroup = db.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.Club.GroupId == club.GroupId && m.ClubId != club.Id);
 
             if (isInClub)
             {
-                return BadRequest();
+                return BadRequest("Already in club");
+            }
+
+            if (isInGroup)
+            {
+                return BadRequest("Already in group");
             }
 
             var relation = new MM_User_Club()
@@ -198,29 +223,6 @@ namespace CrimsonClubs.Controllers.Api
             db.SaveChanges();
 
             return Ok();
-        }
-
-        [HttpGet, Route("{id}/calendar")]
-        [ResponseType(typeof(DetailedEventDto[]))]
-        public IHttpActionResult GetClubCalendar(int id)
-        {
-            var club = db.Clubs.Find(id);
-
-            if (club == null)
-            {
-                return NotFound();
-            }
-
-            var hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted);
-
-            if (!hasPermission)
-            {
-                return StatusCode(HttpStatusCode.Forbidden);
-            }
-
-            var events = club.MM_Club_Event.Select(m => new DetailedEventDto(m));
-
-            return Ok(events);
         }
     }
 }

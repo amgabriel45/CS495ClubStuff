@@ -18,7 +18,7 @@
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
@@ -185,10 +185,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AuthConfig.cs" />
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\Site\GroupController.cs" />
+    <Compile Include="Controllers\Site\EventController.cs" />
+    <Compile Include="Controllers\Api\StatController.cs" />
+    <Compile Include="Start\AuthConfig.cs" />
+    <Compile Include="Start\BundleConfig.cs" />
+    <Compile Include="Start\FilterConfig.cs" />
+    <Compile Include="Start\RouteConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -219,12 +222,10 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\Api\AuthController.cs" />
     <Compile Include="Controllers\Api\GroupController.cs" />
-    <Compile Include="Controllers\Api\StatController.cs" />
     <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\GoogleAuthResponse.cs" />
-    <Compile Include="Startup.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\Api\CalendarController.cs" />
+    <Compile Include="Start\Startup.cs" />
+    <Compile Include="Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CCApiController.cs" />
     <Compile Include="Controllers\Api\EventController.cs" />
     <Compile Include="Controllers\Api\ClubController.cs" />
@@ -2814,9 +2815,6 @@
     <Content Include="Content\global\vendor\toastr\toastr.js.map" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\TabListComponent.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\global\vendor\chartist\chartist.min.js.map" />
     <Content Include="Content\global\vendor\dropify\dropify.eot" />
     <Content Include="Content\global\vendor\dropify\dropify.ttf" />
@@ -2849,6 +2847,8 @@
     <None Include="Properties\PublishProfiles\LocalForDev.pubxml" />
     <None Include="Properties\PublishProfiles\LocalForProd.pubxml" />
     <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
     <None Include="Web.ReleaseDev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,9 +1,9 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace CrimsonClubs
+namespace CrimsonClubs.Start
 {
-    public class BundleConfig
+    public static class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)
         {

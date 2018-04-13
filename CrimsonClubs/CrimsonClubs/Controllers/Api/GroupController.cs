@@ -48,7 +48,7 @@ namespace CrimsonClubs.Controllers.Api
                 return BadRequest();
             }
 
-            var group = dto.FromDto();
+            var group = dto.ToEntity();
 
             db.Groups.Add(group);
             db.SaveChanges();

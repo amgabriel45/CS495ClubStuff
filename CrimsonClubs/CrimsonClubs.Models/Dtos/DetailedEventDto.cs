@@ -30,7 +30,7 @@ namespace CrimsonClubs.Models.Dtos
 
         }
 
-        public DetailedEventDto(MM_Club_Event dbo)
+        public DetailedEventDto(MM_Club_Event dbo, int userId)
         {
             var e = dbo.Event;
             var club = dbo.Club;
@@ -45,7 +45,7 @@ namespace CrimsonClubs.Models.Dtos
             ClubId = club.Id;
             ClubName = club.Name;
 
-            Clubs = e.MM_Club_Event.Select(m => new ClubDto(m.Club)).ToList();
+            Clubs = e.MM_Club_Event.Select(m => new ClubDto(m.Club, userId)).ToList();
             ClubStats = club.Stat_Club.Select(s => new StatClubDto(s)).ToList();
             GroupStats = club.Group?.Stat_Group.Select(s => new StatGroupDto(s)).ToList();
             UsersClubStats = e.MMM_User_Event_Stat.Where(s => s.Stat.Type == (int)StatType.Club).GroupBy(s => s.User).Select(g => new UserStatsDto(g)).ToList();

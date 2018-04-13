@@ -52,6 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\EditStatDto.cs" />
+    <Compile Include="Dtos\AddStatGroupDto.cs" />
+    <Compile Include="Dtos\AddStatClubDto.cs" />
+    <Compile Include="Dtos\EditEventDto.cs" />
+    <Compile Include="Dtos\AddEventDto.cs" />
     <Compile Include="Dtos\EditGroupDto.cs" />
     <Compile Include="Dtos\DetailedClubDto.cs" />
     <Compile Include="Dtos\EventDto.cs" />
@@ -63,9 +68,11 @@
     <Compile Include="Dtos\ApiAuthDto.cs" />
     <Compile Include="Dtos\ClubDto.cs" />
     <Compile Include="Dtos\DetailedEventDto.cs" />
+    <Compile Include="Dtos\AddStatDto.cs" />
     <Compile Include="Dtos\StatGroupDto.cs" />
     <Compile Include="Dtos\StatDto.cs" />
     <Compile Include="Dtos\StatClubDto.cs" />
+    <Compile Include="Dtos\StatValueDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Dtos\UserStatsDto.cs" />
     <Compile Include="Entities\Club.cs" />

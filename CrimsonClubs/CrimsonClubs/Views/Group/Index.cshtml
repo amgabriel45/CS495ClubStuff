@@ -1,0 +1,216 @@
+﻿@{
+    ViewBag.Title = "Groups";
+}
+
+<div class="page fullHeight">
+    <div class="open-full-panel half-panel animate-panel" id="topPage">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <span>Groups</span>
+                    <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Group</span></button>
+                    @*<a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
+                        Advanced Search Options
+                    </a>*@
+                </h2>
+            </div>
+            <div class="panel-body panel-no-pad">
+                <div id="jsGrid" class="fullHeight"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-primary" tabindex="-1" role="dialog" id="mainModal">
+    <div class="modal-dialog modal-center modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: rgb(158,27,50)">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="bottomTitle">View Group</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div id="bottomHalf">
+                        <input type="hidden" id="GroupId" data-field="GroupId" />
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <input type="text" class="form-control empty" id="GroupName" name="GroupName" data-field="GroupName" />
+                                    <label class="form-control-label floating-label">Group Name</label>
+                                </div>
+                            </div>
+                        </div>                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <input type="text" class="form-control empty" id="Description" name="Description" data-field="Description" />
+                                    <label class="form-control-label floating-label">Description</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
+                        <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
+                        <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
+                        <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section stylesheets {
+    @*<link type="text/css" rel="stylesheet" href="~/Content/global/vendor/jsgrid/jsgrid.css" />*@
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/select2/select2.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/icheck/icheck.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/dropify/dropify.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
+}
+
+@section includescripts {
+    <script type="text/javascript" src="~/Content/global/vendor/select2/select2.full.min.js"></script>
+    @*<script type="text/javascript" src="~/Content/global/vendor/jsgrid/jsgrid.js"></script>*@
+    <script type="text/javascript" src="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/icheck/icheck.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/dropify/dropify.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.js'></script>
+
+}
+
+@section scripts {
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
+    
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
+            $('#jsGrid').jsGrid("loadData");
+        });
+
+
+        //Create Grid and Populate group Modals
+        $("#jsGrid").jsGrid({
+            width: "100%",
+
+            inserting: false,
+            editing: false,
+            sorting: true,
+            paging: true,
+
+            controller: {
+                loadData: function () {
+                    var params = {};
+                    var data = $.ajax({ type: "GET", url: "api/groups/", data: params }).then(
+                        function (arr) {
+                            return arr;
+                        })
+                    return data;
+                }
+            },
+
+            fields: [
+                { name: "name", title: "Name", type: "text", width: 150, align: "center" },
+                { name: "description", type: "text", title: "Description", align: "center" },
+                { name: "Id", visible: false },
+                {
+                    type: "control", width: 65,
+                    itemTemplate: function (value, item) {
+                        var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                        var $customButton = $("<i class=\"site-menu-icon md-calendar\" aria-hidden=\"true\"></i>")
+                            .click(function (e) {
+                                $('#deleteButton').show();
+                                $("#saveNewButton").hide();
+                                $("#saveButton").show();
+                                $('#mainModal').modal('toggle');
+                                $('#GroupName').removeClass('empty').val(item.name);
+                                $('#Description').removeClass('empty').val(item.description);
+                                $('#GroupId').val(item.id);
+                            });
+
+                        return $customButton;
+                    }
+                }
+            ],
+            autoload: true
+           
+        });
+
+        //Create New Group Modal
+        $("#createButton").click(function () {
+            $('#calendar').fullCalendar('destroy');
+            $("#saveNewButton").show();
+            $("#saveButton").hide();
+            $('#GroupName').addClass('empty').val('');
+            $('#Description').addClass('empty').val('');
+            $('#Group').val('').change();
+            $('#deleteButton').hide();
+            $('#mainModal').modal('toggle');
+        });
+
+        //Delete Group
+        $("#deleteButton").click(function () {
+            var id = $('#GroupId').val();
+            var data = $.ajax({ type: "DELETE", url: "api/groups/" + id  }).then(
+                function (arr) {
+                    $('#mainModal').modal('toggle');
+                    $('#jsGrid').jsGrid("loadData");
+                    return arr;
+                });
+        });
+
+        //Create New Group
+        $("#saveNewButton").click(function () {
+            var params = {};
+            params["name"] = $("#GroupName").val();
+            params["description"] = $("#Description").val();
+            var $data = $.ajax({
+                type: "POST", url: "api/groups/", data: params
+            }).then(
+                function (arr) {
+                    
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+
+            location.reload();
+        });
+
+        //Edit Existing Group
+        $("#saveButton").click(function () {
+            var params = {};
+            params["id"] = $("#GroupId").val();
+            params["name"] = $("#GroupName").val();
+            params["description"] = $("#Description").val();
+            params["groupId"] = $("#Group").val();
+
+            var $data = $.ajax({
+                type: "PUT", url: "api/groups/", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+            $('#mainModal').modal('toggle');
+            $('#jsGrid').jsGrid("loadData");
+        });
+
+        //Close Group Modal
+        $("#cancelButton").click(function () {
+            $('#calendar').fullCalendar('destroy');
+            $('#mainModal').modal('toggle');
+        });
+
+
+    </script>
+}

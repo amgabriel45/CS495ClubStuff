@@ -16,7 +16,72 @@
         </div>
     </div>
 </div>
+<div class="modal modal-primary" tabindex="-1" role="dialog" id="eventModal">
+    <div class="modal-dialog modal-center modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: rgb(158,27,50)">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="bottomTitle">View Event</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div id="bottomHalf">
+                        <input type="hidden" id="EventId" data-field="EventId" />
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <input type="text" class="form-control empty" id="EventName" name="EventName" data-field="EventName" />
+                                    <label class="form-control-label floating-label">Event Name</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material" data-plugin="formMaterial">
+                                    <label class="form-control-label">Club Name</label>
+                                    <select class="combobox" id="Club" data-field="Group">
+                                        <option value="">Select an Option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <label class="form-control-label floating-label">Start Date</label>
+                                    <br />
+                                    <input type="datetime-local" class="form-control" id="StartDate" name="StartDate" data-field="StartDate" />
 
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <label class="form-control-label floating-label">End Date</label>
+                                    <br />
+                                    <input type="datetime-local" class="form-control" id="EndDate" name="EndDate" data-field="EndDate" />
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group form-material floating" data-plugin="formMaterial">
+                                    <input type="text" class="form-control empty" id="eventDescription" name="Description" data-field="Description" />
+                                    <label class="form-control-label floating-label">Description</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelEventButton">Cancel</div>
+                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteEventButton"><span class="ladda-label">Delete</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveEventButton"><span class="ladda-label">Save</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section stylesheets {
@@ -52,25 +117,37 @@
 
     $(document).ready(function () {
         $("#statusFilter").select2();
-        $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
+        $("#eventModal").find(".combobox").select2({ dropdownParent: $("#eventModal") });
         $('#jsGrid').jsGrid("loadData");
         $('#calendar').fullCalendar('today');
+        var clubs = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
+            function (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    $("#Club").append( // Append an object to the inside of the select box
+                        $("<option></option>") // Yes you can do this.
+                            .text(arr[i].name)
+                            .val(arr[i].id)
+                    );
+                }
+                return arr;
+            });
     });
 
     var params = {};
     var events = [];
     var $data = $.ajax({
-        type: "GET", url: "api/calendar", data: params
+        type: "GET", url: "api/events", data: params
     }).then(
         function (arr) {
-            for (var i = 0; i < arr.length; i++) { events.push({ title: arr[i].name, start: arr[i].start, end: arr[i].finish, description: arr[i].description }) }
-
+            for (var i = 0; i < arr.length; i++) {
+                events.push({ id: arr[i].id, clubId: arr[i].clubId, title: arr[i].name, start: arr[i].start, finish: arr[i].finish, description: arr[i].description })
+            }
             var myCalendar = $('#calendar');
             myCalendar.fullCalendar({
+                editable: true,
                 defaultView: 'month',
-                //  defaultDate: '2018-03-12',
-                contentHeight: 600,
-                // aspectRatio: 2,
+                // defaultDate: '2018-03-12',
+                contentHeight: 700,
                 eventColor: '#9E1B32',
                 eventTextColor: '#FFFFFF',
                 eventRender: function (eventObj, $el) {
@@ -82,11 +159,57 @@
                         container: 'body'
                     });
                 },
-                events: events
+                events: events,
+                eventClick: function (calEvent, jsEvent, view) {
+                    $('#mainModal').modal('toggle');
+                    $('#eventModal').modal('toggle');
+                    $('#EventName').removeClass('empty').val(calEvent.title);
+                    $('#eventDescription').removeClass('empty').val(calEvent.description);
+                    $('#EventId').val(calEvent.id);
+                    $('#StartDate').val(calEvent.start.toISOString());
+                    $('#EndDate').val(calEvent.finish);
+                    $('#Club').val(calEvent.clubId).change();
+                }
             });
             return arr;
         });
 
+    //Delete Event
+    $("#deleteEventButton").click(function () {
+        var id = $('#EventId').val();
+        var data = $.ajax({ type: "DELETE", url: "api/Events/" + id }).then(
+            function (arr) {
+                $('#mainModal').modal('toggle');
+                $('#jsGrid').jsGrid("loadData");
+                return arr;
+            });
+    });
+
+    //Edit Existing Event
+    $("#saveEventButton").click(function () {
+        var params = {};
+        params["Id"] = $("#EventId").val();
+        params["name"] = $("#EventName").val();
+        params["start"] = $("#StartDate").val();
+        params["Finish"] = $("#EndDate").val();
+        params["description"] = $("#eventDescription").val();
+        params["isGroupEvent"] = true;
+        params["clubId"] = $("#Club").val();
+        var $data = $.ajax({
+            type: "PUT", url: "api/events/", data: params
+        }).then(
+            function (arr) {
+
+                return arr;
+            });
+        $('#eventModal').modal('toggle');
+    });
+
+    //Close Event Modal
+    $("#cancelEventButton").click(function () {
+        $('#eventModal').modal('toggle');
+        $('#mainModal').modal('toggle');
+    });
 
 </script>
 }

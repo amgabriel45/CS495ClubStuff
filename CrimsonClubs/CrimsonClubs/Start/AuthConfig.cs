@@ -12,15 +12,15 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace CrimsonClubs
+namespace CrimsonClubs.Start
 {
-    public partial class Startup
+    public static class AuthConfig
     {
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
 
         public static readonly string ClientId = "77421544828-k57594dl8a1rgmitclu6e0rj8970ved1.apps.googleusercontent.com";
 
-        public void ConfigureAuth(IAppBuilder app)
+        public static void ConfigureAuth(IAppBuilder app)
         {
             OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
             app.UseOAuthBearerAuthentication(OAuthBearerOptions);
@@ -76,6 +76,8 @@ namespace CrimsonClubs
                         }
 
                         context.Identity.AddClaim(new Claim("UserId", user.Id.ToString(), ClaimValueTypes.Integer));
+                        context.Identity.AddClaim(new Claim("FirstName", user.First));
+                        context.Identity.AddClaim(new Claim("LastName", user.Last));
                     }
 
                     return Task.FromResult(0);
