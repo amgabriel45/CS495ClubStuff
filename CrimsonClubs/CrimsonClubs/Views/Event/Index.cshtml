@@ -327,7 +327,12 @@
                                         row = table.insertRow(-1);
                                         for (var j = 0; j < columnCount; j++) {
                                             var cell = row.insertCell(-1);
-                                            cell.innerHTML = customers[i][j];
+                                            if (j != 0) {
+                                                cell.innerHTML = " <input type=\"text\" value=\"" + customers[i][j] + "\">";
+                                            }
+                                            else {
+                                                cell.innerHTML = customers[i][j];
+                                            }
                                         }
                                     }
 
@@ -385,7 +390,12 @@
                                         row = table.insertRow(-1);
                                         for (var j = 0; j < columnCount; j++) {
                                             var cell = row.insertCell(-1);
-                                            cell.innerHTML = customers[i][j];
+                                            if (j != 0) {
+                                                cell.innerHTML = " <input type=\"text\" value=\"" + customers[i][j] + "\">";
+                                            }
+                                            else {
+                                                cell.innerHTML = customers[i][j];
+                                            }
                                         }
                                     }
 
