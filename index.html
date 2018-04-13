@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<title>Crimson Clubs</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+    body, h1, h5 {
+        font-family: "Raleway", sans-serif
+    }
+
+    body, html {
+        height: 100%
+    }
+
+    .bgimg {
+        /*background-image: url('/w3images/onepage_restaurant.jpg');*/
+        min-height: 100%;
+        background-position: center;
+        background-size: cover;
+        background-color: black;
+    }
+</style>
+<body>
+
+    <div class="bgimg w3-display-container w3-text-white">
+        <div class="w3-display-middle w3-jumbo">
+            <p style="color: rgb(158,27,50)">crimson clubs</p>
+        </div>
+        <div class="w3-display-topleft w3-container w3-xlarge">
+            <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('about').style.display='block'" class="w3-button w3-crimson">about</button></p>
+            <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('devliverables').style.display='block'" class="w3-button w3-crimson">deliverables</button></p>
+        </div>
+    </div>
+
+    <!-- Menu Modal -->
+    <div id="about" class="w3-modal">
+        <div class="w3-modal-content w3-animate-zoom">
+            <div class="w3-container w3-black w3-display-container">
+                <span onclick="document.getElementById('about').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
+                <h1 style="color: rgb(158,27,50)">About Us</h1>
+            </div>
+            <div class="w3-container">
+                <h5>
+                    Crimson Clubs is a mobile/web application desgined to help clubs and intramurals keep track of statistics and schedules. We aim to save people as much time as possible when using our applications.
+                    We take pride in the ergonomics of our mobile app such as button layout and naviagtion bar placements. We promised to never have advisements on our products unlike our competition. We strive for a pleasant experience for our users!
+                </h5>
+            </div>
+            <div class="w3-container w3-black">
+                <h1 style="color: rgb(158,27,50)">Developer Bios</h3>
+            </div>
+            <div class="w3-container">
+                <ul>
+                    <li><b>Max Livingston</b> - a senior undergraduate at the University of Alabama currently scehduled to graduate May 2018.</li>
+                    <li><b>Travis Redfield</b> - a senior from Huntsville, AL. I am majoring in computer science with a minor in cyber criminology. I have played trombone in the million dollar band for the last 4 years.</li>
+                    <li><b>Taylor Meads</b> - a senior CS student and Japanese minor. Aside from programming, I also like jam bands and playing the bass guitar.</li>
+                    <li><b>Adam Gabriel</b> -  a senior Computer Science major and Spanish Minor from Akron, Ohio. I marched Trombone in the Million Dollar Band for 4 years.</li>
+                    <li><b>Maclane May</b> -  a senior in computer science and an accelerated master's MCS student from Montgomery, AL. I plan to start the Computer Science PhD program at UA next year. I've been a student software developer at the Center for Advanced Public Safety (CAPS) at UA for the past 3 years. I like to play piano, video games, backyard sports, workout, hang out, and binge watch Netflix.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="devliverables" class="w3-modal">
+        <div class="w3-modal-content w3-animate-zoom">
+            <div class="w3-container w3-black">
+                <span onclick="document.getElementById('devliverables').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
+                <h1 style="color: rgb(158,27,50)">Deliverables</h1>
+            </div>
+            <div class="w3-container">
+                <h3><a href="https://docs.google.com/presentation/d/1DDpo8haAouh-JplWAHgw5aQCIlgLs8moonC0YF7iXwM/edit#slide=id.p3" target="_blank">Shark Tank Presentation</a></h3>
+                <h3><a href="https://docs.google.com/presentation/d/1D3Tq1_ewx7ha2O0QzI2ajGgdHqC4pcxEmSLmvbXRCrQ/edit" target="_blank">Requirements Presentation</a></h3>
+                <h3><a href=https://docs.google.com/presentation/d/1qyApWWQ2LLCiyY1faRy8MfkZqg2isGzm-svSHCoKXaE/edit#slide=id.p3" target="_blank">Design Presentation</a></h3>
+                <h3><a href="ProjectReq.pdf" target="_blank">Requirements Document</a></h3>
+                <h3><a href="ProjectDesign.pdf" target="_blank">Design Document</a></h3>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
