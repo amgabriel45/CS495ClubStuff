@@ -1,35 +1,20 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.PointF;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Keep;
-import android.support.design.widget.FloatingActionButton;
 import android.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.util.Base64;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -39,16 +24,12 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-
-import org.json.JSONArray;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Stack;
 
 import javax.net.ssl.HostnameVerifier;
@@ -60,15 +41,10 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Credentials;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+
 import okhttp3.Request;
 import okhttp3.Response;
-
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnNeverAskAgain;
-import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @Keep
@@ -79,6 +55,9 @@ public class MainActivity extends AppCompatActivity
 
     public Toolbar toolbar;
     public static GoogleSignInClient mGoogleSignInClient;
+
+    public static String bearerToken;
+    public static UserDto currUser;
 
     public static OkHttpClient client;
     public static boolean hasConnected = false; //set true when app first connects to a server, set back to false when host is changed
@@ -102,7 +81,6 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         client = getUnsafeOkHttpClient(); //sets up client that accepts any SSL certificate
 
         initDrawers(toolbar); //build nav drawer and bookmark drawer
@@ -113,7 +91,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private  Drawer.OnDrawerItemClickListener listener(){ //handles what happens when poi draweritem is clicked
+    private  Drawer.OnDrawerItemClickListener listener(final BaseFragment fragmentType){ //handles what happens when poi draweritem is clicked
 
         Drawer.OnDrawerItemClickListener result = new Drawer.OnDrawerItemClickListener() {
             @Override
@@ -122,7 +100,7 @@ public class MainActivity extends AppCompatActivity
                 if(drawerItem != null) {
 
 
-                    Fragment temp = new BaseFragment();
+                    Fragment temp = fragmentType;
 
                     getFragmentManager()
                             .beginTransaction()
@@ -156,7 +134,7 @@ public class MainActivity extends AppCompatActivity
                 .withDescription("2 new events")
                 .withIcon(R.drawable.poi_mark)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener())
+                .withOnDrawerItemClickListener(listener(new BaseFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -166,7 +144,7 @@ public class MainActivity extends AppCompatActivity
                 .withDescription("0 new events")
                 .withIcon(R.drawable.poi_mark)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener())
+                .withOnDrawerItemClickListener(listener(new BaseFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -177,7 +155,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("My Calendar")
                 .withIcon(R.drawable.calendar)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener())
+                .withOnDrawerItemClickListener(listener(new BaseFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -186,7 +164,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("Browse Events")
                 .withIcon(R.drawable.ic_info_black_24dp)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener())
+                .withOnDrawerItemClickListener(listener(new BaseFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -195,7 +173,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("Create an Event")
                 .withIcon(android.R.drawable.ic_menu_add)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener())
+                .withOnDrawerItemClickListener(listener(new BaseFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -208,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("Browse Clubs")
                 .withIcon(R.drawable.ic_info_black_24dp)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener())
+                .withOnDrawerItemClickListener(listener(new BrowseClubsFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -217,7 +195,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("Create a Club")
                 .withIcon(android.R.drawable.ic_menu_add)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener())
+                .withOnDrawerItemClickListener(listener(new BaseFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -230,50 +208,117 @@ public class MainActivity extends AppCompatActivity
     public void onResume(){
         super.onResume();
 
-       // SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+       getAuthToken();
 
-        /*
-        isLive = prefs.getBoolean("livemode_switch",false);
-        isTLS = prefs.getBoolean("network_use_ssl",false);
-        host = prefs.getString("host_name","127.0.0.1");
-        port = Integer.parseInt(prefs.getString("port_name","8080"));
 
-        prefs = getSharedPreferences("com.crimsonclubs.uacs.android.crimsonclubs.prefs", Context.MODE_PRIVATE);
+    }
 
-        String temp = prefs.getString("iqagent_uuid","NOTFOUND");
+    public void getAuthToken(){
 
-        if(temp.compareTo("NOTFOUND") != 0) {
-            token = temp;
-        }
+        String token = getIntent().getStringExtra("bearerToken");
+        Log.e("token=",token);
 
-        if(prefs.getBoolean("mode_changed",false)){ //if user has switched between live/internal modes
-            hasConnected = false;
-            clearPathText();
-            updateBookmarks = true;
-            SharedPreferences pref = getSharedPreferences("com.crimsonclubs.uacs.android.crimsonclubs.prefs",Context.MODE_PRIVATE);
-            pref.edit().putBoolean("mode_changed", false).apply();
-        }
+        final Gson gson = new GsonBuilder().serializeNulls().create();
 
-        if(prefs.getBoolean("host_changed",false)){ //if user has changed host
-            hasConnected = false;
-            clearPathText();
-            updateBookmarks = true;
-            SharedPreferences pref = getSharedPreferences("com.crimsonclubs.uacs.android.crimsonclubs.prefs",Context.MODE_PRIVATE);
-            pref.edit().putBoolean("host_changed", false).apply();
-        }
-        */
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth?token=" + token;
 
-        //db = new SQLiteDatabaseHandler(this);
+        Log.e("url",url);
 
-       // db.getReadableDatabase();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
 
-       // db.close();
 
-        if(navDrawer != null) {
-            if (!navDrawer.isDrawerOpen()) {
-                updateNavDrawer(); //populates drawer w/ top level navObjects info
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                MainActivity.this.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(MainActivity.this,
+                                                            "Remote server could not be reached. "
+                                                            ,Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+
+                );
             }
-        }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(MainActivity.this,
+                                                                    "Authentication failed.",
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    }
+                    else{
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(MainActivity.this,
+                                                                    "An unspecified networking error has occurred\n" +
+                                                                            "Error Code: " + response.code(),
+                                                                    Toast.LENGTH_LONG).show();
+                                                            try {
+                                                                Log.e("str", response.body().string());
+                                                            }
+                                                            catch(
+                                                                    IOException e){
+                                                                //
+                                                            }
+                                                        }
+                                                    }
+
+
+                        );
+                    }
+                }
+                else {
+                    boolean isNull = false;
+
+                    ArrayList<ApiAuthDto> temp = new ArrayList<ApiAuthDto>();
+
+                    String body = response.body().string();
+
+
+                    try {
+                        temp = new ArrayList<ApiAuthDto>(Arrays.asList(gson.fromJson(body, ApiAuthDto[].class)));
+                    } catch (JsonSyntaxException e) {
+                        temp.add(gson.fromJson(body, ApiAuthDto.class));
+                    }
+
+                    if (temp.get(0) == null) { //read failed
+                        isNull = true;
+                    }
+
+                    final ApiAuthDto resp = temp.get(0);
+
+                    // Run view-related code back on the main thread
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        bearerToken = Integer.toString(resp.token);
+                                                        currUser = resp.user;
+
+                                                    }
+                                                }
+                    );
+                }
+            }
+
+        });
     }
 
 
@@ -293,105 +338,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-
-           // Intent i = new Intent(this, IQAgentSettingsActivity.class);
-           // startActivity(i);
-          //  return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    //UI and Setup functions
-
-    private void updateNavDrawer(){ //adds navObjects and POIs to drawer according to current groupID
-
-       // navDrawer.removeAllItems();
-
-
-            InternalModeSQLiteHelper db = new InternalModeSQLiteHelper(this);
-
-            //JSONArray arr = db.getJson(db.getItemsAtLevel(currGroupId)); //same thing as live mode but get data from DB
-
-           // IQAgentNavObject[] temp;
-/*
-            try {
-                temp = gson.fromJson(arr.toString(), IQAgentNavObject[].class);
-            } catch (JsonSyntaxException e) {
-                temp = new IQAgentNavObject[1];
-                temp[0] = gson.fromJson(arr.toString(), IQAgentNavObject.class);
-            }
-
-            updateMenusFromArr(temp); //update menus
-
-            db.close();
-            */
-
-        }
-
-
-  //  private void updateMenusFromArr(final IQAgentNavObject[] navArr){ //updates nav drawer with given nav obj info
-
-        /*
-
-        ArrayList<IDrawerItem> pois = new ArrayList<>();
-        ArrayList<IDrawerItem> groups = new ArrayList<>();
-
-        for (int i = 0; i < navArr.length; i++) {
-            if (navArr[i].type.compareTo("poi") == 0) {
-                SecondaryDrawerItem item = new SecondaryDrawerItem()
-                        .withName(navArr[i].name)
-                        .withDescription(navArr[i].description)
-                        .withIcon(R.drawable.poi_mark)
-                        .withIdentifier(navArr[i].id)
-                        .withSelectedBackgroundAnimated(false)
-                        .withOnDrawerItemClickListener(poiListener());
-                pois.add(item);
-            } else {
-                SecondaryDrawerItem item = new SecondaryDrawerItem()
-                        .withName(navArr[i].name)
-                        .withDescription(navArr[i].description)
-                        .withIcon(R.drawable.caret)
-                        .withIdentifier(navArr[i].id)
-                        .withSelectedBackgroundAnimated(false)
-                        .withOnDrawerItemClickListener(groupListener());
-                groups.add(item);
-            }
-        }
-
-        if(!pois.isEmpty()){
-            navDrawer.addItem( new SectionDrawerItem().withName("POIs").withDivider(false));
-            for(IDrawerItem i : pois){
-                navDrawer.addItem(i);
-            }
-        }
-
-        if(!groups.isEmpty()){
-            navDrawer.addItem( new SectionDrawerItem().withName("Groups").withDivider(!pois.isEmpty()));
-            for(IDrawerItem i : groups){
-                navDrawer.addItem(i);
-            }
-        }
-
-*/
-
-//}
 
     private void initDrawers(Toolbar toolbar){ //sets up the drawers
 
@@ -420,15 +366,6 @@ public class MainActivity extends AppCompatActivity
                 .build();
 
     }
-
-
-
-    //Utility Functions
-
-
-
-
-    //Everything Else
 
 
 

@@ -83,12 +83,7 @@ public class BaseFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
-        final ListView lv = (ListView) getActivity().findViewById(R.id.dataList);
-        ArrayList<String> l = new ArrayList<>();
-        l.add("BaseFragment");
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, l);
-        lv.setAdapter(itemsAdapter);
+
     }
 
     @Override

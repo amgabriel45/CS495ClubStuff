@@ -91,6 +91,8 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
         b.putString("email",account.getEmail());
         b.putString("name",account.getGivenName());
         b.putString("photoUrl",account.getPhotoUrl().toString());
+        b.putString("bearerToken",account.getIdToken());
+
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtras(b);
