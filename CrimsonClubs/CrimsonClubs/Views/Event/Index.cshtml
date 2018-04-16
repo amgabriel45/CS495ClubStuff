@@ -13,6 +13,12 @@
                     <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseClubStat">
                         Club Stats
                     </a>
+                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseGroupStat" id="eventDropdown">
+                        Group Stats
+                    </a>
+                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseEventStat" id="eventDropdown">
+                        Event Stats
+                    </a>
                 </h2>
             </div>
             <div class="panel-body panel-no-pad">
@@ -61,14 +67,93 @@
                             </div>
                             <div class="row">
                                 <button class="btn btn-icon btn-success" id="AddClubStat">Add Club Stat</button>
-                               
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="jsGrid" class="fullHeight"></div>
+                <div class="panel-body panel-no-pad">
+                    <div class="collapse" id="collapseGroupStat">
+                        <div class="panel">
+                            <div class="panel-body container">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6">
+                                        <div class="form-group form-material floating" data-plugin="formMaterial">
+                                            <input type="text" class="form-control empty" id="GroupStatName" />
+                                            <label class="form-control-label floating-label">Group Stat Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-md-6">
+                                        <div class="form-group form-material floating" data-plugin="formMaterial">
+                                            <input type="text" class="form-control empty" id="GroupStatAbb" />
+                                            <label class="form-control-label floating-label">Group Stat Abbreviation</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-md-3">
+                                        <div class="form-group form-material" data-plugin="formMaterial">
+                                            <label class="form-control-label">Group Name</label>
+                                            <select class="combobox" id="StatGroupList" data-field="Group">
+                                                <option value="">Select an Option</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-md-3">
+                                        <div class="form-group form-material" data-plugin="formMaterial">
+                                            <label class="form-control-label">Stat Name</label>
+                                            <select class="combobox" id="GroupStatList" data-field="Group">
+                                                <option value="">Select an Option</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-icon btn-warning" id="DeleteGroupStat" style="margin-top:25px">Delete Club Stat</button>
+                                    *Select a group to delete a stat*
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="form-group form-material floating" data-plugin="formMaterial">
+                                                <input type="text" class="form-control empty" id="GroupStatDescription" name="Description" data-field="Description" />
+                                                <label class="form-control-label floating-label">Description</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <button class="btn btn-icon btn-success" id="AddGroupStat">Add Club Stat</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse" id="collapseEventStat">
+                        <div class="panel">
+                            <div class="panel-body container">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-3">
+                                        <div class="form-group form-material" data-plugin="formMaterial">
+                                            <label class="form-control-label">Select Event Name To Edit Event Stats</label>
+                                            <select class="combobox" id="StatEventList" data-field="Group">
+                                                <option value="">Select an Option</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="clubStatTable" class="fullHeight" align="center"></div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="row">
+                                    <div id="groupStatTable" class="fullHeight" align="center"></div>
+                                </div>
+                                <div class="row">
+                                    <button class="btn btn-icon btn-success" id="AddEventStats">Update Event Stats</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="jsGrid" class="fullHeight"></div>
+                </div>
             </div>
-        </div>
     </div>
 </div>
 
@@ -212,11 +297,14 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#StatClubList").select2();
+            $("#StatEventList").select2();
+            $("#StatGroupList").select2();
+            $("#GroupStatList").select2();
             $("#StatList").select2();
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
             $('#jsGrid').jsGrid("loadData");
 
-            //Populate Dropdown
+            //Populate Dropdowns
             var params = {};
             var data = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
                 function (arr) {
@@ -239,8 +327,32 @@
                     }
                     return arr;
                 });
+            var data = $.ajax({ type: "GET", url: "api/events/", data: params }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#StatEventList").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                    }
+                    return arr;
+                });
+            var data = $.ajax({ type: "GET", url: "api/groups/", data: params }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#StatGroupList").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                    }
+                    return arr;
+                });
             $('input[type=datetime-local]').setNow();
         });
+
+        
 
         //Create Grid and Populate Event Modals
         $("#jsGrid").jsGrid({
@@ -328,7 +440,7 @@
                                         for (var j = 0; j < columnCount; j++) {
                                             var cell = row.insertCell(-1);
                                             if (j != 0) {
-                                                cell.innerHTML = " <input type=\"text\" value=\"" + customers[i][j] + "\">";
+                                                cell.innerHTML = customers[i][j];
                                             }
                                             else {
                                                 cell.innerHTML = customers[i][j];
@@ -391,7 +503,7 @@
                                         for (var j = 0; j < columnCount; j++) {
                                             var cell = row.insertCell(-1);
                                             if (j != 0) {
-                                                cell.innerHTML = " <input type=\"text\" value=\"" + customers[i][j] + "\">";
+                                                cell.innerHTML = customers[i][j];
                                             }
                                             else {
                                                 cell.innerHTML = customers[i][j];
@@ -431,6 +543,101 @@
                     }
                     return arr;
                 });
+        });
+
+        //Populate Group Stat List for Deletion
+        $('#StatGroupList').on('change', function () {
+            var groupSelect = $('#StatGroupList').val();
+            var data = $.ajax({ type: "GET", url: "api/stats?groupId=" + groupSelect }).then(
+                function (arr) {
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#GroupStatList").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                    }
+                    return arr;
+                });
+        });
+
+        
+
+        //Click Events Below
+        //  
+        //
+        //
+        //
+        //
+        //Click Events Below
+
+
+        //Create New Club Stat
+        $("#AddClubStat").click(function () {
+            var params = {};
+            params["clubId"] = $("#StatClubList").val();
+            params["name"] = $("#StatName").val();
+            params["abbreviation"] = $("#StatAbb").val();
+            params["description"] = $("#StatDescription").val();
+            var $data = $.ajax({
+                type: "POST", url: "api/stats/club", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+
+            location.reload();
+        });
+
+        //Delete Club Stat
+        $("#DeleteClubStat").click(function () {
+
+            var statId = $("#StatList").val();
+
+            var $data = $.ajax({
+                type: "DELETE", url: "api/stats/" + statId
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+
+            location.reload();
+        });
+
+        //Create New Group Stat
+        $("#AddGroupStat").click(function () {
+            var params = {};
+            params["groupId"] = $("#StatGroupList").val();
+            params["name"] = $("#GroupStatName").val();
+            params["abbreviation"] = $("#GroupStatAbb").val();
+            params["description"] = $("#GroupStatDescription").val();
+            var $data = $.ajax({
+                type: "POST", url: "api/stats/Group", data: params
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+
+            location.reload();
+        });
+
+        //Delete Group Stat
+        $("#DeleteGroupStat").click(function () {
+
+            var statId = $("#GroupStatList").val();
+
+            var $data = $.ajax({
+                type: "DELETE", url: "api/stats/" + statId
+            }).then(
+                function (arr) {
+
+                    return arr;
+                });
+
+            location.reload();
         });
 
         //Create Event Modal
@@ -506,6 +713,192 @@
         //Close Stat Event Modal
         $("#cancelStatButton").click(function () {
             $('#statModal').modal('toggle');
+        });
+
+        //Add Club Stat Button
+        $("#AddEventStats").click(function () {
+
+            var inc = 0;
+            var table = document.getElementById("clubStatTable").children[0].rows;
+            for (var i = 1; i < table.length; i++) {
+                for (var x = 1; x < table[i].cells.length; x++) {
+                    clubStatsArray[inc]["value"] = table[i].cells[x].children[0].value;
+                    inc++;
+                }
+            }
+
+            var table = document.getElementById("groupStatTable").children[0].rows;
+            for (var i = 1; i < table.length; i++) {
+                for (var x = 1; x < table[i].cells.length; x++) {
+                    clubStatsArray[inc]["value"] = table[i].cells[x].children[0].value;
+                    inc++;
+                }
+            }
+
+
+            var eventId = $('#StatEventList').val();
+
+            //Insert Stats Here
+            var data = $.ajax({ type: "POST", url: "api/events/" + eventId + "/stats", data: JSON.stringify(clubStatsArray), contentType: "application/json" }).then(
+                function (arr) {
+                    return arr;
+                });
+
+            location.reload();
+        });
+
+        var clubStatsArray = [];
+        var groupStatsArray = [];
+        //Populate Event Stats Dropdown
+        $("#StatEventList").on('change', function () {
+            $('#clubStatTable').html('Loading Please Wait...');
+            $('#groupStatTable').html('');
+
+            var eventId = $('#StatEventList').val();
+            var eventNames = [];
+
+            var data = $.ajax({ type: "GET", url: "api/events/" + eventId }).then(
+                function (item) {
+
+                    var eventNameData = $.ajax({ type: "GET", url: "api/clubs/" + item.clubId }).then(
+                        function (names) {
+                            eventNames = names.members;
+
+                            //Construct Club Table
+                            var customers = new Array();
+                            customers.push(["Name"]);
+                            for (var i = 0; i < item.clubStats.length; i++) {
+                                customers[0].push(item.clubStats[i].name);
+                            }
+
+
+                            for (var i = 0; i < eventNames.length; i++) {
+                                customers.push([eventNames[i].first + " " + eventNames[i].last]);
+
+                                if (i < item.usersClubStats.length) {
+                                    for (var x = 0; x < item.clubStats.length; x++) {
+                                        customers[i + 1].push(item.usersClubStats[i].stats[item.clubStats[x].id]);
+                                        clubStatsArray.push({ "value": 0, "userId": eventNames[i].id, "eventId": item.id, "statId": item.clubStats[x].id });
+                                    }
+                                }
+                                else {
+                                    for (var x = 0; x < item.clubStats.length; x++) {
+                                        customers[i + 1].push(0);
+                                        clubStatsArray.push({ "value": 0, "userId": eventNames[i].id, "eventId": item.id, "statId": item.clubStats[x].id });
+                                    }
+                                }
+
+                            }
+
+                            //Create a HTML Table element.
+                            var table = document.createElement("TABLE");
+                            table.border = "1";
+                            table.width = 500;
+                            table.cellpadding = 5;
+                            table.align = "center";
+
+                            //Get the count of columns.
+                            var columnCount = customers[0].length;
+
+                            //Add the header row.
+                            var row = table.insertRow(-1);
+                            row.align = "center";
+                            for (var i = 0; i < columnCount; i++) {
+                                var headerCell = document.createElement("TH");
+                                headerCell.align = "center";
+                                headerCell.innerHTML = customers[0][i];
+                                row.appendChild(headerCell);
+
+                            }
+
+                            //Add the data rows.
+                            for (var i = 1; i < customers.length; i++) {
+                                row = table.insertRow(-1);
+                                for (var j = 0; j < columnCount; j++) {
+                                    var cell = row.insertCell(-1);
+                                    if (j != 0) {
+                                        cell.innerHTML = " <input type=\"text\" value=\"" + customers[i][j] + "\">";
+                                    }
+                                    else {
+                                        cell.innerHTML = customers[i][j];
+                                    }
+                                }
+                            }
+
+                            var dvTable = document.getElementById("clubStatTable");
+                            dvTable.innerHTML = "";
+                            dvTable.appendChild(table);
+
+                            //Construct Group Stat Table 
+                            var customers = new Array();
+                            customers.push(["Name"]);
+                            for (var i = 0; i < item.groupStats.length; i++) {
+                                customers[0].push(item.groupStats[i].name);
+                            }
+                            for (var i = 0; i < eventNames.length; i++) {
+                                customers.push([eventNames[i].first + " " + eventNames[i].last]);
+
+                                if (i < item.usersGroupStats.length) {
+                                    for (var x = 0; x < item.groupStats.length; x++) {
+                                        customers[i + 1].push(item.usersGroupStats[i].stats[item.groupStats[x].id]);
+                                        clubStatsArray.push({ "value": 0, "userId": eventNames[i].id, "eventId": item.id, "statId": item.groupStats[x].id });
+                                    }
+                                }
+                                else {
+                                    for (var x = 0; x < item.groupStats.length; x++) {
+                                        customers[i + 1].push(0);
+                                        clubStatsArray.push({ "value": 0, "userId": eventNames[i].id, "eventId": item.id, "statId": item.groupStats[x].id });
+                                    }
+                                }
+
+                            }
+
+                            //Create a HTML Table element.
+                            var table = document.createElement("TABLE");
+                            table.border = "1";
+                            table.width = 500;
+                            table.cellpadding = 5;
+                            table.align = "center";
+
+                            //Get the count of columns.
+                            var columnCount = customers[0].length;
+
+                            //Add the header row.
+                            var row = table.insertRow(-1);
+                            row.align = "center";
+                            for (var i = 0; i < columnCount; i++) {
+                                var headerCell = document.createElement("TH");
+                                headerCell.align = "center";
+                                headerCell.innerHTML = customers[0][i];
+                                row.appendChild(headerCell);
+
+                            }
+
+                            //Add the data rows.
+                            for (var i = 1; i < customers.length; i++) {
+                                row = table.insertRow(-1);
+                                for (var j = 0; j < columnCount; j++) {
+                                    var cell = row.insertCell(-1);
+                                    if (j != 0) {
+                                        cell.innerHTML = " <input type=\"text\" value=\"" + customers[i][j] + "\">";
+                                    }
+                                    else {
+                                        cell.innerHTML = customers[i][j];
+                                    }
+                                }
+                            }
+
+                            var dvTable = document.getElementById("groupStatTable");
+                            dvTable.innerHTML = "";
+                            dvTable.appendChild(table);
+                            return item;
+
+
+                        });
+
+                });
+            return data;
+
         });
 
         //Datetime now function
