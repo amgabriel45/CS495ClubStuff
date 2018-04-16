@@ -117,7 +117,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <button class="btn btn-icon btn-success" id="AddGroupStat">Add Club Stat</button>
+                                    <button class="btn btn-icon btn-success" id="AddGroupStat">Add Group Stat</button>
 
                                 </div>
                             </div>
@@ -743,7 +743,7 @@
                 function (arr) {
                     return arr;
                 });
-
+            clubStatsArray = [];
             location.reload();
         });
 
@@ -753,7 +753,7 @@
         $("#StatEventList").on('change', function () {
             $('#clubStatTable').html('Loading Please Wait...');
             $('#groupStatTable').html('');
-
+            clubStatsArray = [];
             var eventId = $('#StatEventList').val();
             var eventNames = [];
 
