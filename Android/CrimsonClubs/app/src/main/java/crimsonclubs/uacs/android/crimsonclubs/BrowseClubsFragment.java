@@ -145,7 +145,7 @@ public class BrowseClubsFragment extends BaseFragment  {
                                                                public void run() {
 
                                                                    adapter = new ClubAdapter(objs);
-                                                                   final ListView lv = (ListView) getActivity().findViewById(R.id.infoList);
+                                                                   final ListView lv = (ListView) getActivity().findViewById(R.id.clubsList);
 
                                                                    //lv.setOnItemClickListener( infoItemClickListener());
 

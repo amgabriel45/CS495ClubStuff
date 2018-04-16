@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity
     public Toolbar toolbar;
     public static GoogleSignInClient mGoogleSignInClient;
 
+    private Fragment lastFragment;
+    private Fragment currFragment;
+
     public static String bearerToken;
     public static UserDto currUser;
 
@@ -100,7 +103,9 @@ public class MainActivity extends AppCompatActivity
                 if(drawerItem != null) {
 
 
-                    Fragment temp = fragmentType;
+                    currFragment = fragmentType;
+
+                    lastFragment = getFragmentManager().findFragmentByTag("curr");
 
                     getFragmentManager()
                             .beginTransaction()
@@ -111,7 +116,7 @@ public class MainActivity extends AppCompatActivity
                                     R.animator.card_flip_left_in,
                                     R.animator.card_flip_left_out)
 
-                            .replace(R.id.container, temp, "curr")
+                            .replace(R.id.container, currFragment, "curr")
 
                             .commit();
 
@@ -123,6 +128,32 @@ public class MainActivity extends AppCompatActivity
         };
 
         return result;
+    }
+
+    private void goToLastFragment(){
+
+
+
+        if (lastFragment != null){
+            getFragmentManager()
+                    .beginTransaction()
+
+                    .setCustomAnimations(
+                            R.animator.card_flip_right_in,
+                            R.animator.card_flip_right_out,
+                            R.animator.card_flip_left_in,
+                            R.animator.card_flip_left_out)
+
+                    .replace(R.id.container, lastFragment, "curr")
+
+                    .commit();
+
+            lastFragment = currFragment;
+            currFragment = lastFragment = getFragmentManager().findFragmentByTag("curr");
+
+            navDrawer.closeDrawer();
+        }
+
     }
 
     public void setUpDemoDrawer(){
@@ -220,7 +251,8 @@ public class MainActivity extends AppCompatActivity
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
-        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth?token=" + token;
+        //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth?token=" + token;
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth/test/1";
 
         Log.e("url",url);
 
@@ -309,7 +341,7 @@ public class MainActivity extends AppCompatActivity
                                                     @Override
                                                     public void run() {
 
-                                                        bearerToken = Integer.toString(resp.token);
+                                                        bearerToken = resp.token;
                                                         currUser = resp.user;
 
                                                     }
@@ -320,7 +352,6 @@ public class MainActivity extends AppCompatActivity
 
         });
     }
-
 
     @Override
     protected void onPause() {
@@ -334,6 +365,9 @@ public class MainActivity extends AppCompatActivity
 
                 navDrawer.closeDrawer();
 
+        }
+        else{
+            goToLastFragment();
         }
 
     }

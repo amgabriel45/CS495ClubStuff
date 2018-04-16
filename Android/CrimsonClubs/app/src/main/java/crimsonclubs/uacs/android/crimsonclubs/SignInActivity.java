@@ -27,6 +27,9 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
+        forceProceedToMainActivity();
+        finish();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("77421544828-k57594dl8a1rgmitclu6e0rj8970ved1.apps.googleusercontent.com")
                 .requestEmail()
@@ -99,6 +102,24 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
 
         startActivity(intent);
         finish();
+    }
+
+    private void forceProceedToMainActivity() //delete this in final version
+    {
+
+        Bundle b = new Bundle();
+        b.putString("email","jgarcia@crimson.ua.edu");
+        b.putString("name","Jerry");
+        b.putString("photoUrl","www.goatse.cx");
+        b.putString("bearerToken","abcdefg");
+
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtras(b);
+
+        startActivity(intent);
+        finish();
+
     }
 
 }

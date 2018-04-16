@@ -8,7 +8,7 @@ public class ApiAuthDto {
 
     @Expose
     @SerializedName("token")
-    public int token;
+    public String token;
     @Expose
     @SerializedName("user")
     public UserDto user;
