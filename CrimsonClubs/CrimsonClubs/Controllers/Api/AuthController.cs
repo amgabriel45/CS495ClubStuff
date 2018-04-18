@@ -72,7 +72,7 @@ namespace CrimsonClubs.Controllers.Api
 
             var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
             ticket.Properties.IssuedUtc = currentUtc;
-            ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromMinutes(30));
+            ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromDays(1));
 
             string accessToken = AuthConfig.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
 

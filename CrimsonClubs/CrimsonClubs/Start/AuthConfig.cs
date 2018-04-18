@@ -30,6 +30,7 @@ namespace CrimsonClubs.Start
                 AuthenticationType = DefaultAuthenticationTypes.ExternalCookie,
                 LoginPath = new PathString("/auth/login"),
                 CookieName = "Auth",
+                ExpireTimeSpan = TimeSpan.FromDays(1),
                 Provider = new CookieAuthenticationProvider
                 {
                     OnApplyRedirect = context =>
@@ -42,7 +43,7 @@ namespace CrimsonClubs.Start
                 }
             });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-            app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
+            app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromDays(1));
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             var authenticationOptions = new GoogleOAuth2AuthenticationOptions()
