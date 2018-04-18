@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Join Clubs";
+}
+
+<div class="page fullHeight">
+    <div class="open-full-panel half-panel animate-panel" id="topPage">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <span>Pick a Club</span>
+                    @*<button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Group</span></button>*@
+                    @*<a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
+                        Advanced Search Options
+                    </a>*@
+                </h2>
+            </div>
+            <div class="panel-body panel-no-pad">
+                <div id="jsGrid" class="fullHeight"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section stylesheets {
+    @*<link type="text/css" rel="stylesheet" href="~/Content/global/vendor/jsgrid/jsgrid.css" />*@
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/select2/select2.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/icheck/icheck.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/global/vendor/dropify/dropify.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.css' />
+}
+
+@section includescripts {
+    <script type="text/javascript" src="~/Content/global/vendor/select2/select2.full.min.js"></script>
+    @*<script type="text/javascript" src="~/Content/global/vendor/jsgrid/jsgrid.js"></script>*@
+    <script type="text/javascript" src="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/icheck/icheck.js"></script>
+    <script type="text/javascript" src="~/Content/global/vendor/dropify/dropify.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.js'></script>
+
+}
+
+@section scripts {
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
+    
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#jsGrid').jsGrid("loadData");
+        });
+
+
+        //Create Grid and Populate Club Modals
+        $("#jsGrid").jsGrid({
+            width: "100%",
+
+            inserting: false,
+            editing: false,
+            sorting: true,
+            paging: true,
+
+            controller: {
+                loadData: function () {
+                    var data = $.ajax({ type: "GET", url: "api/clubs/all" }).then(
+                        function (arr) {
+                            return arr;
+                        })
+                    return data;
+                }
+            },
+
+            fields: [
+                { name: "name", title: "Name", type: "text", width: 150, align: "center" },
+                { name: "groupName", type: "text", title: "Group", align: "center" },
+                { name: "Id", visible: false },
+                {
+                    type: "control", width: 65,
+                    itemTemplate: function (value, item) {
+                        var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                        var $customButton = $("<i class=\"site-menu-icon md-plus\" aria-hidden=\"true\"></i>")
+                            .click(function (e) {
+                                var $data = $.ajax({
+                                    type: "POST", url: "api/clubs/" + item.id + "/join"
+                                }).then(
+                                    function (arr) {
+                                        arr = arr;
+                                    });
+                            });
+
+                        return $customButton;
+                    }
+                }
+            ],
+            autoload: true
+
+        });
+
+       
+
+    </script>
+}

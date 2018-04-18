@@ -185,6 +185,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Site\JoinController.cs" />
     <Compile Include="Controllers\Site\GroupController.cs" />
     <Compile Include="Controllers\Site\EventController.cs" />
     <Compile Include="Controllers\Api\StatController.cs" />
@@ -2849,6 +2850,7 @@
     <Content Include="Views\Calendar\Index.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />
+    <Content Include="Views\Join\Index.cshtml" />
     <None Include="Web.ReleaseDev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
