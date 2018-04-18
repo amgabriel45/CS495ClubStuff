@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("Browse Events")
                 .withIcon(R.drawable.ic_info_black_24dp)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BaseFragment()))
+                .withOnDrawerItemClickListener(listener(new BrowseEventsFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
