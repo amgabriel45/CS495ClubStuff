@@ -10,18 +10,80 @@
                 <h2 class="panel-title">
                     <span>Events</span>
                     <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Event</span></button>
-                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseClubStat">
-                        Club Stats
+                    <a class="btn btn-info btn-warning floatRight" data-toggle="collapse" href="#collapseDeleteGroupStat" id="eventDropdown">
+                        Delete Group Stat
                     </a>
-                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseGroupStat" id="eventDropdown">
-                        Group Stats
+                    <a class="btn btn-info btn-success floatRight" data-toggle="collapse" href="#collapseGroupStat" id="eventDropdown">
+                        Add Group Stat
                     </a>
-                    <a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseEventStat" id="eventDropdown">
+                    <a class="btn btn-info btn-warning floatRight" data-toggle="collapse" href="#collapseDeleteClubStat" id="eventDropdown">
+                        Delete Club Stat
+                    </a>
+                    <a class="btn btn-info btn-success floatRight" data-toggle="collapse" href="#collapseClubStat">
+                        Add Club Stat
+                    </a>
+                    <a class="btn btn-info btn-md floatRight" data-toggle="collapse" href="#collapseEventStat" id="eventDropdown">
                         Event Stats
                     </a>
                 </h2>
             </div>
             <div class="panel-body panel-no-pad">
+                <div class="collapse" id="collapseDeleteGroupStat">
+                    <div class="panel">
+                        <div class="panel-body container">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="form-group form-material" data-plugin="formMaterial">
+                                        <label class="form-control-label">Group Name</label>
+                                        <select class="combobox" id="StatGroupListDelete" data-field="Group">
+                                            <option value="">Select an Option</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="form-group form-material" data-plugin="formMaterial">
+                                        <label class="form-control-label">Stat Name</label>
+                                        <select class="combobox" id="StatListGroupDelete" data-field="Group">
+                                            <option value="">Select an Option</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-icon btn-warning" id="DeleteGroupStat" style="margin-left:340px">Delete Stat</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse" id="collapseDeleteClubStat">
+                    <div class="panel">
+                        <div class="panel-body container">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="form-group form-material" data-plugin="formMaterial">
+                                        <label class="form-control-label">Club Name</label>
+                                        <select class="combobox" id="StatClubListDelete" data-field="Group">
+                                            <option value="">Select an Option</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="form-group form-material" data-plugin="formMaterial">
+                                        <label class="form-control-label">Stat Name</label>
+                                        <select class="combobox" id="StatListClubDelete" data-field="Group">
+                                            <option value="">Select an Option</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-icon btn-warning" id="DeleteClubStat" style="margin-left:340px">Delete Stat</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="collapse" id="collapseClubStat">
                     <div class="panel">
                         <div class="panel-body container">
@@ -46,16 +108,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-md-3">
-                                    <div class="form-group form-material" data-plugin="formMaterial">
-                                        <label class="form-control-label">Stat Name</label>
-                                        <select class="combobox" id="StatList" data-field="Group">
-                                            <option value="">Select an Option</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <button class="btn btn-icon btn-warning" id="DeleteClubStat" style="margin-top:25px">Delete Club Stat</button>
-                                *Select a club to delete a stat*
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="form-group form-material floating" data-plugin="formMaterial">
@@ -67,7 +119,6 @@
                             </div>
                             <div class="row">
                                 <button class="btn btn-icon btn-success" id="AddClubStat">Add Club Stat</button>
-
                             </div>
                         </div>
                     </div>
@@ -97,16 +148,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-xs-12 col-md-3">
-                                        <div class="form-group form-material" data-plugin="formMaterial">
-                                            <label class="form-control-label">Stat Name</label>
-                                            <select class="combobox" id="GroupStatList" data-field="Group">
-                                                <option value="">Select an Option</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-icon btn-warning" id="DeleteGroupStat" style="margin-top:25px">Delete Club Stat</button>
-                                    *Select a group to delete a stat*
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <div class="form-group form-material floating" data-plugin="formMaterial">
@@ -118,7 +159,6 @@
                                 </div>
                                 <div class="row">
                                     <button class="btn btn-icon btn-success" id="AddGroupStat">Add Group Stat</button>
-
                                 </div>
                             </div>
                         </div>
@@ -203,28 +243,10 @@
                             <div class="col-xs-12 col-md-3">
                                 <div class="form-group form-material" data-plugin="formMaterial">
                                     <label class="form-control-label">Club Name</label>
-                                    <select class="combobox" id="Club" data-field="Group">
+                                    <select class="combobox" id="Club" data-field="Group" disabled>
                                         <option value="">Select an Option</option>
                                     </select>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-5" data-plugin="formMaterial">
-                                <label class="form-control-label">Club List</label>
-                                <ul class="dynamic-list" id="dynamic-list">
-                                    <li class="floating firstli">
-                                        <div class="input-group" style="display:inline-table">
-                                            <select class="combobox" id="MultiClub" data-field="Group">
-                                                <option value="">Select an Option</option>
-                                            </select>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-icon btn-success" onclick="addItem()">Add Club</button>
-                                                <button class="btn btn-icon btn-danger md-delete" type="button" onclick="removeItem()"></button>
-                                            </span>
-                                        </div>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                         <div class="row">
@@ -295,15 +317,23 @@
 
 
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function () {  
+            
             $("#StatClubList").select2();
-            $("#StatEventList").select2();
             $("#StatGroupList").select2();
-            $("#GroupStatList").select2();
+            $("#StatClubListDelete").select2();
+            $("#StatClubListDelete").select2();
+            $("#StatEventList").select2();
+            $("#StatGroupListDelete").select2();
+            $("#StatListClubDelete").empty();
+            $("#StatListGroupDelete").empty();
             $("#StatList").select2();
+            $("#StatListClubDelete").select2();
+            $("#StatListGroupDelete").select2();
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
             $('#jsGrid').jsGrid("loadData");
 
+            
             //Populate Dropdowns
             var params = {};
             var data = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
@@ -320,6 +350,16 @@
                                 .val(arr[i].id)
                         );
                         $("#StatClubList").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                        $("#StatClubListDelete").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
+                        $("#StatGroupListDelete").append( // Append an object to the inside of the select box
                             $("<option></option>") // Yes you can do this.
                                 .text(arr[i].name)
                                 .val(arr[i].id)
@@ -395,6 +435,7 @@
                                 $('#StartDate').val(item.start);
                                 $('#EndDate').val(item.finish);
                                 $('#Club').val(item.clubId).change();
+                                $("#Club").attr('disabled','disabled');
                             });
 
                         var $customClubStatButton = $("<i class=\"site-menu-icon md-evernote\" aria-hidden=\"true\"></i>")
@@ -529,13 +570,16 @@
 
         });
 
+        
+
         //Populate Stat List for Deletion
-        $('#StatClubList').on('change', function () {
-            var clubSelect = $('#StatClubList').val();
+        $('#StatClubListDelete').on('change', function () {
+            $("#StatListClubDelete").empty();
+            var clubSelect = $('#StatClubListDelete').val();
             var data = $.ajax({ type: "GET", url: "api/stats?clubId=" + clubSelect }).then(
                 function (arr) {
                     for (var i = 0; i < arr.length; i++) {
-                        $("#StatList").append( // Append an object to the inside of the select box
+                        $("#StatListClubDelete").append( // Append an object to the inside of the select box
                             $("<option></option>") // Yes you can do this.
                                 .text(arr[i].name)
                                 .val(arr[i].id)
@@ -546,12 +590,13 @@
         });
 
         //Populate Group Stat List for Deletion
-        $('#StatGroupList').on('change', function () {
-            var groupSelect = $('#StatGroupList').val();
+        $('#StatGroupListDelete').on('change', function () {
+            $("#StatListGroupDelete").empty();
+            var groupSelect = $('#StatGroupListDelete').val();
             var data = $.ajax({ type: "GET", url: "api/stats?groupId=" + groupSelect }).then(
                 function (arr) {
                     for (var i = 0; i < arr.length; i++) {
-                        $("#GroupStatList").append( // Append an object to the inside of the select box
+                        $("#StatListGroupDelete").append( // Append an object to the inside of the select box
                             $("<option></option>") // Yes you can do this.
                                 .text(arr[i].name)
                                 .val(arr[i].id)
@@ -560,7 +605,6 @@
                     return arr;
                 });
         });
-
         
 
         //Click Events Below
@@ -593,7 +637,7 @@
         //Delete Club Stat
         $("#DeleteClubStat").click(function () {
 
-            var statId = $("#StatList").val();
+            var statId = $("#StatListClubDelete").val();
 
             var $data = $.ajax({
                 type: "DELETE", url: "api/stats/" + statId
@@ -627,7 +671,7 @@
         //Delete Group Stat
         $("#DeleteGroupStat").click(function () {
 
-            var statId = $("#GroupStatList").val();
+            var statId = $("#StatListGroupDelete").val();
 
             var $data = $.ajax({
                 type: "DELETE", url: "api/stats/" + statId
@@ -650,6 +694,7 @@
             $('#Club').val('').change();
             $('#deleteButton').hide();
             $('#mainModal').modal('toggle');
+            $("#Club").removeAttr('disabled');
         });
 
         //Delete Event
