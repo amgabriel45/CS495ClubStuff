@@ -10,8 +10,8 @@
                     <span>Groups</span>
                     <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Group</span></button>
                     @*<a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
-                        Advanced Search Options
-                    </a>*@
+                            Advanced Search Options
+                        </a>*@
                 </h2>
             </div>
             <div class="panel-body panel-no-pad">
@@ -41,7 +41,7 @@
                                     <label class="form-control-label floating-label">Group Name</label>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group form-material floating" data-plugin="formMaterial">
@@ -52,12 +52,12 @@
                         </div>
                     </div>
                 </div>
-                    <div class="modal-footer">
-                        <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
-                        <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
-                        <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
-                        <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
-                    </div>
+                <div class="modal-footer">
+                    <div class="btn btn-info closeBottom waves-effect waves-light waves-round cancelButton floatRight" id="cancelButton">Cancel</div>
+                    <button type="submit" class="btn btn-warning waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="deleteButton"><span class="ladda-label">Delete</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveNewButton"><span class="ladda-label">Save</span></button>
+                    <button type="submit" class="btn btn-primary waves-effect ladda-button saveButton floatRight" data-style="contract-overlay" id="saveButton"><span class="ladda-label">Save</span></button>
+                </div>
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
 @section scripts {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
     <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
-    
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -144,7 +144,7 @@
                 }
             ],
             autoload: true
-           
+
         });
 
         //Create New Group Modal
@@ -162,7 +162,7 @@
         //Delete Group
         $("#deleteButton").click(function () {
             var id = $('#GroupId').val();
-            var data = $.ajax({ type: "DELETE", url: "api/groups/" + id  }).then(
+            var data = $.ajax({ type: "DELETE", url: "api/groups/" + id }).then(
                 function (arr) {
                     $('#mainModal').modal('toggle');
                     $('#jsGrid').jsGrid("loadData");
@@ -179,7 +179,7 @@
                 type: "POST", url: "api/groups/", data: params
             }).then(
                 function (arr) {
-                    
+
                     return arr;
                 });
             $('#mainModal').modal('toggle');

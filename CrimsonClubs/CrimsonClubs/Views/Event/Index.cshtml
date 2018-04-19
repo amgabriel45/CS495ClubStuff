@@ -10,19 +10,19 @@
                 <h2 class="panel-title">
                     <span>Events</span>
                     <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Event</span></button>
-                    <a class="btn btn-info btn-warning floatRight" data-toggle="collapse" href="#collapseDeleteGroupStat" id="eventDropdown">
+                    <a class="btn btn-info btn-warning floatRight" id="colDelGroup" data-toggle="collapse">
                         Delete Group Stat
                     </a>
-                    <a class="btn btn-info btn-success floatRight" data-toggle="collapse" href="#collapseGroupStat" id="eventDropdown">
+                    <a class="btn btn-info btn-success floatRight" id="colGroup" data-toggle="collapse">
                         Add Group Stat
                     </a>
-                    <a class="btn btn-info btn-warning floatRight" data-toggle="collapse" href="#collapseDeleteClubStat" id="eventDropdown">
+                    <a class="btn btn-info btn-warning floatRight" id="colDelClub" data-toggle="collapse">
                         Delete Club Stat
                     </a>
-                    <a class="btn btn-info btn-success floatRight" data-toggle="collapse" href="#collapseClubStat">
+                    <a class="btn btn-info btn-success floatRight" id="colClub" data-toggle="collapse">
                         Add Club Stat
                     </a>
-                    <a class="btn btn-info btn-md floatRight" data-toggle="collapse" href="#collapseEventStat" id="eventDropdown">
+                    <a class="btn btn-info btn-md floatRight" id="colEvent" data-toggle="collapse">
                         Event Stats
                     </a>
                 </h2>
@@ -194,6 +194,7 @@
                     <div id="jsGrid" class="fullHeight"></div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 
@@ -317,11 +318,10 @@
 
 
     <script type="text/javascript">
-        $(document).ready(function () {  
-            
+        $(document).ready(function () {
+
             $("#StatClubList").select2();
             $("#StatGroupList").select2();
-            $("#StatClubListDelete").select2();
             $("#StatClubListDelete").select2();
             $("#StatEventList").select2();
             $("#StatGroupListDelete").select2();
@@ -333,7 +333,7 @@
             $("#mainModal").find(".combobox").select2({ dropdownParent: $("#mainModal") });
             $('#jsGrid').jsGrid("loadData");
 
-            
+
             //Populate Dropdowns
             var params = {};
             var data = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
@@ -355,11 +355,6 @@
                                 .val(arr[i].id)
                         );
                         $("#StatClubListDelete").append( // Append an object to the inside of the select box
-                            $("<option></option>") // Yes you can do this.
-                                .text(arr[i].name)
-                                .val(arr[i].id)
-                        );
-                        $("#StatGroupListDelete").append( // Append an object to the inside of the select box
                             $("<option></option>") // Yes you can do this.
                                 .text(arr[i].name)
                                 .val(arr[i].id)
@@ -386,13 +381,18 @@
                                 .text(arr[i].name)
                                 .val(arr[i].id)
                         );
+                        $("#StatGroupListDelete").append( // Append an object to the inside of the select box
+                            $("<option></option>") // Yes you can do this.
+                                .text(arr[i].name)
+                                .val(arr[i].id)
+                        );
                     }
                     return arr;
                 });
             $('input[type=datetime-local]').setNow();
         });
 
-        
+
 
         //Create Grid and Populate Event Modals
         $("#jsGrid").jsGrid({
@@ -414,7 +414,7 @@
             },
             fields: [
                 { name: "name", title: "Name", type: "text", width: 100, align: "center" },
-                { name: "clubName", title: "Club", type: "text", width: 100, align: "center" },               
+                { name: "clubName", title: "Club", type: "text", width: 100, align: "center" },
                 { name: "start", type: "date", title: "Start", align: "center" },
                 { name: "finish", type: "date", title: "Finish", align: "center" },
                 { name: "id", visible: false },
@@ -435,7 +435,7 @@
                                 $('#StartDate').val(item.start);
                                 $('#EndDate').val(item.finish);
                                 $('#Club').val(item.clubId).change();
-                                $("#Club").attr('disabled','disabled');
+                                $("#Club").attr('disabled', 'disabled');
                             });
 
                         var $customClubStatButton = $("<i class=\"site-menu-icon md-evernote\" aria-hidden=\"true\"></i>")
@@ -570,7 +570,7 @@
 
         });
 
-        
+
 
         //Populate Stat List for Deletion
         $('#StatClubListDelete').on('change', function () {
@@ -605,16 +605,51 @@
                     return arr;
                 });
         });
-        
+
 
         //Click Events Below
-        //  
+        //
         //
         //
         //
         //
         //Click Events Below
 
+        $("#colEvent").click(function () {
+            $('#collapseClubStat').hide();
+            $('#collapseDeleteClubStat').hide();
+            $('#collapseGroupStat').hide();
+            $('#collapseDeleteGroupStat').hide();
+            $('#collapseEventStat').toggle();
+        });
+        $("#colClub").click(function () {
+            $('#collapseEventStat').hide();
+            $('#collapseDeleteClubStat').hide();
+            $('#collapseGroupStat').hide();
+            $('#collapseDeleteGroupStat').hide();
+            $('#collapseClubStat').toggle();
+        });
+        $("#colDelClub").click(function () {
+            $('#collapseClubStat').hide();
+            $('#collapseEventStat').hide();
+            $('#collapseGroupStat').hide();
+            $('#collapseDeleteGroupStat').hide();
+            $('#collapseDeleteClubStat').toggle();
+        });
+        $("#colGroup").click(function () {
+            $('#collapseClubStat').hide();
+            $('#collapseDeleteClubStat').hide();
+            $('#collapseEventStat').hide();
+            $('#collapseDeleteGroupStat').hide();
+            $('#collapseGroupStat').toggle();
+        });
+        $("#colDelGroup").click(function () {
+            $('#collapseClubStat').hide();
+            $('#collapseDeleteClubStat').hide();
+            $('#collapseGroupStat').hide();
+            $('#collapseEventStat').hide();
+            $('#collapseDeleteGroupStat').toggle();
+        });
 
         //Create New Club Stat
         $("#AddClubStat").click(function () {
@@ -658,7 +693,7 @@
             params["abbreviation"] = $("#GroupStatAbb").val();
             params["description"] = $("#GroupStatDescription").val();
             var $data = $.ajax({
-                type: "POST", url: "api/stats/Group", data: params
+                type: "POST", url: "api/stats/group", data: params
             }).then(
                 function (arr) {
 
@@ -874,7 +909,7 @@
                             dvTable.innerHTML = "";
                             dvTable.appendChild(table);
 
-                            //Construct Group Stat Table 
+                            //Construct Group Stat Table
                             var customers = new Array();
                             customers.push(["Name"]);
                             for (var i = 0; i < item.groupStats.length; i++) {

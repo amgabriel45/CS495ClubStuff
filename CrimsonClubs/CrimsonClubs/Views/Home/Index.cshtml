@@ -10,8 +10,8 @@
                     <span>Clubs</span>
                     <button type="button" class="btn btn-animate btn-animate-side btn-success btn-sm createButton headerCreateButton" id="createButton"><span><i class="icon md-plus"></i>New Club</span></button>
                     @*<a class="btn btn-info btn-sm floatRight" data-toggle="collapse" href="#collapseSearch">
-                        Advanced Search Options
-                    </a>*@
+                            Advanced Search Options
+                        </a>*@
                 </h2>
             </div>
             <div class="panel-body panel-no-pad">
@@ -65,6 +65,10 @@
                                         <div id='calendar'></div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <p style="margin-left:50px;"><b><u>Member List</u></b></p>
+                                <div id="memberList"></div>
                             </div>
                         </div>
                     </div>
@@ -173,7 +177,7 @@
 @section scripts {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
     <script type="text/javascript" src="~/Content/site/jsgridHelper.js"></script>
-    
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -284,6 +288,16 @@
                                         });
                                         return arr;
                                     });
+                                var data = $.ajax({ type: "GET", url: "api/clubs/" + item.id }).then(
+                                    function (arr) {
+                                        var list_html = "<ol>";
+                                        for (var i = 0; i < arr.members.length; i++) {
+                                            list_html += "<li>" + arr.members[i].first + " " + arr.members[i].last + "</li>";
+                                        }
+                                        list_html += "</ol>"
+                                        $("#memberList").html(list_html);
+                                        return arr;
+                                    });
                                 $('#mainModal').modal('toggle');
                                 $('#ClubName').removeClass('empty').val(item.name);
                                 $('#Description').removeClass('empty').val(item.description);
@@ -296,7 +310,7 @@
                 }
             ],
             autoload: true
-           
+
         });
 
         //Create Club Modal
@@ -334,7 +348,7 @@
                 type: "POST", url: "api/clubs/", data: params
             }).then(
                 function (arr) {
-                    
+
                     return arr;
                 });
             $('#mainModal').modal('toggle');
