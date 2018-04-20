@@ -6,7 +6,7 @@
     tools:context="crimsonclubs.uacs.android.crimsonclubs.BrowseEventsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
         android:id="@+id/eventsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -121,5 +121,4 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
         finish();
 
     }
-
 }

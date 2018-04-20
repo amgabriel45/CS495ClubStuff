@@ -3,7 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="crimson">#7F0000</color>
+    <color name="crimson">#7f0000</color>
     <color name="crimson_light">#B03235</color>
     <color name="iqagent_orange_dark">#DE7121</color>
     <color name="iqagent_blue">#355BCE</color>

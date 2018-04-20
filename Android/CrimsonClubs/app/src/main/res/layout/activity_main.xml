@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/top_level"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    app:statusBarBackground="@color/crimson"
     tools:openDrawer="start">
 
     <FrameLayout
@@ -15,11 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="0dp">
 
     </FrameLayout>
-
 
 
 </android.support.design.widget.CoordinatorLayout>

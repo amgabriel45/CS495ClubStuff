@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("Create an Event")
                 .withIcon(android.R.drawable.ic_menu_add)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BaseFragment()))
+                .withOnDrawerItemClickListener(listener(new CreateEventFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity
                 .withName("Create a Club")
                 .withIcon(android.R.drawable.ic_menu_add)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BaseFragment()))
+                .withOnDrawerItemClickListener(listener(new CreateClubFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
