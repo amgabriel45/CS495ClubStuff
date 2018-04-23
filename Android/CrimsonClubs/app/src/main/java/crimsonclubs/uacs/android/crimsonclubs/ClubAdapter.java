@@ -19,11 +19,14 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
 
     private ArrayList<ClubDto> mData; //original data
 
+    public MainActivity main;
+
     public ArrayList<ClubDto> orig;
 
-    public ClubAdapter(ArrayList<ClubDto> data){
+    public ClubAdapter(ArrayList<ClubDto> data, MainActivity m){
         super();
         mData  = data;
+        main = m;
         orig = (ArrayList<ClubDto>) mData.clone();
     }
 
@@ -56,7 +59,7 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
 
         ClubListItemHolder holder;
 
-        ClubDto targ = (ClubDto) getItem(pos);
+        final ClubDto targ = (ClubDto) getItem(pos);
 
         if(convertView == null) {
 
@@ -77,6 +80,15 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
             if(targ.isRequestToJoin){
                 holder.locked.setVisibility(View.VISIBLE);
             }
+
+            holder.selectBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ViewClubFragment f = new ViewClubFragment();
+                    f.currId = targ.id;
+                    main.goToFragment(f);
+                }
+            });
 
         }
         else{

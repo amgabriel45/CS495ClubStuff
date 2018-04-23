@@ -1,15 +1,17 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -22,25 +24,24 @@ import java.util.Arrays;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import static android.util.Log.e;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQueryTextListener  {
+public class ViewClubFragment extends BaseFragment {
 
-    public ArrayList<ClubDto> objs = new ArrayList<>();
-    public ClubAdapter adapter;
 
-    public SearchView mSearchView;
-    public ListView mListView;
+    public int currId;
 
-    public BrowseClubsFragment() {
+    public ClubDto currClub;
+
+    public ArrayList<MemberDto> members = new ArrayList<>();
+    public ArrayList<EventDto> events = new ArrayList<>();
+
+    public ViewClubFragment() {
 
     }
 
@@ -52,7 +53,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
 
 
 
-        return inflater.inflate(R.layout.fragment_browse_clubs, container, false);
+        return inflater.inflate(R.layout.fragment_view_club, container, false);
     }
 
     @Override
@@ -60,35 +61,17 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
         super.onResume();
 
 
-
-        updateList();
+        updateUI();
 
     }
 
-    private void setupSearchView()
-    {
-        mSearchView = (SearchView) getActivity().findViewById(R.id.searchBar);
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.setOnQueryTextListener(this);
-        mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Search for clubs...");
 
-        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean queryTextFocused) {
-                if(!queryTextFocused) {
-                    mSearchView.setQuery("", false);
-                }
-            }
-        });
-    }
-
-    public void updateList(){
+    public void updateUI(){
 
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
-            String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs";
+            String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + Integer.toString(currId);
 
 
             Request request = new Request.Builder()
@@ -162,9 +145,9 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                         if (temp.get(0) == null) { //read failed
                             isNull = true;
                         }
-
-                        objs.clear();
-                        objs.addAll(temp);
+                        else{
+                            currClub = temp.get(0);
+                        }
 
 
                         // Run view-related code back on the main thread
@@ -172,16 +155,14 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                                                                @Override
                                                                public void run() {
 
-                                                                   adapter = new ClubAdapter(objs, (MainActivity) getActivity());
-                                                                   mListView = (ListView) getActivity().findViewById(R.id.clubsList);
 
-                                                                   //lv.setOnItemClickListener( infoItemClickListener());
+                                                                   Log.e("name",currClub.groupName);
+                                                                   Log.e("num",Integer.toString(currClub.members.size()));
 
-                                                                   mListView.setAdapter(adapter);
-                                                                   //mListView.setTextFilterEnabled(true);
-                                                                   setupSearchView();
-
-                                                                   adapter.notifyDataSetChanged();
+                                                                   TextView name = (TextView) getActivity().findViewById(R.id.name);
+                                                                   name.setText(currClub.groupName);
+                                                                   TextView desc = (TextView) getActivity().findViewById(R.id.description);
+                                                                   desc.setText(currClub.description);
                                                                }
                                                            }
                         );
@@ -191,34 +172,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
             });
         }
 
-    @Override
-    public boolean onQueryTextChange(String newText)
-    {
 
-
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query)
-    {
-
-        ClubAdapter adapter = (ClubAdapter) mListView.getAdapter();
-        Filter filter = adapter.getFilter();
-
-        if(TextUtils.isEmpty(query)){
-
-            mListView.clearTextFilter();
-        }
-        else{
-            mListView.setFilterText(query);
-            filter.filter(query);
-        }
-
-
-        return false;
-    }
-
-        }
+}
 
 

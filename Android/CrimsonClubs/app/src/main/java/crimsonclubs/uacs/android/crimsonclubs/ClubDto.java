@@ -3,6 +3,7 @@ package crimsonclubs.uacs.android.crimsonclubs;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 
 
 public class ClubDto {
@@ -37,4 +38,10 @@ public class ClubDto {
     @Expose
     @SerializedName("isAllowedToJoin")
     public boolean isAllowedToJoin;
+    @Expose
+    @SerializedName("members")
+    public ArrayList<MemberDto> members;
+    @Expose
+    @SerializedName("events")
+    public ArrayList<EventDto> events;
 }
