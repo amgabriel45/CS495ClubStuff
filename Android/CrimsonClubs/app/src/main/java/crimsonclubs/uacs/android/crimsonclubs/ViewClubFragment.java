@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -163,6 +164,22 @@ public class ViewClubFragment extends BaseFragment {
                                                                    name.setText(currClub.name);
                                                                    TextView desc = (TextView) getActivity().findViewById(R.id.description);
                                                                    desc.setText(currClub.description);
+                                                                   TextView numMembers = (TextView) getActivity().findViewById(R.id.numMembers);
+
+                                                                   numMembers.setText(currClub.memberCount + " members");
+
+                                                                   BrowseEventsFragment f = new BrowseEventsFragment();
+                                                                   f.clubId = currClub.id;
+
+                                                                   getFragmentManager()
+                                                                           .beginTransaction()
+
+
+
+                                                                           .replace(R.id.eventsContainer, f, "curr")
+
+                                                                           .commit();
+
                                                                }
                                                            }
                         );

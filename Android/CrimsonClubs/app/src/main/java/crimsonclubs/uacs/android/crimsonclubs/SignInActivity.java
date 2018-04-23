@@ -27,11 +27,11 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        forceProceedToMainActivity();
+        forceProceedToMainActivity(); //take this out in final
         finish();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("77421544828-k57594dl8a1rgmitclu6e0rj8970ved1.apps.googleusercontent.com")
+                .requestIdToken("77421544828-k57594dl8a1rgmitclu6e0rj8970ved1.apps.googleusercontent.com") //unique token for crimson clubs apps
                 .requestEmail()
                 .requestProfile()
                 .build();
@@ -51,14 +51,14 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
 
     @Override
     protected void onStart(){
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this); //check if user is already signed in
 
         if(account == null){
             //null
         }
         else{
 
-            proceedToMainActivity(account);
+            proceedToMainActivity(account); //if successful, proceed
         }
 
         super.onStart();

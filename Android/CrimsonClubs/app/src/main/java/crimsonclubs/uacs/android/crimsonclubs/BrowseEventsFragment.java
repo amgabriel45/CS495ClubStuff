@@ -30,6 +30,8 @@ public class BrowseEventsFragment extends BaseFragment {
     public ArrayList<EventDto> objs = new ArrayList<>();
     public EventAdapter adapter;
 
+    public int clubId = -1; //-1 if browsing all events, else returns list of events relevant to specified club
+
     public BrowseEventsFragment() {
         // Required empty public constructor
     }
@@ -47,7 +49,12 @@ public class BrowseEventsFragment extends BaseFragment {
     public void onResume(){
         super.onResume();
 
-        updateList();
+        if(clubId == -1) {
+            updateList();
+        }
+        else{
+            getEventsForClubId();
+        }
 
     }
 
@@ -160,6 +167,112 @@ public class BrowseEventsFragment extends BaseFragment {
                     }
 
                     if (temp.get(0) == null) { //read failed
+                        isNull = true;
+                    }
+
+                    objs.clear();
+                    objs.addAll(temp);
+
+
+                    // Run view-related code back on the main thread
+                    getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        adapter = new EventAdapter(objs);
+                                                        final ListView lv = (ListView) getActivity().findViewById(R.id.eventsList);
+                                                        //final TextView tv = getActivity().findViewById(R.id.eventsList);
+
+                                                        //lv.setOnItemClickListener( infoItemClickListener());
+
+                                                        lv.setAdapter(adapter);
+                                                        //tv.setAdapter(adapter);
+
+                                                        adapter.notifyDataSetChanged();
+                                                    }
+                                                }
+                    );
+                }
+            }
+
+        });
+    }
+
+    public void getEventsForClubId(){
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + Integer.toString(clubId) + "/calendar";
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .build();
+
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(getActivity(),
+                                                            "Remote server could not be reached. "
+                                                            ,Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getActivity(),
+                                                                    "Authentication failed.",
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    }
+                    else{
+                        getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getActivity(),
+                                                                    "An unspecified networking error has occurred\n" +
+                                                                            "Error Code: " + response.code(),
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    }
+                }
+                else {
+                    boolean isNull = false;
+
+                    ArrayList<EventDto> temp = new ArrayList<EventDto>();
+
+                    String body = response.body().string();
+
+
+                    try {
+                        temp = new ArrayList<EventDto>(Arrays.asList(gson.fromJson(body, EventDto[].class)));
+                    } catch (JsonSyntaxException e) {
+                        temp.add(gson.fromJson(body, EventDto.class));
+                    }
+
+                    if (temp.size() > 0 && temp.get(0) == null) { //read failed
                         isNull = true;
                     }
 

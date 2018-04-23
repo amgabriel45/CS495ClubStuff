@@ -186,6 +186,9 @@ public class MainActivity extends AppCompatActivity
 
     public void setUpDemoDrawer(){
 
+        SecondaryDrawerItem item;
+
+        /*
         navDrawer.addItem( new SectionDrawerItem().withName("My Groups").withDivider(false));
 
         SecondaryDrawerItem item = new SecondaryDrawerItem()
@@ -207,6 +210,7 @@ public class MainActivity extends AppCompatActivity
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
+        */
 
         navDrawer.addItem( new SectionDrawerItem().withName("Calendar and Events").withDivider(true));
 
