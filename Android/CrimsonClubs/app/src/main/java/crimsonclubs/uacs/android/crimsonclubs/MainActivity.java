@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         return result;
     }
 
-    private void goToLastFragment(){
+    public void goToLastFragment(){
 
 
 

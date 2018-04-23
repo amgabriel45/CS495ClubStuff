@@ -1,12 +1,31 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+
+import mehdi.sakout.fancybuttons.FancyButton;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 
 public class CreateClubFragment extends BaseFragment {
@@ -51,7 +70,106 @@ public class CreateClubFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_club, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_club, container, false);
+        FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
+
+        btnInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
+                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
+
+                String clubName = inputName.getText().toString();
+                String clubDesc = inputDesc.getText().toString();
+
+                AddClubDto newClub = new AddClubDto();
+                newClub.name = clubName;
+                newClub.description = clubDesc;
+                newClub.isRequestToJoin = true;
+                newClub.groupId = 1;
+
+                View view2 = getActivity().getCurrentFocus();
+                if (view2 != null){
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+                }
+
+                sendClub(newClub);
+            }
+        });
+
+        return view;
+    }
+
+
+    public void sendClub(AddClubDto newClub) {
+        String token;
+        token = getActivity().getIntent().getStringExtra("bearerToken");
+        Log.e("token=",token);
+
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+        //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/events?token=" + token;
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs";
+
+        Log.e("url",url);
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("name", newClub.name)
+                .add("description", newClub.description)
+                .add("isRequestToJoin", "true")
+                .add("groupId", "1")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .post(requestBody)
+                .build();
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+               e.printStackTrace();
+
+               getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Fail", Toast.LENGTH_LONG).show();
+                    }
+               });
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    ResponseBody responseBody = response.body();
+
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    //change to view detailed club for club just created when finished
+                    BrowseClubsFragment nextFrag = new BrowseClubsFragment();
+                    FragmentTransaction fragTrans = getActivity().getFragmentManager().beginTransaction();
+                    fragTrans
+                            .setCustomAnimations(
+                                    R.animator.card_flip_right_in,
+                                    R.animator.card_flip_right_out,
+                                    R.animator.card_flip_left_in,
+                                    R.animator.card_flip_left_out)
+                            .replace(R.id.container, nextFrag)
+                            .addToBackStack(null)
+                            .commit();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
