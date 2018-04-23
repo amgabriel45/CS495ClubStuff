@@ -156,11 +156,11 @@ public class ViewClubFragment extends BaseFragment {
                                                                public void run() {
 
 
-                                                                   Log.e("name",currClub.groupName);
+                                                                   Log.e("name",currClub.name);
                                                                    Log.e("num",Integer.toString(currClub.members.size()));
 
                                                                    TextView name = (TextView) getActivity().findViewById(R.id.name);
-                                                                   name.setText(currClub.groupName);
+                                                                   name.setText(currClub.name);
                                                                    TextView desc = (TextView) getActivity().findViewById(R.id.description);
                                                                    desc.setText(currClub.description);
                                                                }

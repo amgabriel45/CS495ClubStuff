@@ -72,7 +72,7 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
                 holder.locked = (ImageView) convertView.findViewById(R.id.isLocked);
                 holder.selectBtn = (FancyButton) convertView.findViewById(R.id.btn_select);
 
-            holder.groupName.setText(targ.groupName);
+            holder.groupName.setText(targ.name);
 
             holder.clubDesc.setText(targ.description);
             holder.numMembers.setText(targ.memberCount + " members");
@@ -114,10 +114,10 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
                 if (constraint != null) {
                     if (orig != null && orig.size() > 0) {
                         for (final ClubDto g : orig) {
-                            if (g.groupName.toLowerCase()
+                            if (g.name.toLowerCase()
                                     .contains(constraint.toString().toLowerCase())) {
                                 results.add(g);
-                                Log.e("name", g.groupName);
+                                Log.e("name", g.name);
                             } else {
                                 if (g.description.toLowerCase()
                                         .contains(constraint.toString().toLowerCase())) {
@@ -140,7 +140,7 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
                                           FilterResults results) {
 
                 for(ClubDto a : (ArrayList<ClubDto>) results.values){
-                    Log.e("arr",a.groupName);
+                    Log.e("arr",a.name);
                 }
                 mData = (ArrayList<ClubDto>) results.values;
                 notifyDataSetChanged();
