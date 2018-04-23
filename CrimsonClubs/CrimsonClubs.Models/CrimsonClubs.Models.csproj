@@ -62,6 +62,7 @@
     <Compile Include="Dtos\EventDto.cs" />
     <Compile Include="Dtos\AddGroupDto.cs" />
     <Compile Include="Dtos\GroupDto.cs" />
+    <Compile Include="Dtos\JoinRequestDto.cs" />
     <Compile Include="Dtos\MemberDto.cs" />
     <Compile Include="Dtos\EditClubDto.cs" />
     <Compile Include="Dtos\AddClubDto.cs" />

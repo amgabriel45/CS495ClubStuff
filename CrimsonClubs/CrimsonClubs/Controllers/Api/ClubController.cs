@@ -224,5 +224,51 @@ namespace CrimsonClubs.Controllers.Api
 
             return Ok();
         }
+
+        [HttpGet, Route("{id}/requests")]
+        [ResponseType(typeof(JoinRequestDto[]))]
+        public IHttpActionResult GetJoinRequests(int id)
+        {
+            var requests = db.MM_User_Club
+                .Where(m => m.ClubId == id && !m.IsAccepted)
+                .ToList()
+                .Select(m => new JoinRequestDto(m));
+
+            return Ok(requests);
+        }
+
+        [HttpPut, Route("{clubId}/requests")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult HandleJoinRequests(int clubId, int? userId, bool? accept)
+        {
+            if (userId == null || accept == null)
+            {
+                return BadRequest();
+            }
+
+            var relation = db.MM_User_Club.FirstOrDefault(m => m.ClubId == clubId && m.UserId == userId && !m.IsAccepted);
+
+            if (relation == null)
+            {
+                return NotFound();
+            }
+
+            string message = string.Empty;
+
+            if (accept == false)
+            {
+                message = "rejected";
+                db.MM_User_Club.Remove(relation);
+            }
+            else
+            {
+                message = "accepted";
+                relation.IsAccepted = true;
+            }
+
+            db.SaveChanges();
+
+            return Ok(message);
+        }
     }
 }
