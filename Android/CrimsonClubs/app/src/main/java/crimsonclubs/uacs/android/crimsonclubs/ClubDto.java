@@ -33,6 +33,9 @@ public class ClubDto {
     @SerializedName("isAccepted")
     public boolean isAccepted;
     @Expose
+    @SerializedName("isAdmin")
+    public boolean isAdmin;
+    @Expose
     @SerializedName("hasRequested")
     public boolean hasRequested;
     @Expose
