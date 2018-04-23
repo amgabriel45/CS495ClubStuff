@@ -18,6 +18,7 @@ namespace CrimsonClubs.Models.Dtos
         public bool IsAccepted { get; set; }
         public bool HasRequested { get; set; }
         public bool IsAllowedToJoin { get; set; }
+        public bool IsAdmin { get; set; }
 
         public ClubDto()
         {
@@ -36,6 +37,7 @@ namespace CrimsonClubs.Models.Dtos
             IsAccepted = dbo.MM_User_Club.Any(m => m.UserId == userId && m.IsAccepted);
             HasRequested = dbo.MM_User_Club.Any(m => m.UserId == userId && !m.IsAccepted);
             IsAllowedToJoin = !IsAccepted && !(dbo.Group?.Clubs.SelectMany(m => m.MM_User_Club).Any(m => m.UserId == userId && m.ClubId != Id) ?? false);
+            IsAdmin = dbo.MM_User_Club.Any(m => m.UserId == userId && m.IsAccepted && m.IsAdmin);
         }
     }
 }
