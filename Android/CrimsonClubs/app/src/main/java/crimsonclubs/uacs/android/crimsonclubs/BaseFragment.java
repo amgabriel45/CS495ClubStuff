@@ -22,6 +22,7 @@ public class BaseFragment extends Fragment {
 
 
 
+
     private OnFragmentInteractionListener mListener;
 
     public BaseFragment() {
@@ -40,11 +41,16 @@ public class BaseFragment extends Fragment {
     public static BaseFragment newInstance(String param1, String param2) {
         BaseFragment fragment = new BaseFragment();
 
+
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
 
     }

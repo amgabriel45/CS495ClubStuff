@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity
     public Toolbar toolbar;
     public static GoogleSignInClient mGoogleSignInClient;
 
-    private Fragment lastFragment;
-    private Fragment currFragment;
+    private BaseFragment lastFragment;
+    private BaseFragment currFragment;
 
     public static String bearerToken;
     public static UserDto currUser;
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
 
         initDrawers(toolbar); //build nav drawer and bookmark drawer
 
+
         setUpDemoDrawer();
 
 
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity
 
                     currFragment = fragmentType;
 
-                    lastFragment = getFragmentManager().findFragmentByTag("curr");
+                    lastFragment = (BaseFragment) getFragmentManager().findFragmentByTag("curr");
 
                     getFragmentManager()
                             .beginTransaction()
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity
                             .replace(R.id.container, currFragment, "curr")
 
                             .commit();
+
 
                     navDrawer.closeDrawer();
                 }
@@ -149,11 +151,15 @@ public class MainActivity extends AppCompatActivity
                     .commit();
 
             lastFragment = currFragment;
-            currFragment = lastFragment = getFragmentManager().findFragmentByTag("curr");
+            currFragment = (BaseFragment) getFragmentManager().findFragmentByTag("curr");
 
             navDrawer.closeDrawer();
         }
 
+    }
+
+    public void updateTitle(String str){
+        toolbar.setTitle(str);
     }
 
     public void setUpDemoDrawer(){

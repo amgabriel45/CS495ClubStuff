@@ -3,10 +3,13 @@ package crimsonclubs.uacs.android.crimsonclubs;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,14 +32,16 @@ import static android.util.Log.e;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BrowseClubsFragment extends BaseFragment  {
+public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQueryTextListener  {
 
     public ArrayList<ClubDto> objs = new ArrayList<>();
     public ClubAdapter adapter;
 
+    public SearchView mSearchView;
+    public ListView mListView;
 
     public BrowseClubsFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -44,6 +49,9 @@ public class BrowseClubsFragment extends BaseFragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
+
         return inflater.inflate(R.layout.fragment_browse_clubs, container, false);
     }
 
@@ -51,8 +59,28 @@ public class BrowseClubsFragment extends BaseFragment  {
     public void onResume(){
         super.onResume();
 
+
+
         updateList();
 
+    }
+
+    private void setupSearchView()
+    {
+        mSearchView = (SearchView) getActivity().findViewById(R.id.searchBar);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setSubmitButtonEnabled(true);
+        mSearchView.setQueryHint("Search for clubs...");
+
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if(!queryTextFocused) {
+                    mSearchView.setQuery("", false);
+                }
+            }
+        });
     }
 
     public void updateList(){
@@ -145,11 +173,13 @@ public class BrowseClubsFragment extends BaseFragment  {
                                                                public void run() {
 
                                                                    adapter = new ClubAdapter(objs);
-                                                                   final ListView lv = (ListView) getActivity().findViewById(R.id.clubsList);
+                                                                   mListView = (ListView) getActivity().findViewById(R.id.clubsList);
 
                                                                    //lv.setOnItemClickListener( infoItemClickListener());
 
-                                                                   lv.setAdapter(adapter);
+                                                                   mListView.setAdapter(adapter);
+                                                                   //mListView.setTextFilterEnabled(true);
+                                                                   setupSearchView();
 
                                                                    adapter.notifyDataSetChanged();
                                                                }
@@ -160,6 +190,35 @@ public class BrowseClubsFragment extends BaseFragment  {
 
             });
         }
+
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+
+        ClubAdapter adapter = (ClubAdapter) mListView.getAdapter();
+        Filter filter = adapter.getFilter();
+
+        if(TextUtils.isEmpty(query)){
+
+            mListView.clearTextFilter();
+        }
+        else{
+            mListView.setFilterText(query);
+            filter.filter(query);
+        }
+
+
+        return false;
+    }
+
         }
 
 

@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/iqagent_blue</item>
-        <item name="colorPrimaryDark">@color/iqagent_blue_dark</item>
-        <item name="colorAccent">@color/iqagent_blue</item>
+        <item name="colorPrimary">@color/crimson</item>
+        <item name="colorPrimaryDark">@color/crimson</item>
+        <item name="colorAccent">@color/crimson_light</item>
     </style>
 
     <style name="PoiViewTheme" parent="Theme.AppCompat.Light.DarkActionBar">
