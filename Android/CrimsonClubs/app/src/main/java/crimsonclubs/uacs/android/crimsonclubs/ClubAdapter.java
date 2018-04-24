@@ -1,6 +1,7 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,49 +58,44 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
 
-        ClubListItemHolder holder;
+        View row = null;
+
+        if(convertView == null) {
+            row = LayoutInflater.from(parent.getContext()).inflate(R.layout.club_list_item, parent, false);
+        }
+        else{
+            row = convertView;
+        }
 
         final ClubDto targ = (ClubDto) getItem(pos);
 
-        if(convertView == null) {
+        TextView groupName = (TextView) row.findViewById(R.id.groupName);
+        TextView clubDesc = (TextView) row.findViewById(R.id.clubDesc);
+        TextView numMembers = (TextView) row.findViewById(R.id.numMembers);
+        ImageView locked = (ImageView) row.findViewById(R.id.isLocked);
+        FancyButton selectBtn = (FancyButton) row.findViewById(R.id.btn_select);
 
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.club_list_item, parent, false);
-                holder = new ClubListItemHolder();
+        groupName.setText(targ.name);
 
-                holder.groupName = (TextView) convertView.findViewById(R.id.groupName);
-                holder.clubDesc = (TextView) convertView.findViewById(R.id.clubDesc);
-                holder.numMembers = (TextView) convertView.findViewById(R.id.numMembers);
-                holder.locked = (ImageView) convertView.findViewById(R.id.isLocked);
-                holder.selectBtn = (FancyButton) convertView.findViewById(R.id.btn_select);
+        clubDesc.setText(targ.description);
+        numMembers.setText(targ.memberCount + " members");
 
-            holder.groupName.setText(targ.name);
+        if(targ.isRequestToJoin){
+            locked.setVisibility(View.VISIBLE);
+        }
 
-            holder.clubDesc.setText(targ.description);
-            holder.numMembers.setText(targ.memberCount + " members");
-
-            if(targ.isRequestToJoin){
-                holder.locked.setVisibility(View.VISIBLE);
+        selectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewClubFragment f = new ViewClubFragment();
+                f.currId = targ.id;
+                main.goToFragment(f);
             }
-
-            holder.selectBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ViewClubFragment f = new ViewClubFragment();
-                    f.currId = targ.id;
-                    main.goToFragment(f);
-                }
-            });
-
-        }
-        else{
-            holder = (ClubListItemHolder) convertView.getTag();
-        }
+        });
 
 
 
-
-
-        return convertView;
+        return row;
     }
 
     public Filter getFilter() {

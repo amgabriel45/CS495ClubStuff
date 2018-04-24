@@ -2,13 +2,11 @@ package crimsonclubs.uacs.android.crimsonclubs;
 
 import android.os.Bundle;
 import android.support.annotation.Keep;
-import android.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 
@@ -60,12 +58,11 @@ public class MainActivity extends AppCompatActivity
 
     public static String bearerToken;
     public static UserDto currUser;
+    public ArrayList<ClubDto> userClubs = new ArrayList<>();
 
     public static OkHttpClient client;
-    public static boolean hasConnected = false; //set true when app first connects to a server, set back to false when host is changed
 
     public Drawer navDrawer = null;
-    public Drawer bookmarkDrawer = null;
 
     private Stack<BaseFragment> backStack = new Stack<>();
 
@@ -87,10 +84,97 @@ public class MainActivity extends AppCompatActivity
 
         initDrawers(toolbar); //build nav drawer and bookmark drawer
 
+    }
 
-        setUpDemoDrawer();
+    public void getUserClubs(){
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs";
 
 
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .build();
+
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                MainActivity.this.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(MainActivity.this,
+                                                            "Remote server could not be reached. "
+                                                            ,Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(MainActivity.this,
+                                                                    "Authentication failed.",
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    }
+                    else{
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(MainActivity.this,
+                                                                    "An unspecified networking error has occurred\n" +
+                                                                            "Error Code: " + response.code(),
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    }
+                }
+                else {
+
+
+                    ArrayList<ClubDto> temp = new ArrayList<ClubDto>();
+
+                    String body = response.body().string();
+
+
+                    try {
+                        temp = new ArrayList<ClubDto>(Arrays.asList(gson.fromJson(body, ClubDto[].class)));
+                    } catch (JsonSyntaxException e) {
+                        temp.add(gson.fromJson(body, ClubDto.class));
+                    }
+
+
+                    // Run view-related code back on the main thread
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        setUpNavDrawer();
+
+                                                    }
+                                                }
+                    );
+                }
+            }
+
+        });
     }
 
 
@@ -186,33 +270,28 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void setUpDemoDrawer(){
+    public void setUpNavDrawer(){
 
         SecondaryDrawerItem item;
 
-        /*
+
         navDrawer.addItem( new SectionDrawerItem().withName("My Groups").withDivider(false));
 
-        SecondaryDrawerItem item = new SecondaryDrawerItem()
-                .withName("Men's Tennis Singles")
-                .withDescription("2 new events")
-                .withIcon(R.drawable.poi_mark)
-                .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BaseFragment()))
-                .withSelectedBackgroundAnimated(false);
+        for(ClubDto c: userClubs){
 
-        navDrawer.addItem(item);
+            int color = c.isAdmin ? R.color.crimson : R.color.black; //sets color to red if user is admin of group
 
-        item = new SecondaryDrawerItem()
-                .withName("Chess Club")
-                .withDescription("0 new events")
-                .withIcon(R.drawable.poi_mark)
-                .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BaseFragment()))
-                .withSelectedBackgroundAnimated(false);
+            item = new SecondaryDrawerItem()
+                    .withName(c.name)
+                    .withDescription(c.memberCount + " members")
+                    .withIcon(R.drawable.poi_mark)
+                    .withTextColorRes(color)
+                    .withIdentifier(1)
+                    .withOnDrawerItemClickListener(listener(new BaseFragment()))
+                    .withSelectedBackgroundAnimated(false);
 
-        navDrawer.addItem(item);
-        */
+            navDrawer.addItem(item);
+        }
 
         navDrawer.addItem( new SectionDrawerItem().withName("Calendar and Events").withDivider(true));
 
@@ -342,13 +421,7 @@ public class MainActivity extends AppCompatActivity
                                                                     "An unspecified networking error has occurred\n" +
                                                                             "Error Code: " + response.code(),
                                                                     Toast.LENGTH_LONG).show();
-                                                            try {
-                                                                Log.e("str", response.body().string());
-                                                            }
-                                                            catch(
-                                                                    IOException e){
-                                                                //
-                                                            }
+
                                                         }
                                                     }
 
@@ -383,7 +456,7 @@ public class MainActivity extends AppCompatActivity
 
                                                         bearerToken = resp.token;
                                                         currUser = resp.user;
-
+                                                        getUserClubs();
                                                     }
                                                 }
                     );
@@ -413,7 +486,6 @@ public class MainActivity extends AppCompatActivity
 
 
     private void initDrawers(Toolbar toolbar){ //sets up the drawers
-
 
 
         AccountHeader headerResult = new AccountHeaderBuilder()
