@@ -134,26 +134,31 @@ public class MainActivity extends AppCompatActivity
 
     public void goToLastFragment(){
 
-        BaseFragment lastFragment = backStack.pop();
+        try {
+            BaseFragment lastFragment = backStack.pop();
 
-        if (lastFragment != null) {
-            Log.e("nm",lastFragment.getClass().toString());
-            getFragmentManager()
-                    .beginTransaction()
+            if (lastFragment != null) {
+                Log.e("nm", lastFragment.getClass().toString());
+                getFragmentManager()
+                        .beginTransaction()
 
-                    .setCustomAnimations(
-                            R.animator.card_flip_right_in,
-                            R.animator.card_flip_right_out,
-                            R.animator.card_flip_left_in,
-                            R.animator.card_flip_left_out)
+                        .setCustomAnimations(
+                                R.animator.card_flip_right_in,
+                                R.animator.card_flip_right_out,
+                                R.animator.card_flip_left_in,
+                                R.animator.card_flip_left_out)
 
-                    .replace(R.id.container, lastFragment)
+                        .replace(R.id.container, lastFragment)
 
-                    .commit();
+                        .commit();
 
-            currFragment = lastFragment;
+                currFragment = lastFragment;
 
-            navDrawer.closeDrawer();
+                navDrawer.closeDrawer();
+            }
+        }
+        catch(java.util.EmptyStackException e){
+            e.printStackTrace();
         }
 
     }
@@ -404,7 +409,6 @@ public class MainActivity extends AppCompatActivity
             goToLastFragment();
         }
 
-        super.onBackPressed();
     }
 
 
