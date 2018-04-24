@@ -248,7 +248,7 @@
                                 $("#saveButton").show();
                                 $("#leaveClubButton").show();
                                 var events = [];
-                                var $data = $.ajax({
+                                var calEvents = $.ajax({
                                     type: "GET", url: "api/clubs/" + item.id + "/calendar"
                                 }).then(
                                     function (arr) {
@@ -288,7 +288,8 @@
                                         });
                                         return arr;
                                     });
-                                var data = $.ajax({ type: "GET", url: "api/clubs/" + item.id }).then(
+
+                                var parseMembers = $.ajax({ type: "GET", url: "api/clubs/" + item.id }).then(
                                     function (arr) {
                                         var list_html = "<ol>";
                                         for (var i = 0; i < arr.members.length; i++) {
@@ -298,6 +299,7 @@
                                         $("#memberList").html(list_html);
                                         return arr;
                                     });
+
                                 $('#mainModal').modal('toggle');
                                 $('#ClubName').removeClass('empty').val(item.name);
                                 $('#Description').removeClass('empty').val(item.description);

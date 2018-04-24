@@ -304,7 +304,7 @@
 
 @section includescripts {
     <script type="text/javascript" src="~/Content/global/vendor/select2/select2.full.min.js"></script>
-    @*<script type="text/javascript" src="~/Content/global/vendor/jsgrid/jsgrid.js"></script>*@
+
     <script type="text/javascript" src="~/Content/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="~/Content/global/vendor/icheck/icheck.js"></script>
     <script type="text/javascript" src="~/Content/global/vendor/dropify/dropify.js"></script>
@@ -315,7 +315,7 @@
 
 @section scripts {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-
+    <script type="text/javascript" src="~/Content/site/ajaxHelper.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -334,11 +334,11 @@
             $('#jsGrid').jsGrid("loadData");
 
 
+
             //Populate Dropdowns
-            var params = {};
-            var data = $.ajax({ type: "GET", url: "api/clubs/", data: params }).then(
-                function (arr) {
-                    for (var i = 0; i < arr.length; i++) {
+            var myClubs = CrimsonCalls.getMyClubs({
+                success: function (arr) {
+                   for (var i = 0; i < arr.length; i++) {
                         $("#Club").append( // Append an object to the inside of the select box
                             $("<option></option>") // Yes you can do this.
                                 .text(arr[i].name)
@@ -360,9 +360,10 @@
                                 .val(arr[i].id)
                         );
                     }
-                    return arr;
-                });
-            var data = $.ajax({ type: "GET", url: "api/events/", data: params }).then(
+                }
+            });
+           
+            var myEvents = $.ajax({ type: "GET", url: "api/events/" }).then(
                 function (arr) {
                     for (var i = 0; i < arr.length; i++) {
                         $("#StatEventList").append( // Append an object to the inside of the select box
@@ -373,7 +374,8 @@
                     }
                     return arr;
                 });
-            var data = $.ajax({ type: "GET", url: "api/groups/", data: params }).then(
+
+            var myGroups = $.ajax({ type: "GET", url: "api/groups/" }).then(
                 function (arr) {
                     for (var i = 0; i < arr.length; i++) {
                         $("#StatGroupList").append( // Append an object to the inside of the select box
@@ -389,15 +391,13 @@
                     }
                     return arr;
                 });
+
             $('input[type=datetime-local]').setNow();
         });
-
-
 
         //Create Grid and Populate Event Modals
         $("#jsGrid").jsGrid({
             width: "100%",
-
             inserting: false,
             editing: false,
             sorting: true,
@@ -405,11 +405,11 @@
 
             controller: {
                 loadData: function () {
-                    var data = $.ajax({ type: "GET", url: "api/events" }).then(
+                    var events = $.ajax({ type: "GET", url: "api/events" }).then(
                         function (arr) {
                             return arr;
                         })
-                    return data;
+                    return events;
                 }
             },
             fields: [
@@ -572,7 +572,7 @@
 
 
 
-        //Populate Stat List for Deletion
+        //Populate Club Stat List for Deletion
         $('#StatClubListDelete').on('change', function () {
             $("#StatListClubDelete").empty();
             var clubSelect = $('#StatClubListDelete').val();
