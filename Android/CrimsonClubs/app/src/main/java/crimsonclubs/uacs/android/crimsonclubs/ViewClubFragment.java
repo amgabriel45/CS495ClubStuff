@@ -2,6 +2,7 @@ package crimsonclubs.uacs.android.crimsonclubs;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import mehdi.sakout.fancybuttons.FancyButton;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -52,9 +54,25 @@ public class ViewClubFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        // Set listener for edit button and launch edit club fragment if clicked
+        View view = inflater.inflate(R.layout.fragment_view_club, container, false)
+        FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_edit);
+        if (currClub.isAdmin){
+            btnInput.setVisibility(View.VISIBLE);
+        }
 
-
-        return inflater.inflate(R.layout.fragment_view_club, container, false);
+        // Inflate the layout for this fragment
+        btnInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("id",currClub.id);
+                EditClubFragment editClub = new EditClubFragment();
+                editClub.setArguments(bundle);
+                transaction.replace(R.id.container)
+            }
+        }
+        return view;
     }
 
     @Override
