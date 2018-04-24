@@ -322,15 +322,6 @@ public class MainActivity extends AppCompatActivity
 
         navDrawer.addItem(item);
 
-        item = new SecondaryDrawerItem()
-                .withName("Edit an Event")
-                .withIcon(android.R.drawable.ic_menu_add)
-                .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new EditEventFragment()))
-                .withSelectedBackgroundAnimated(false);
-
-        navDrawer.addItem(item);
-
         navDrawer.addItem( new SectionDrawerItem().withName("Clubs").withDivider(true));
 
 
