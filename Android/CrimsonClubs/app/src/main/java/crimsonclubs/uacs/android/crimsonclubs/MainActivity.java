@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity
     public Toolbar toolbar;
     public static GoogleSignInClient mGoogleSignInClient;
 
-    private BaseFragment lastFragment;
     private BaseFragment currFragment;
 
     public static String bearerToken;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity
     public Drawer navDrawer = null;
     public Drawer bookmarkDrawer = null;
 
-    public Stack<Integer> navStack = new Stack<>();
+    private Stack<BaseFragment> backStack = new Stack<>();
 
 
 
@@ -104,9 +103,11 @@ public class MainActivity extends AppCompatActivity
                 if(drawerItem != null) {
 
 
-                    currFragment = fragmentType;
+                    if(currFragment != null){
+                        backStack.push(currFragment);
+                    }
 
-                    lastFragment = (BaseFragment) getFragmentManager().findFragmentByTag("curr");
+                    currFragment = fragmentType;
 
                     getFragmentManager()
                             .beginTransaction()
@@ -117,8 +118,7 @@ public class MainActivity extends AppCompatActivity
                                     R.animator.card_flip_left_in,
                                     R.animator.card_flip_left_out)
 
-                            .replace(R.id.container, currFragment, "curr")
-
+                            .replace(R.id.container, currFragment)
                             .commit();
 
 
@@ -134,9 +134,10 @@ public class MainActivity extends AppCompatActivity
 
     public void goToLastFragment(){
 
+        BaseFragment lastFragment = backStack.pop();
 
-
-        if (lastFragment != null){
+        if (lastFragment != null) {
+            Log.e("nm",lastFragment.getClass().toString());
             getFragmentManager()
                     .beginTransaction()
 
@@ -146,12 +147,11 @@ public class MainActivity extends AppCompatActivity
                             R.animator.card_flip_left_in,
                             R.animator.card_flip_left_out)
 
-                    .replace(R.id.container, lastFragment, "curr")
+                    .replace(R.id.container, lastFragment)
 
                     .commit();
 
-            lastFragment = currFragment;
-            currFragment = (BaseFragment) getFragmentManager().findFragmentByTag("curr");
+            currFragment = lastFragment;
 
             navDrawer.closeDrawer();
         }
@@ -160,9 +160,9 @@ public class MainActivity extends AppCompatActivity
 
     public void goToFragment(BaseFragment fragment){
 
-        currFragment = fragment;
+        backStack.push(currFragment);
 
-        lastFragment = (BaseFragment) getFragmentManager().findFragmentByTag("curr");
+        currFragment = fragment;
 
         getFragmentManager()
                 .beginTransaction()
@@ -180,9 +180,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void updateTitle(String str){
-        toolbar.setTitle(str);
-    }
 
     public void setUpDemoDrawer(){
 
@@ -402,13 +399,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
+
+
 
     @Override
     public void onBackPressed() {
+
 
         if(navDrawer.isDrawerOpen()) {
 
@@ -419,6 +415,7 @@ public class MainActivity extends AppCompatActivity
             goToLastFragment();
         }
 
+        super.onBackPressed();
     }
 
 

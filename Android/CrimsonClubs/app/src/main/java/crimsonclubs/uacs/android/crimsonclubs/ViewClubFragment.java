@@ -55,23 +55,8 @@ public class ViewClubFragment extends BaseFragment {
         // Inflate the layout for this fragment
 
         // Set listener for edit button and launch edit club fragment if clicked
-        View view = inflater.inflate(R.layout.fragment_view_club, container, false)
-        FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_edit);
-        if (currClub.isAdmin){
-            btnInput.setVisibility(View.VISIBLE);
-        }
+        View view = inflater.inflate(R.layout.fragment_view_club, container, false);
 
-        // Inflate the layout for this fragment
-        btnInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("id",currClub.id);
-                EditClubFragment editClub = new EditClubFragment();
-                editClub.setArguments(bundle);
-                transaction.replace(R.id.container)
-            }
-        }
         return view;
     }
 
@@ -197,6 +182,24 @@ public class ViewClubFragment extends BaseFragment {
                                                                            .replace(R.id.eventsContainer, f, "curr")
 
                                                                            .commit();
+
+                                                                   FancyButton btnInput = (FancyButton) getActivity().findViewById(R.id.btn_edit);
+
+                                                                   if (currClub.isAdmin){
+                                                                       btnInput.setVisibility(View.VISIBLE);
+                                                                   }
+
+                                                                   btnInput.setOnClickListener(new View.OnClickListener() {
+                                                                       @Override
+                                                                       public void onClick(View view) {
+                                                                           Bundle bundle = new Bundle();
+                                                                           bundle.putInt("id",currClub.id);
+                                                                           EditClubFragment editClub = new EditClubFragment();
+                                                                           editClub.setArguments(bundle);
+
+                                                                           main.goToFragment(editClub);
+                                                                       }
+                                                                   });
 
                                                                }
                                                            }

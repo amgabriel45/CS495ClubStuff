@@ -20,7 +20,7 @@ import java.util.List;
 public class BaseFragment extends Fragment {
 
 
-
+    public MainActivity main;
 
 
     private OnFragmentInteractionListener mListener;
@@ -75,6 +75,8 @@ public class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        main = (MainActivity) getActivity();
         /*
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
