@@ -10,13 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.AdapterView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 import okhttp3.Call;
@@ -28,15 +36,22 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
-public class CreateClubFragment extends BaseFragment {
+public class CreateClubFragment extends BaseFragment implements AdapterView.OnItemSelectedListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private Spinner spinner;
+    public ArrayList<GroupDto> groupList = new ArrayList<GroupDto>();
+    //public List<GroupDto> groupList = new ArrayList<GroupDto>();
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    public ArrayList<GroupDto> objs = new ArrayList<>();
+    public ClubAdapter adapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,33 +59,22 @@ public class CreateClubFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    /*
-    public static CreateClubFragment newInstance(String param1, String param2) {
-        CreateClubFragment fragment = new CreateClubFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        //parent.getItemAtPosition(pos);
     }
-    */
-
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onNothingSelected(AdapterView<?> parent) {
+        //Do stuff
     }
-    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_club, container, false);
+
+        //Add items to spinner dropdown
+        addItemsSpinner();
+
         FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
 
         btnInput.setOnClickListener(new View.OnClickListener() {
@@ -78,15 +82,21 @@ public class CreateClubFragment extends BaseFragment {
             public void onClick(View view) {
                 final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
                 final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
+                spinner = (Spinner) getActivity().findViewById(R.id.group_spinner);
 
                 String clubName = inputName.getText().toString();
                 String clubDesc = inputDesc.getText().toString();
+                String groupName = String.valueOf(spinner.getSelectedItem());
+                System.out.println(groupName);
+
+                //This could be -1 do errors
+                int groupId = getGroupId(groupName);
 
                 AddClubDto newClub = new AddClubDto();
                 newClub.name = clubName;
                 newClub.description = clubDesc;
                 newClub.isRequestToJoin = true;
-                newClub.groupId = 1;
+                newClub.groupId = groupId;
 
                 View view2 = getActivity().getCurrentFocus();
                 if (view2 != null){
@@ -101,6 +111,131 @@ public class CreateClubFragment extends BaseFragment {
         return view;
     }
 
+    public int getGroupId(String groupName) {
+
+        for (int i = 0; i < groupList.size(); i++) {
+            if (groupList.get(i).name.compareTo(groupName) == 0)
+                return groupList.get(i).id;
+        }
+
+        return -1;
+    }
+
+    public void addItemsSpinner() {
+        spinner = (Spinner) getActivity().findViewById(R.id.group_spinner);
+        //spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        List<String> list = new ArrayList<String>();
+
+        String token;
+        token = getActivity().getIntent().getStringExtra("bearerToken");
+        Log.e("token=", token);
+
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+        //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/events?token=" + token;
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/groups";
+
+        Log.e("url", url);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .build();
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(getActivity(),
+                                                            "Remote server could not be reached. "
+                                                            , Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        System.out.println("Response: " + response.toString());
+                        getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getActivity(),
+                                                                    "Authentication failed.",
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getActivity(),
+                                                                    "An unspecified networking error has occurred\n" +
+                                                                            "Error Code: " + response.code(),
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    }
+                } else {
+                    boolean isNull = false;
+
+                    //ArrayList<GroupDto> temp = new ArrayList<GroupDto>();
+
+                    String body = response.body().string();
+
+
+                    try {
+                        groupList = new ArrayList<GroupDto>(Arrays.asList(gson.fromJson(body, GroupDto[].class)));
+                    } catch (JsonSyntaxException e) {
+                        groupList.add(gson.fromJson(body, GroupDto.class));
+                    }
+
+                    if (groupList.get(0) == null) { //read failed
+                        isNull = true;
+                    }
+
+                    objs.clear();
+                    objs.addAll(groupList);
+
+
+                    // Run view-related code back on the main thread
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Context context = getActivity();
+                            spinner = (Spinner) getActivity().findViewById(R.id.group_spinner);
+
+                            ArrayList<String> groupNameList = new ArrayList<>();
+
+                            for (int i = 0; i < groupList.size(); i++) {
+                                groupNameList.add(groupList.get(i).name);
+                            }
+
+                            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context,
+                                    android.R.layout.simple_spinner_item, groupNameList);
+                            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinner.setAdapter(dataAdapter);
+
+                        }
+                    });
+                }
+            }
+        });
+    }
+
 
     public void sendClub(AddClubDto newClub) {
         String token;
@@ -111,13 +246,15 @@ public class CreateClubFragment extends BaseFragment {
         //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/events?token=" + token;
         String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs";
 
+        String gname = String.valueOf(newClub.groupId);
+
         Log.e("url",url);
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("name", newClub.name)
                 .add("description", newClub.description)
                 .add("isRequestToJoin", "true")
-                .add("groupId", "1")
+                .add("groupId", gname)
                 .build();
 
         Request request = new Request.Builder()

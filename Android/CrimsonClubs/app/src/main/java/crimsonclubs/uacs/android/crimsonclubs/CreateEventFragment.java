@@ -190,7 +190,10 @@ public class CreateEventFragment extends BaseFragment {
                     ResponseBody responseBody = response.body();
                     System.out.println("Response: " + response.toString());
                     System.out.println("ResponseBody: " + responseBody.string());
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (!response.isSuccessful()) {
+                        //do more stuff here
+                        throw new IOException("Unexpected code " + response);
+                    }
 
                     //Headers responseHeaders = response.headers();
                     /*

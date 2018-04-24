@@ -8,8 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import android.widget.Filter;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,10 +29,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class BrowseEventsFragment extends BaseFragment {
+public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQueryTextListener{
 
     public ArrayList<EventDto> objs = new ArrayList<>();
     public EventAdapter adapter;
+
+    public SearchView mSearchView;
+    public ListView mListView;
 
     public int clubId = -1; //-1 if browsing all events, else returns list of events relevant to specified club
 
@@ -56,6 +63,24 @@ public class BrowseEventsFragment extends BaseFragment {
             getEventsForClubId();
         }
 
+    }
+
+    private void setupSearchView()
+    {
+        mSearchView = (SearchView)getActivity().findViewById(R.id.searchBar);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setSubmitButtonEnabled(true);
+        mSearchView.setQueryHint("Search for events...");
+
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if(!queryTextFocused) {
+                    mSearchView.setQuery("", false);
+                }
+            }
+        });
     }
 
     public void updateList(){
@@ -179,7 +204,7 @@ public class BrowseEventsFragment extends BaseFragment {
                                                     @Override
                                                     public void run() {
 
-                                                        adapter = new EventAdapter(objs);
+                                                        adapter = new EventAdapter(objs, (MainActivity) getActivity());
                                                         final ListView lv = (ListView) getActivity().findViewById(R.id.eventsList);
                                                         //final TextView tv = getActivity().findViewById(R.id.eventsList);
 
@@ -187,6 +212,8 @@ public class BrowseEventsFragment extends BaseFragment {
 
                                                         lv.setAdapter(adapter);
                                                         //tv.setAdapter(adapter);
+
+                                                        setupSearchView();
 
                                                         adapter.notifyDataSetChanged();
                                                     }
@@ -196,6 +223,34 @@ public class BrowseEventsFragment extends BaseFragment {
             }
 
         });
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+
+
+        return true;
+    }
+
+     @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+
+        ClubAdapter adapter = (ClubAdapter) mListView.getAdapter();
+        Filter filter = adapter.getFilter();
+
+        if(TextUtils.isEmpty(query)){
+
+            mListView.clearTextFilter();
+        }
+        else{
+            mListView.setFilterText(query);
+            filter.filter(query);
+        }
+
+
+        return false;
     }
 
     public void getEventsForClubId(){
@@ -285,7 +340,7 @@ public class BrowseEventsFragment extends BaseFragment {
                                                     @Override
                                                     public void run() {
 
-                                                        adapter = new EventAdapter(objs);
+                                                        adapter = new EventAdapter(objs, (MainActivity) getActivity());
                                                         final ListView lv = (ListView) getActivity().findViewById(R.id.eventsList);
                                                         //final TextView tv = getActivity().findViewById(R.id.eventsList);
 

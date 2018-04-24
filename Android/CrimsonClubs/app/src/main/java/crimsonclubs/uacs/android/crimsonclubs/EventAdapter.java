@@ -8,11 +8,22 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class EventAdapter extends BaseAdapter {
 
     private ArrayList<EventDto> mData = new ArrayList<>();
 
-    public EventAdapter(ArrayList<EventDto> data) { mData = data; }
+    public MainActivity main;
+
+    public ArrayList<EventDto> orig;
+
+    public EventAdapter(ArrayList<EventDto> data, MainActivity m) {
+        super();
+        mData = data;
+        main = m;
+        orig = (ArrayList<EventDto>) mData.clone();
+    }
 
     @Override
     public int getCount() {
@@ -32,20 +43,36 @@ public class EventAdapter extends BaseAdapter {
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
 
-        EventDto targ = (EventDto) getItem(pos);
+        final EventDto targ = (EventDto) getItem(pos);
+
+        View row = null;
 
         if(convertView == null) {
-            TextView tv;
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false);
-            tv = (TextView) convertView.findViewById(R.id.name);
-            tv.setText(targ.name);
-            tv = (TextView) convertView.findViewById(R.id.description);
-            tv.setText(targ.description);
-
+            row = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false);
+        }
+        else {
+            row = convertView;
         }
 
+        TextView tv;
+        tv = (TextView) row.findViewById(R.id.name);
+        tv.setText(targ.name);
+        tv = (TextView) row.findViewById(R.id.description);
+        tv.setText(targ.description);
 
-        return convertView;
+        FancyButton selectBtn = (FancyButton) row.findViewById(R.id.btn_select);
+
+        selectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewEventFragment f = new ViewEventFragment();
+                f.currId = targ.id;
+                main.goToFragment(f);
+            }
+        });
+
+
+        return row;
     }
 
 

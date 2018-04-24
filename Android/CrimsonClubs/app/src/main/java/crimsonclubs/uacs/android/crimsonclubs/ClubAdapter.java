@@ -87,7 +87,7 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ViewClubFragment f = new ViewClubFragment();
+                ViewEventFragment f = new ViewEventFragment();
                 f.currId = targ.id;
                 main.goToFragment(f);
             }
