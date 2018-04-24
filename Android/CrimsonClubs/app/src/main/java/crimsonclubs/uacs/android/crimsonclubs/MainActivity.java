@@ -381,8 +381,8 @@ public class MainActivity extends AppCompatActivity
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
-        //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth?token=" + token;
-        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth/test/1";
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth?token=" + token;
+        //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/auth/test/1";
 
         Log.e("url",url);
 
