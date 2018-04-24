@@ -27,8 +27,8 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        forceProceedToMainActivity(); //take this out in final
-        finish();
+        //forceProceedToMainActivity(); //take this out in final
+        //finish();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("77421544828-k57594dl8a1rgmitclu6e0rj8970ved1.apps.googleusercontent.com") //unique token for crimson clubs apps
