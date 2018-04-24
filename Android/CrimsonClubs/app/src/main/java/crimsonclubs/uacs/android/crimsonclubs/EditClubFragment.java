@@ -104,6 +104,7 @@ public class EditClubFragment extends BaseFragment {
 
 
     public void sendClub(EditClubDto newClub) {
+        String id = this.getArguments().getString("id");
         String token;
         token = getActivity().getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
@@ -118,7 +119,7 @@ public class EditClubFragment extends BaseFragment {
                 .add("name", newClub.name)
                 .add("description", newClub.description)
                 .add("isRequestToJoin", "true")
-                .add("groupId", "1")
+                .add("Id", id)
                 .build();
 
         Request request = new Request.Builder()

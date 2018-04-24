@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import mehdi.sakout.fancybuttons.FancyButton;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -129,6 +130,20 @@ public class ViewEventFragment extends BaseFragment {
                             TextView finishDate = (TextView) getActivity().findViewById(R.id.finishDate);
                             finishDate.setText(currEvent.finish);
 
+
+                            FancyButton btnInput = (FancyButton) getActivity().findViewById(R.id.btn_edit);
+
+                            btnInput.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("id",currEvent.id);
+                                    EditEventFragment editEvent = new EditEventFragment();
+                                    editEvent.setArguments(bundle);
+
+                                    main.goToFragment(editEvent);
+                                }
+                            });
 
                         }
                     });

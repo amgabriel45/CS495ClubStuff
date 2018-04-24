@@ -118,6 +118,7 @@ public class EditEventFragment extends BaseFragment {
     }
 
     public void sendEvent(EditEventDto newEvent){
+        String id = this.getArguments().getString("id");
         String token;
         token = getActivity().getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
@@ -134,8 +135,7 @@ public class EditEventFragment extends BaseFragment {
                 .add("start", newEvent.start)
                 .add("finish", newEvent.finish)
                 .add("isGroupEvent", "true")
-                .add("clubId", "1")
-                .add("clubIds", "2")
+                .add("eventId", id)
                 .build();
 
         Request request = new Request.Builder()

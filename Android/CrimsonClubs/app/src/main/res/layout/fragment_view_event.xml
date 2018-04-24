@@ -101,8 +101,8 @@
         app:layout_constraintTop_toBottomOf="@+id/clubsContainer"
         app:layout_constraintVertical_bias="1.0"
         fancy:fb_borderColor="#FFFFFF"
-        fancy:fb_borderWidth="1dp"
 
+        fancy:fb_borderWidth="1dp"
         fancy:fb_defaultColor="@color/crimson_light"
         fancy:fb_iconPosition="right"
         fancy:fb_radius="5dp"
