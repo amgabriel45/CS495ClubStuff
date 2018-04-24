@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrimsonClubs.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,20 @@ namespace CrimsonClubs.Models.Dtos
         public string Last { get; set; }
         public bool IsOrganizationAdmin { get; set; }
         public int OrganizationId { get; set; }
+
+        public UserDto()
+        {
+
+        }
+
+        public UserDto(User dbo)
+        {
+            Id = dbo.Id;
+            Email = dbo.Email;
+            First = dbo.First;
+            Last = dbo.Last;
+            IsOrganizationAdmin = dbo.IsOrganizationAdmin;
+            OrganizationId = dbo.OrganizationId;
+        }
     }
 }

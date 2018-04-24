@@ -1,4 +1,5 @@
-﻿using CrimsonClubs.Models;
+﻿using CrimsonClubs.Extensions;
+using CrimsonClubs.Models;
 using CrimsonClubs.Models.Dtos;
 using CrimsonClubs.Models.Entities;
 using CrimsonClubs.Start;
@@ -39,54 +40,28 @@ namespace CrimsonClubs.Controllers.Api
             }
 
             string json = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<GoogleAuthResponse>(json);
+            var auth = JsonConvert.DeserializeObject<GoogleAuthResponseDto>(json);
 
             //string androidClientId = "77421544828-33rdp50mrdtpeje5dpbal37s63e5ojco.apps.googleusercontent.com";
 
-            if (data.ClientIdWeb != AuthConfig.ClientId) // && data.ClientIdApp != androidClientId
+            if (auth.ClientIdWeb != AuthConfig.ClientId) // && data.ClientIdApp != androidClientId
             {
                 return BadRequest("Invalid Token Origin");
             }
 
-            var user = db.Users.FirstOrDefault(u => u.Email == data.Email);
+            var user = db.Users.FirstOrDefault(u => u.Email == auth.Email);
 
             if (user == null)
             {
-                user = new User();
-                user.Email = data.Email;
-                user.First = data.First;
-                user.Last = data.Last;
-                user.IsOrganizationAdmin = false;
-                user.OrganizationId = 1;
+                user = auth.ToEntity();
 
                 db.Users.Add(user);
                 db.SaveChanges();
             }
 
-            var identity = new ClaimsIdentity(AuthConfig.OAuthBearerOptions.AuthenticationType);
-            identity.AddClaim(new Claim("UserId", user.Id.ToString(), ClaimValueTypes.Integer));
-            identity.AddClaim(new Claim("FirstName", user.First));
-            identity.AddClaim(new Claim("LastName", user.Last));
+            string accessToken = user.GenerateAccessToken();
 
-            var currentUtc = new SystemClock().UtcNow;
-
-            var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
-            ticket.Properties.IssuedUtc = currentUtc;
-            ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromDays(1));
-
-            string accessToken = AuthConfig.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
-
-            var dto = new ApiAuthDto();
-            dto.Token = accessToken;
-            dto.User = new UserDto()
-            {
-                Id = user.Id,
-                Email = user.Email,
-                First = user.First,
-                Last = user.Last,
-                IsOrganizationAdmin = user.IsOrganizationAdmin,
-                OrganizationId = user.OrganizationId
-            };
+            var dto = new ApiAuthDto(accessToken, user);
 
             return Ok(dto);
         }
@@ -96,17 +71,6 @@ namespace CrimsonClubs.Controllers.Api
         [ResponseType(typeof(ApiAuthDto))]
         public IHttpActionResult GetAuthTest(int userId)
         {
-            var identity = new ClaimsIdentity(AuthConfig.OAuthBearerOptions.AuthenticationType);
-            identity.AddClaim(new Claim("UserId", userId.ToString(), ClaimValueTypes.Integer));
-
-            var currentUtc = new SystemClock().UtcNow;
-
-            var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
-            ticket.Properties.IssuedUtc = currentUtc;
-            ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromMinutes(30));
-
-            string accessToken = AuthConfig.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
-
             var user = db.Users.Find(userId);
 
             if (user == null)
@@ -114,17 +78,9 @@ namespace CrimsonClubs.Controllers.Api
                 return NotFound();
             }
 
-            var dto = new ApiAuthDto();
-            dto.Token = accessToken;
-            dto.User = new UserDto()
-            {
-                Id = user.Id,
-                Email = user.Email,
-                First = user.First,
-                Last = user.Last,
-                IsOrganizationAdmin = user.IsOrganizationAdmin,
-                OrganizationId = user.OrganizationId
-            };
+            string token = user.GenerateAccessToken();
+
+            var dto = new ApiAuthDto(token, user);
 
             return Ok(dto);
         }

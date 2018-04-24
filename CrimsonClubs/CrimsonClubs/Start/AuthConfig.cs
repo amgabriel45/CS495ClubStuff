@@ -1,4 +1,5 @@
-﻿using CrimsonClubs.Models.Entities;
+﻿using CrimsonClubs.Extensions;
+using CrimsonClubs.Models.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
@@ -65,20 +66,13 @@ namespace CrimsonClubs.Start
 
                         if (user == null)
                         {
-                            user = new User();
-                            user.Email = context.Email;
-                            user.First = context.GivenName;
-                            user.Last = context.FamilyName;
-                            user.IsOrganizationAdmin = false;
-                            user.OrganizationId = 1;
+                            user = context.NewUser();
 
                             db.Users.Add(user);
                             db.SaveChanges();
                         }
 
-                        context.Identity.AddClaim(new Claim("UserId", user.Id.ToString(), ClaimValueTypes.Integer));
-                        context.Identity.AddClaim(new Claim("FirstName", user.First));
-                        context.Identity.AddClaim(new Claim("LastName", user.Last));
+                        context.Identity.AddClaims(user);
                     }
 
                     return Task.FromResult(0);

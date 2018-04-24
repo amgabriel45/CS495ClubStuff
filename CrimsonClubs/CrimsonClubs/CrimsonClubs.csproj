@@ -189,6 +189,9 @@
     <Compile Include="Controllers\Site\GroupController.cs" />
     <Compile Include="Controllers\Site\EventController.cs" />
     <Compile Include="Controllers\Api\StatController.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Extensions\ClaimsIdentityExtensions.cs" />
+    <Compile Include="Extensions\GoogleOAuth2AuthenticatedContextExtensions.cs" />
     <Compile Include="Start\AuthConfig.cs" />
     <Compile Include="Start\BundleConfig.cs" />
     <Compile Include="Start\FilterConfig.cs" />
@@ -224,7 +227,6 @@
     <Compile Include="Controllers\Api\AuthController.cs" />
     <Compile Include="Controllers\Api\GroupController.cs" />
     <Compile Include="Models\CurrentUser.cs" />
-    <Compile Include="Models\GoogleAuthResponse.cs" />
     <Compile Include="Start\Startup.cs" />
     <Compile Include="Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CCApiController.cs" />
@@ -2860,14 +2862,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CrimsonClubs.Data.Interfaces\CrimsonClubs.Data.Interfaces.csproj">
-      <Project>{f693afc1-ebe2-4e90-8301-6b1df7d23002}</Project>
-      <Name>CrimsonClubs.Data.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CrimsonClubs.Data.Sql\CrimsonClubs.Data.Providers.csproj">
-      <Project>{496ec899-7b4a-42af-943e-906bced7bfca}</Project>
-      <Name>CrimsonClubs.Data.Providers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CrimsonClubs.Models\CrimsonClubs.Models.csproj">
       <Project>{72a5ceab-e599-477a-a415-9a5636d631cc}</Project>
       <Name>CrimsonClubs.Models</Name>
