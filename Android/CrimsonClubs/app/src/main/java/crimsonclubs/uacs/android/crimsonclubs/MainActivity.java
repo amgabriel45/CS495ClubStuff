@@ -268,17 +268,6 @@ public class MainActivity extends AppCompatActivity
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
-
-        item = new SecondaryDrawerItem()
-                .withName("Edit a Club")
-                .withIcon(android.R.drawable.ic_menu_add)
-                .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new EditClubFragment()))
-                .withSelectedBackgroundAnimated(false);
-
-        navDrawer.addItem(item);
-
-
     }
 
     @Override
