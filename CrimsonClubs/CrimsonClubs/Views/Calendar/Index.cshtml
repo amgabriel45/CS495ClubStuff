@@ -135,12 +135,19 @@
 
         var params = {};
         var events = [];
-        var $data = $.ajax({
+        var calEvents = $.ajax({
             type: "GET", url: "api/events", data: params
         }).then(
             function (arr) {
                 for (var i = 0; i < arr.length; i++) {
-                    events.push({ id: arr[i].id, clubId: arr[i].clubId, title: arr[i].name, start: arr[i].start, finish: arr[i].finish, description: arr[i].description })
+                    events.push({
+                        id: arr[i].id,
+                        clubId: arr[i].clubId,
+                        title: arr[i].name,
+                        start: arr[i].start,
+                        finish: arr[i].finish,
+                        description: arr[i].description
+                    })
                 }
                 var myCalendar = $('#calendar');
                 myCalendar.fullCalendar({
