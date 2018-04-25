@@ -27,7 +27,7 @@ namespace CrimsonClubs.Controllers.Api
 
             bool hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted == true);
 
-            if (!hasPermission)
+            if (!hasPermission && club.IsRequestToJoin)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
