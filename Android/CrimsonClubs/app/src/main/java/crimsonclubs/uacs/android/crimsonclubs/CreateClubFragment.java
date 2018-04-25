@@ -82,7 +82,7 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
             public void onClick(View view) {
                 final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
                 final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
-                spinner = (Spinner) getActivity().findViewById(R.id.group_spinner);
+                spinner = (Spinner) main.findViewById(R.id.group_spinner);
 
                 String clubName = inputName.getText().toString();
                 String clubDesc = inputDesc.getText().toString();
@@ -98,9 +98,9 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
                 newClub.isRequestToJoin = true;
                 newClub.groupId = groupId;
 
-                View view2 = getActivity().getCurrentFocus();
+                View view2 = main.getCurrentFocus();
                 if (view2 != null){
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
                 }
 
@@ -122,12 +122,12 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
     }
 
     public void addItemsSpinner() {
-        spinner = (Spinner) getActivity().findViewById(R.id.group_spinner);
+        spinner = (Spinner) main.findViewById(R.id.group_spinner);
         //spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
         List<String> list = new ArrayList<String>();
 
         String token;
-        token = getActivity().getIntent().getStringExtra("bearerToken");
+        token = main.getIntent().getStringExtra("bearerToken");
         Log.e("token=", token);
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
@@ -145,10 +145,10 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                getActivity().runOnUiThread(new Runnable() {
+                main.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(getActivity(),
+                                                    Toast.makeText(main,
                                                             "Remote server could not be reached. "
                                                             , Toast.LENGTH_LONG).show();
                                                 }
@@ -163,10 +163,10 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
                 if (!response.isSuccessful()) {
                     if (response.code() == 401) {
                         System.out.println("Response: " + response.toString());
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getActivity(),
+                                                            Toast.makeText(main,
                                                                     "Authentication failed.",
                                                                     Toast.LENGTH_LONG).show();
 
@@ -175,10 +175,10 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
 
                         );
                     } else {
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getActivity(),
+                                                            Toast.makeText(main,
                                                                     "An unspecified networking error has occurred\n" +
                                                                             "Error Code: " + response.code(),
                                                                     Toast.LENGTH_LONG).show();
@@ -211,12 +211,12 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
 
 
                     // Run view-related code back on the main thread
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            Context context = getActivity();
-                            spinner = (Spinner) getActivity().findViewById(R.id.group_spinner);
+                            Context context = main;
+                            spinner = (Spinner) main.findViewById(R.id.group_spinner);
 
                             ArrayList<String> groupNameList = new ArrayList<>();
 
@@ -239,7 +239,7 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
 
     public void sendClub(final AddClubDto newClub) {
         String token;
-        token = getActivity().getIntent().getStringExtra("bearerToken");
+        token = main.getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
@@ -268,10 +268,10 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
             public void onFailure(Call call, IOException e) {
                e.printStackTrace();
 
-               getActivity().runOnUiThread(new Runnable() {
+               main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(), "Fail", Toast.LENGTH_LONG).show();
+                        Toast.makeText(main, "Fail", Toast.LENGTH_LONG).show();
                     }
                });
             }
@@ -282,10 +282,10 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
 
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_LONG).show();
+                            Toast.makeText(main, "Success", Toast.LENGTH_LONG).show();
                         }
                     });
 

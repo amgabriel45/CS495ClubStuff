@@ -67,7 +67,7 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
 
     private void setupSearchView()
     {
-        mSearchView = (SearchView)getActivity().findViewById(R.id.searchBar);
+        mSearchView = (SearchView)main.findViewById(R.id.searchBar);
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
@@ -133,10 +133,10 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                getActivity().runOnUiThread(new Runnable() {
+                main.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(getActivity(),
+                                                    Toast.makeText(main,
                                                             "Remote server could not be reached. "
                                                             ,Toast.LENGTH_LONG).show();
                                                 }
@@ -150,10 +150,10 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
 
                 if (!response.isSuccessful()) {
                     if (response.code() == 401) {
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getActivity(),
+                                                            Toast.makeText(main,
                                                                     "Authentication failed.",
                                                                     Toast.LENGTH_LONG).show();
 
@@ -163,10 +163,10 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
                         );
                     }
                     else{
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getActivity(),
+                                                            Toast.makeText(main,
                                                                     "An unspecified networking error has occurred\n" +
                                                                             "Error Code: " + response.code(),
                                                                     Toast.LENGTH_LONG).show();
@@ -178,7 +178,6 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
                     }
                 }
                 else {
-                    boolean isNull = false;
 
                     ArrayList<EventDto> temp = new ArrayList<EventDto>();
 
@@ -191,27 +190,22 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
                         temp.add(gson.fromJson(body, EventDto.class));
                     }
 
-                    if (temp.get(0) == null) { //read failed
-                        isNull = true;
-                    }
 
                     objs.clear();
                     objs.addAll(temp);
 
 
                     // Run view-related code back on the main thread
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
 
-                                                        adapter = new EventAdapter(objs, (MainActivity) getActivity());
-                                                        final ListView lv = (ListView) getActivity().findViewById(R.id.eventsList);
-                                                        //final TextView tv = getActivity().findViewById(R.id.eventsList);
+                                                        adapter = new EventAdapter(objs, (MainActivity) main);
 
-                                                        //lv.setOnItemClickListener( infoItemClickListener());
+                                                        mListView = (ListView) main.findViewById(R.id.eventsList);
 
-                                                        lv.setAdapter(adapter);
-                                                        //tv.setAdapter(adapter);
+
+                                                        mListView.setAdapter(adapter);
 
                                                         setupSearchView();
 
@@ -237,7 +231,7 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
     public boolean onQueryTextSubmit(String query)
     {
 
-        ClubAdapter adapter = (ClubAdapter) mListView.getAdapter();
+        EventAdapter adapter = (EventAdapter) mListView.getAdapter();
         Filter filter = adapter.getFilter();
 
         if(TextUtils.isEmpty(query)){
@@ -269,10 +263,10 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                getActivity().runOnUiThread(new Runnable() {
+                main.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Toast.makeText(getActivity(),
+                                                    Toast.makeText(main,
                                                             "Remote server could not be reached. "
                                                             ,Toast.LENGTH_LONG).show();
                                                 }
@@ -286,10 +280,10 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
 
                 if (!response.isSuccessful()) {
                     if (response.code() == 401) {
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getActivity(),
+                                                            Toast.makeText(main,
                                                                     "Authentication failed.",
                                                                     Toast.LENGTH_LONG).show();
 
@@ -299,10 +293,10 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
                         );
                     }
                     else{
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            Toast.makeText(getActivity(),
+                                                            Toast.makeText(main,
                                                                     "An unspecified networking error has occurred\n" +
                                                                             "Error Code: " + response.code(),
                                                                     Toast.LENGTH_LONG).show();
@@ -336,13 +330,13 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
 
 
                     // Run view-related code back on the main thread
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
 
-                                                        adapter = new EventAdapter(objs, (MainActivity) getActivity());
-                                                        final ListView lv = (ListView) getActivity().findViewById(R.id.eventsList);
-                                                        //final TextView tv = getActivity().findViewById(R.id.eventsList);
+                                                        adapter = new EventAdapter(objs, (MainActivity) main);
+                                                        final ListView lv = (ListView) main.findViewById(R.id.eventsList);
+                                                        //final TextView tv = main.findViewById(R.id.eventsList);
 
                                                         //lv.setOnItemClickListener( infoItemClickListener());
 

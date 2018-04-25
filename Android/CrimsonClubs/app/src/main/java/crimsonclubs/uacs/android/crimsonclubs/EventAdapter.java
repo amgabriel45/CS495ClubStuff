@@ -1,16 +1,19 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class EventAdapter extends BaseAdapter {
+public class EventAdapter extends BaseAdapter implements Filterable{
 
     private ArrayList<EventDto> mData = new ArrayList<>();
 
@@ -73,6 +76,52 @@ public class EventAdapter extends BaseAdapter {
 
 
         return row;
+    }
+
+    public Filter getFilter() {
+        return new Filter() {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<EventDto> results = new ArrayList<EventDto>();
+                if (orig == null)
+                    orig = mData;
+                if (constraint != null) {
+                    if (orig != null && orig.size() > 0) {
+                        for (final EventDto g : orig) {
+                            if (g.name.toLowerCase()
+                                    .contains(constraint.toString().toLowerCase())) {
+                                results.add(g);
+                                Log.e("name", g.name);
+                            } else {
+                                if (g.description.toLowerCase()
+                                        .contains(constraint.toString().toLowerCase())) {
+                                    results.add(g);
+                                    Log.e("desc", g.description);
+                                }
+                            }
+                        }
+                        oReturn.values = results;
+                    }
+                }
+
+
+                return oReturn;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint,
+                                          FilterResults results) {
+
+                for(EventDto a : (ArrayList<EventDto>) results.values){
+                    Log.e("arr",a.name);
+                }
+                mData = (ArrayList<EventDto>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 

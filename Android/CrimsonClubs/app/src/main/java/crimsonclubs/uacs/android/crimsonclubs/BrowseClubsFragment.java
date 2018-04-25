@@ -69,7 +69,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
 
     private void setupSearchView()
     {
-        mSearchView = (SearchView) getActivity().findViewById(R.id.searchBar);
+        mSearchView = (SearchView) main.findViewById(R.id.searchBar);
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
@@ -103,10 +103,10 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                 @Override
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                                                            @Override
                                                            public void run() {
-                                                               Toast.makeText(getActivity(),
+                                                               Toast.makeText(main,
                                                                        "Remote server could not be reached. "
                                                                        ,Toast.LENGTH_LONG).show();
                                                            }
@@ -120,10 +120,10 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
 
                     if (!response.isSuccessful()) {
                         if (response.code() == 401) {
-                            getActivity().runOnUiThread(new Runnable() {
+                            main.runOnUiThread(new Runnable() {
                                                                    @Override
                                                                    public void run() {
-                                                                       Toast.makeText(getActivity(),
+                                                                       Toast.makeText(main,
                                                                                "Authentication failed.",
                                                                                Toast.LENGTH_LONG).show();
 
@@ -133,10 +133,10 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                             );
                         }
                         else{
-                            getActivity().runOnUiThread(new Runnable() {
+                            main.runOnUiThread(new Runnable() {
                                                                    @Override
                                                                    public void run() {
-                                                                       Toast.makeText(getActivity(),
+                                                                       Toast.makeText(main,
                                                                                "An unspecified networking error has occurred\n" +
                                                                                        "Error Code: " + response.code(),
                                                                                Toast.LENGTH_LONG).show();
@@ -170,12 +170,12 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
 
 
                         // Run view-related code back on the main thread
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                                @Override
                                                                public void run() {
 
-                                                                   adapter = new ClubAdapter(objs, (MainActivity) getActivity());
-                                                                   mListView = (ListView) getActivity().findViewById(R.id.clubsList);
+                                                                   adapter = new ClubAdapter(objs, (MainActivity) main);
+                                                                   mListView = (ListView) main.findViewById(R.id.clubsList);
 
                                                                    //lv.setOnItemClickListener( infoItemClickListener());
 

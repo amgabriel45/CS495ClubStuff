@@ -129,9 +129,9 @@ public class CreateEventFragment extends BaseFragment {
                 newEvent.isGroupEvent = true;
                 newEvent.clubIds = clubs;
 
-                View view2 = getActivity().getCurrentFocus();
+                View view2 = main.getCurrentFocus();
                 if (view2 != null) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
                 }
 
@@ -145,7 +145,7 @@ public class CreateEventFragment extends BaseFragment {
 
     public void sendEvent(final AddEventDto newEvent){
         String token;
-        token = getActivity().getIntent().getStringExtra("bearerToken");
+        token = main.getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
@@ -177,10 +177,10 @@ public class CreateEventFragment extends BaseFragment {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
 
-                getActivity().runOnUiThread(new Runnable() {
+                main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(), "Failure", Toast.LENGTH_LONG).show();
+                        Toast.makeText(main, "Failure", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -204,18 +204,18 @@ public class CreateEventFragment extends BaseFragment {
 
                     //System.out.println(responseBody.string());
 
-                    Context context = getActivity();
+                    Context context = main;
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_LONG).show();
+                            Toast.makeText(main, "Success", Toast.LENGTH_LONG).show();
                         }
                     });
 
                     //Toast.makeText(context, "Success", Toast.LENGTH_LONG).show();
 
-                    //((MainActivity)getActivity()).goToLastFragment();
+                    //((MainActivity)main).goToLastFragment();
 
                     //change to view detailed event for event just created when finished
                     BrowseEventsFragment nextFrag = new BrowseEventsFragment();

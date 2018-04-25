@@ -89,9 +89,9 @@ public class EditClubFragment extends BaseFragment {
                 newClub.isRequestToJoin = true;
                 newClub.groupId = 1;
 
-                View view2 = getActivity().getCurrentFocus();
+                View view2 = main.getCurrentFocus();
                 if (view2 != null){
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
                 }
 
@@ -106,7 +106,7 @@ public class EditClubFragment extends BaseFragment {
     public void sendClub(final EditClubDto newClub) {
         String id = this.getArguments().getString("id");
         String token;
-        token = getActivity().getIntent().getStringExtra("bearerToken");
+        token = main.getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
@@ -133,10 +133,10 @@ public class EditClubFragment extends BaseFragment {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
 
-                getActivity().runOnUiThread(new Runnable() {
+                main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(), "Fail", Toast.LENGTH_LONG).show();
+                        Toast.makeText(main, "Fail", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -147,10 +147,10 @@ public class EditClubFragment extends BaseFragment {
 
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_LONG).show();
+                            Toast.makeText(main, "Success", Toast.LENGTH_LONG).show();
                         }
                     });
 

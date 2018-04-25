@@ -64,10 +64,10 @@ public class ViewEventFragment extends BaseFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                getActivity().runOnUiThread(new Runnable() {
+                main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getActivity(),
+                        Toast.makeText(main,
                                 "Remote server could not be reached. ",
                                 Toast.LENGTH_LONG).show();
                     }
@@ -78,19 +78,19 @@ public class ViewEventFragment extends BaseFragment {
             public void onResponse(Call call, final Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     if (response.code() == 401) {
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getActivity(),
+                                Toast.makeText(main,
                                         "Authentication failed ",
                                         Toast.LENGTH_LONG).show();
                             }
                         });
                     } else {
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getActivity(),
+                                Toast.makeText(main,
                                         "An unspecified networking error has occurred\n" +
                                             "error Code: " + response.code(),
                                         Toast.LENGTH_LONG).show();
@@ -116,22 +116,22 @@ public class ViewEventFragment extends BaseFragment {
                     else
                         currEvent = temp.get(0);
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Log.e("name", currEvent.name);
 
-                            TextView name = (TextView) getActivity().findViewById(R.id.name);
+                            TextView name = (TextView) main.findViewById(R.id.name);
                             name.setText(currEvent.name);
-                            TextView desc = (TextView) getActivity().findViewById(R.id.description);
+                            TextView desc = (TextView) main.findViewById(R.id.description);
                             desc.setText(currEvent.description);
-                            TextView startDate = (TextView) getActivity().findViewById(R.id.startDate);
+                            TextView startDate = (TextView) main.findViewById(R.id.startDate);
                             startDate.setText(currEvent.start);
-                            TextView finishDate = (TextView) getActivity().findViewById(R.id.finishDate);
+                            TextView finishDate = (TextView) main.findViewById(R.id.finishDate);
                             finishDate.setText(currEvent.finish);
 
 
-                            FancyButton btnInput = (FancyButton) getActivity().findViewById(R.id.btn_edit);
+                            FancyButton btnInput = (FancyButton) main.findViewById(R.id.btn_edit);
 
                             btnInput.setOnClickListener(new View.OnClickListener() {
                                 @Override

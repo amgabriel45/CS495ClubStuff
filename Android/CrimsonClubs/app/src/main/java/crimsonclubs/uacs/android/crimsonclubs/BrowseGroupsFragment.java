@@ -4,6 +4,7 @@ package crimsonclubs.uacs.android.crimsonclubs;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class BrowseGroupsFragment extends BaseFragment implements SearchView.OnQ
 
     private void setupSearchView()
     {
-        mSearchView = (SearchView) getActivity().findViewById(R.id.searchBar);
+        mSearchView = (SearchView) main.findViewById(R.id.searchBar);
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
@@ -98,10 +99,10 @@ public class BrowseGroupsFragment extends BaseFragment implements SearchView.OnQ
                 @Override
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                                                            @Override
                                                            public void run() {
-                                                               Toast.makeText(getActivity(),
+                                                               Toast.makeText(main,
                                                                        "Remote server could not be reached. "
                                                                        ,Toast.LENGTH_LONG).show();
                                                            }
@@ -115,10 +116,10 @@ public class BrowseGroupsFragment extends BaseFragment implements SearchView.OnQ
 
                     if (!response.isSuccessful()) {
                         if (response.code() == 401) {
-                            getActivity().runOnUiThread(new Runnable() {
+                            main.runOnUiThread(new Runnable() {
                                                                    @Override
                                                                    public void run() {
-                                                                       Toast.makeText(getActivity(),
+                                                                       Toast.makeText(main,
                                                                                "Authentication failed.",
                                                                                Toast.LENGTH_LONG).show();
 
@@ -128,10 +129,10 @@ public class BrowseGroupsFragment extends BaseFragment implements SearchView.OnQ
                             );
                         }
                         else{
-                            getActivity().runOnUiThread(new Runnable() {
+                            main.runOnUiThread(new Runnable() {
                                                                    @Override
                                                                    public void run() {
-                                                                       Toast.makeText(getActivity(),
+                                                                       Toast.makeText(main,
                                                                                "An unspecified networking error has occurred\n" +
                                                                                        "Error Code: " + response.code(),
                                                                                Toast.LENGTH_LONG).show();
@@ -148,7 +149,7 @@ public class BrowseGroupsFragment extends BaseFragment implements SearchView.OnQ
                         ArrayList<GroupDto> temp = new ArrayList<GroupDto>();
 
                         String body = response.body().string();
-
+                        Log.e("groups",body);
 
                         try {
                             temp = new ArrayList<GroupDto>(Arrays.asList(gson.fromJson(body, GroupDto[].class)));
@@ -165,12 +166,12 @@ public class BrowseGroupsFragment extends BaseFragment implements SearchView.OnQ
 
 
                         // Run view-related code back on the main thread
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                                @Override
                                                                public void run() {
 
-                                                                   adapter = new GroupAdapter(objs, (MainActivity) getActivity());
-                                                                   mListView = (ListView) getActivity().findViewById(R.id.groupsList);
+                                                                   adapter = new GroupAdapter(objs, (MainActivity) main);
+                                                                   mListView = (ListView) main.findViewById(R.id.groupsList);
 
                                                                    //lv.setOnItemClickListener( infoItemClickListener());
 
