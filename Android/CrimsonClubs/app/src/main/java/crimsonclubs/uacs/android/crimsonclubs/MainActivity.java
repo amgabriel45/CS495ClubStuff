@@ -1,7 +1,6 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
 import android.os.Bundle;
-import android.support.annotation.Keep;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -82,9 +81,11 @@ public class MainActivity extends AppCompatActivity
 
         initDrawers(toolbar); //build nav drawer and bookmark drawer
 
+        refreshUserClubs();
+
     }
 
-    public void getUserClubs(){
+    public void refreshUserClubs(){
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
         String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs";
@@ -158,13 +159,15 @@ public class MainActivity extends AppCompatActivity
                         temp.add(gson.fromJson(body, ClubDto.class));
                     }
 
+                    userClubs = temp;
 
                     // Run view-related code back on the main thread
                     MainActivity.this.runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
 
-                                                        setUpNavDrawer();
+
+                                                        refreshNavDrawer();
 
                                                     }
                                                 }
@@ -268,7 +271,9 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void setUpNavDrawer(){
+    public void refreshNavDrawer(){
+
+        initDrawers(toolbar);
 
         SecondaryDrawerItem item;
 
@@ -279,13 +284,16 @@ public class MainActivity extends AppCompatActivity
 
             int color = c.isAdmin ? R.color.crimson : R.color.black; //sets color to red if user is admin of group
 
+            ViewClubFragment f = new ViewClubFragment();
+            f.currId = c.id;
+
             item = new SecondaryDrawerItem()
                     .withName(c.name)
                     .withDescription(c.memberCount + " members")
                     .withIcon(R.drawable.poi_mark)
                     .withTextColorRes(color)
                     .withIdentifier(1)
-                    .withOnDrawerItemClickListener(listener(new BaseFragment()))
+                    .withOnDrawerItemClickListener(listener(f))
                     .withSelectedBackgroundAnimated(false);
 
             navDrawer.addItem(item);
@@ -357,7 +365,9 @@ public class MainActivity extends AppCompatActivity
     public void getAuthToken(){
 
         String token = getIntent().getStringExtra("bearerToken");
-        Log.e("token=",token);
+        Log.e("debug","token: " + token);
+
+
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -447,7 +457,7 @@ public class MainActivity extends AppCompatActivity
                                                         Log.e("bearer token:",resp.token);
                                                         bearerToken = resp.token;
                                                         currUser = resp.user;
-                                                        getUserClubs();
+                                                        refreshUserClubs();
                                                     }
                                                 }
                     );
@@ -478,7 +488,8 @@ public class MainActivity extends AppCompatActivity
 
     private void initDrawers(Toolbar toolbar){ //sets up the drawers
 
-        if(navDrawer == null) {
+            navDrawer = null;
+
             AccountHeader headerResult = new AccountHeaderBuilder()
                     .withActivity(this)
                     .withHeaderBackground(R.drawable.side_nav_bar)
@@ -501,7 +512,7 @@ public class MainActivity extends AppCompatActivity
                     .withDrawerGravity(GravityCompat.START)
                     .build();
 
-        }
+
 
     }
 

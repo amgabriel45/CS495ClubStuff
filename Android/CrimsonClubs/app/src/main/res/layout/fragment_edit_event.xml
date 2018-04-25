@@ -62,7 +62,7 @@
                                 fancy:fb_defaultColor="@color/crimson_light"
                                 fancy:fb_iconPosition="left"
                                 fancy:fb_radius="18dp"
-                                fancy:fb_text="Edit Event"
+                                fancy:fb_text="Save Changes"
                                 fancy:fb_textColor="#FFFFFF" />
 
                         </FrameLayout>

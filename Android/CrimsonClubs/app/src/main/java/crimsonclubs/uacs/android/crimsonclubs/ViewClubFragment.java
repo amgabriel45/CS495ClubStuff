@@ -28,6 +28,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -88,10 +89,10 @@ public class ViewClubFragment extends BaseFragment {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
-                    getActivity().runOnUiThread(new Runnable() {
+                    main.runOnUiThread(new Runnable() {
                                                            @Override
                                                            public void run() {
-                                                               Toast.makeText(getActivity(),
+                                                               Toast.makeText(main,
                                                                        "Remote server could not be reached. "
                                                                        ,Toast.LENGTH_LONG).show();
                                                            }
@@ -105,10 +106,10 @@ public class ViewClubFragment extends BaseFragment {
 
                     if (!response.isSuccessful()) {
                         if (response.code() == 401) {
-                            getActivity().runOnUiThread(new Runnable() {
+                            main.runOnUiThread(new Runnable() {
                                                                    @Override
                                                                    public void run() {
-                                                                       Toast.makeText(getActivity(),
+                                                                       Toast.makeText(main,
                                                                                "Authentication failed.",
                                                                                Toast.LENGTH_LONG).show();
 
@@ -118,10 +119,10 @@ public class ViewClubFragment extends BaseFragment {
                             );
                         }
                         else{
-                            getActivity().runOnUiThread(new Runnable() {
+                            main.runOnUiThread(new Runnable() {
                                                                    @Override
                                                                    public void run() {
-                                                                       Toast.makeText(getActivity(),
+                                                                       Toast.makeText(main,
                                                                                "An unspecified networking error has occurred\n" +
                                                                                        "Error Code: " + response.code(),
                                                                                Toast.LENGTH_LONG).show();
@@ -155,7 +156,7 @@ public class ViewClubFragment extends BaseFragment {
 
 
                         // Run view-related code back on the main thread
-                        getActivity().runOnUiThread(new Runnable() {
+                        main.runOnUiThread(new Runnable() {
                                                                @Override
                                                                public void run() {
 
@@ -163,11 +164,11 @@ public class ViewClubFragment extends BaseFragment {
                                                                    Log.e("name",currClub.name);
                                                                    Log.e("num",Integer.toString(currClub.members.size()));
 
-                                                                   TextView name = (TextView) getActivity().findViewById(R.id.name);
+                                                                   TextView name = (TextView) main.findViewById(R.id.name);
                                                                    name.setText(currClub.name);
-                                                                   TextView desc = (TextView) getActivity().findViewById(R.id.description);
+                                                                   TextView desc = (TextView) main.findViewById(R.id.description);
                                                                    desc.setText(currClub.description);
-                                                                   TextView numMembers = (TextView) getActivity().findViewById(R.id.numMembers);
+                                                                   TextView numMembers = (TextView) main.findViewById(R.id.numMembers);
 
                                                                    numMembers.setText(currClub.memberCount + " members");
 
@@ -183,7 +184,7 @@ public class ViewClubFragment extends BaseFragment {
 
                                                                            .commit();
 
-                                                                   FancyButton btnInput = (FancyButton) getActivity().findViewById(R.id.btn_edit);
+                                                                   FancyButton btnInput = (FancyButton) main.findViewById(R.id.btn_edit);
 
                                                                    if (currClub.isAdmin){
                                                                        btnInput.setVisibility(View.VISIBLE);
@@ -197,24 +198,33 @@ public class ViewClubFragment extends BaseFragment {
                                                                            EditClubFragment editClub = new EditClubFragment();
                                                                            editClub.setArguments(bundle);
 
+                                                                           //AcceptUsersFragment a = new AcceptUsersFragment();
+                                                                           //a.currId= currId;
+                                                                           //main.goToFragment(a);
+
                                                                            main.goToFragment(editClub);
                                                                        }
                                                                    });
 
-                                                                   btnInput = (FancyButton) getActivity().findViewById(R.id.btn_join);
+                                                                   btnInput = (FancyButton) main.findViewById(R.id.btn_join);
 
                                                                    btnInput.setText(currClub.isAccepted ? "Leave" : "Join");
-                                                                   btnInput.setOnClickListener(new View.OnClickListener() {
-                                                                       @Override
-                                                                       public void onClick(View view) {
-                                                                           if(currClub.isAccepted){
-                                                                               tryLeave(currClub.id);
+
+                                                                   if(!currClub.isAllowedToJoin && !currClub.isAccepted){
+                                                                       btnInput.setBackgroundColor(getResources().getColor(R.color.md_grey_500));
+                                                                   }
+                                                                   else {
+                                                                       btnInput.setOnClickListener(new View.OnClickListener() {
+                                                                           @Override
+                                                                           public void onClick(View view) {
+                                                                               if (currClub.isAccepted) {
+                                                                                   tryLeave(currClub.id);
+                                                                               } else {
+                                                                                   tryJoin(currClub.id);
+                                                                               }
                                                                            }
-                                                                           else{
-                                                                               tryJoin(currClub.id);
-                                                                           }
-                                                                       }
-                                                                   });
+                                                                       });
+                                                                   }
 
                                                                }
                                                            }
@@ -230,10 +240,12 @@ public class ViewClubFragment extends BaseFragment {
 
             String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + clubId + "/join";
 
+            RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
 
             Request request = new Request.Builder()
                     .url(url)
                     .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                    .post(body)
                     .build();
 
 
@@ -293,6 +305,7 @@ public class ViewClubFragment extends BaseFragment {
                                                             public void run() {
 
                                                                 Toast.makeText(main, "Successfully joined club", Toast.LENGTH_SHORT).show();
+                                                                main.refreshUserClubs();
 
                                                             }
                                                         }
@@ -308,10 +321,12 @@ public class ViewClubFragment extends BaseFragment {
 
         String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + clubId + "/leave";
 
+        RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
 
         Request request = new Request.Builder()
                 .url(url)
                 .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .post(body)
                 .build();
 
 
@@ -371,7 +386,8 @@ public class ViewClubFragment extends BaseFragment {
                                            public void run() {
 
                                                Toast.makeText(main, "Successfully left club", Toast.LENGTH_SHORT).show();
-
+                                               main.refreshUserClubs();
+                                               main.goToLastFragment();
                                            }
                                        }
                     );

@@ -18,7 +18,7 @@ public class GroupDto {
     @SerializedName("OrganizationId")
     public int orgId;
     @Expose
-    @SerializedName("clubcount")
+    @SerializedName("clubCount")
     public int clubCount;
 
 }

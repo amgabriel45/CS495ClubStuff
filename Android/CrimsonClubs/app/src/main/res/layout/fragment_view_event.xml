@@ -106,7 +106,7 @@
         fancy:fb_defaultColor="@color/crimson_light"
         fancy:fb_iconPosition="right"
         fancy:fb_radius="5dp"
-        fancy:fb_text="Edit"
+        fancy:fb_text="Edit Event"
         fancy:fb_textColor="#FFFFFF"
         fancy:fb_textSize="20dp" />
 

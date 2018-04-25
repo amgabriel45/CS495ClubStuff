@@ -1,8 +1,8 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,27 +22,24 @@ import java.util.Arrays;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import static android.util.Log.e;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQueryTextListener  {
+public class AcceptUsersFragment extends BaseFragment implements SearchView.OnQueryTextListener  {
 
-    public ArrayList<ClubDto> objs = new ArrayList<>();
-    public ClubAdapter adapter;
+    public ArrayList<JoinRequestDto> objs = new ArrayList<>();
+    public JoinRequestAdapter adapter;
 
     public SearchView mSearchView;
     public ListView mListView;
 
     int currId;
 
-    public BrowseClubsFragment() {
+    public AcceptUsersFragment() {
 
     }
 
@@ -54,14 +51,12 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
 
 
 
-        return inflater.inflate(R.layout.fragment_browse_clubs, container, false);
+        return inflater.inflate(R.layout.fragment_accept_users, container, false);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-
-
 
         updateList();
 
@@ -73,7 +68,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Search for clubs...");
+        mSearchView.setQueryHint("Search for users...");
 
         mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -91,7 +86,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
             //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/all";
-        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs?groupId=" + currId;
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + currId + "/requests";
 
             Request request = new Request.Builder()
                     .url(url)
@@ -148,22 +143,19 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                         }
                     }
                     else {
-                        boolean isNull = false;
 
-                        ArrayList<ClubDto> temp = new ArrayList<ClubDto>();
+
+                        ArrayList<JoinRequestDto> temp = new ArrayList<JoinRequestDto>();
 
                         String body = response.body().string();
 
 
                         try {
-                            temp = new ArrayList<ClubDto>(Arrays.asList(gson.fromJson(body, ClubDto[].class)));
+                            temp = new ArrayList<JoinRequestDto>(Arrays.asList(gson.fromJson(body, JoinRequestDto[].class)));
                         } catch (JsonSyntaxException e) {
-                            temp.add(gson.fromJson(body, ClubDto.class));
+                            temp.add(gson.fromJson(body, JoinRequestDto.class));
                         }
 
-                        if (temp.get(0) == null) { //read failed
-                            isNull = true;
-                        }
 
                         objs.clear();
                         objs.addAll(temp);
@@ -174,8 +166,8 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                                                                @Override
                                                                public void run() {
 
-                                                                   adapter = new ClubAdapter(objs, (MainActivity) main);
-                                                                   mListView = (ListView) main.findViewById(R.id.clubsList);
+                                                                   adapter = new JoinRequestAdapter(objs, (MainActivity) main,currId);
+                                                                   mListView = (ListView) main.findViewById(R.id.usersList);
 
                                                                    //lv.setOnItemClickListener( infoItemClickListener());
 
@@ -205,7 +197,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
     public boolean onQueryTextSubmit(String query)
     {
 
-        ClubAdapter adapter = (ClubAdapter) mListView.getAdapter();
+        JoinRequestAdapter adapter = (JoinRequestAdapter) mListView.getAdapter();
         Filter filter = adapter.getFilter();
 
         if(TextUtils.isEmpty(query)){
