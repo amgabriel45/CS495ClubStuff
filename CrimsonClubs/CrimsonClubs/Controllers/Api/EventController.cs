@@ -27,7 +27,7 @@ namespace CrimsonClubs.Controllers.Api
 
             var hasPermission = club.MM_User_Club.Any(m => m.UserId == CurrentUser.Id && m.IsAccepted);
 
-            if (!hasPermission)
+            if (!hasPermission && club.IsRequestToJoin)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
@@ -52,7 +52,7 @@ namespace CrimsonClubs.Controllers.Api
 
         [HttpGet, Route("{eventId}")]
         [ResponseType(typeof(DetailedEventDto))]
-        public IHttpActionResult GetEvent(int? eventId)
+        public IHttpActionResult GetEvent(int? eventId, int? clubId = null)
         {
             if (eventId == null)
             {
@@ -70,6 +70,16 @@ namespace CrimsonClubs.Controllers.Api
                 .MM_User_Club.Where(m => m.IsAccepted)
                 .SelectMany(m => m.Club.MM_Club_Event)
                 .FirstOrDefault(m => m.EventId == eventId);
+
+            if (dbo == null && clubId != null)
+            {
+                dbo = e.MM_Club_Event.FirstOrDefault(m => m.ClubId == clubId);
+            }
+
+            if (dbo == null)
+            {
+                dbo = e.MM_Club_Event.FirstOrDefault();
+            }
 
             var dto = new DetailedEventDto(dbo, CurrentUser.Id);
 
