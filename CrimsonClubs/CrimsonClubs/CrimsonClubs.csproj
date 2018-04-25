@@ -2098,14 +2098,9 @@
     <Content Include="Content\images\green.png" />
     <Content Include="Content\images\red.png" />
     <Content Include="Content\images\yellow.png" />
-    <Content Include="Content\site\jsgridHelper.js" />
     <Content Include="Content\site.css" />
     <Content Include="Content\site.js" />
-    <Content Include="Content\site\commonPageScripts.js" />
-    <Content Include="Content\site\dropdownManager.js" />
-    <Content Include="Content\site\dynamicList.js" />
-    <Content Include="Content\site\halfPageScripts.js" />
-    <Content Include="Content\site\modalPageScripts.js" />
+    <Content Include="Content\site\ajaxHelper.js" />
     <Content Include="Content\ua.jpg" />
     <Content Include="Content\UserIcon.png" />
     <Content Include="Global.asax" />
