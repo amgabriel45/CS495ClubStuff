@@ -198,6 +198,10 @@ public class ViewClubFragment extends BaseFragment {
                                                                            EditClubFragment editClub = new EditClubFragment();
                                                                            editClub.setArguments(bundle);
 
+                                                                           //AcceptUsersFragment a = new AcceptUsersFragment();
+                                                                           //a.currId= currId;
+                                                                           //main.goToFragment(a);
+
                                                                            main.goToFragment(editClub);
                                                                        }
                                                                    });
@@ -205,17 +209,22 @@ public class ViewClubFragment extends BaseFragment {
                                                                    btnInput = (FancyButton) main.findViewById(R.id.btn_join);
 
                                                                    btnInput.setText(currClub.isAccepted ? "Leave" : "Join");
-                                                                   btnInput.setOnClickListener(new View.OnClickListener() {
-                                                                       @Override
-                                                                       public void onClick(View view) {
-                                                                           if(currClub.isAccepted){
-                                                                               tryLeave(currClub.id);
+
+                                                                   if(!currClub.isAllowedToJoin && !currClub.isAccepted){
+                                                                       btnInput.setBackgroundColor(getResources().getColor(R.color.md_grey_500));
+                                                                   }
+                                                                   else {
+                                                                       btnInput.setOnClickListener(new View.OnClickListener() {
+                                                                           @Override
+                                                                           public void onClick(View view) {
+                                                                               if (currClub.isAccepted) {
+                                                                                   tryLeave(currClub.id);
+                                                                               } else {
+                                                                                   tryJoin(currClub.id);
+                                                                               }
                                                                            }
-                                                                           else{
-                                                                               tryJoin(currClub.id);
-                                                                           }
-                                                                       }
-                                                                   });
+                                                                       });
+                                                                   }
 
                                                                }
                                                            }

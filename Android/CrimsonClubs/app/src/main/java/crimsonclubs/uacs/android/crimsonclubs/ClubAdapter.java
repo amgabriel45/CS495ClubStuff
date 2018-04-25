@@ -11,10 +11,20 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ClubAdapter extends BaseAdapter implements Filterable {
 
@@ -73,29 +83,217 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
         TextView clubDesc = (TextView) row.findViewById(R.id.clubDesc);
         TextView numMembers = (TextView) row.findViewById(R.id.numMembers);
         ImageView locked = (ImageView) row.findViewById(R.id.isLocked);
-        FancyButton selectBtn = (FancyButton) row.findViewById(R.id.btn_select);
+        final FancyButton selectBtn = (FancyButton) row.findViewById(R.id.btn_select);
 
         groupName.setText(targ.name);
 
         clubDesc.setText(targ.description);
         numMembers.setText(targ.memberCount + " members");
 
+
         if(targ.isRequestToJoin){
             locked.setVisibility(View.VISIBLE);
+
+            if(!targ.isAccepted){
+                if(!targ.hasRequested) {
+                    selectBtn.setText("Request to Join");
+                }
+                else{
+                    selectBtn.setText("Undo Request");
+                }
+            }
         }
 
-        selectBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ViewClubFragment f = new ViewClubFragment();
-                f.currId = targ.id;
-                main.goToFragment(f);
-            }
-        });
+
+        selectBtn.setOnClickListener(btnListener(targ,selectBtn));
 
 
 
         return row;
+    }
+
+    private View.OnClickListener btnListener(final ClubDto targ, final FancyButton btn){
+
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(targ.hasRequested && targ.isAccepted){
+                    requestLeave(targ,btn);
+                }
+
+                if(targ.isRequestToJoin && !targ.isAccepted){
+                    requestJoin(targ,btn);
+                }
+                else {
+                    ViewClubFragment f = new ViewClubFragment();
+                    f.currId = targ.id;
+                    main.goToFragment(f);
+                }
+            }
+        };
+    }
+
+    public void requestJoin(final ClubDto targ, final FancyButton btn){
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + targ.id + "/join";
+
+        RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .post(body)
+                .build();
+
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                main.runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           Toast.makeText(main,
+                                                   "Remote server could not be reached. "
+                                                   ,Toast.LENGTH_LONG).show();
+                                       }
+                                   }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "Authentication failed.",
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                    else{
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "An unspecified networking error has occurred\n" +
+                                                                   "Error Code: " + response.code(),
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                }
+                else {
+
+                    // Run view-related code back on the main thread
+                    main.runOnUiThread(new Runnable() {
+                                           @Override
+                                           public void run() {
+
+                                               Toast.makeText(main, "Request successful", Toast.LENGTH_SHORT).show();
+                                               btn.setText("Undo Request");
+                                               btn.setOnClickListener(btnListener(targ,btn));
+                                           }
+                                       }
+                    );
+                }
+            }
+
+        });
+    }
+
+    public void requestLeave(final ClubDto targ, final FancyButton btn){
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + targ.id + "/leave";
+
+        RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .post(body)
+                .build();
+
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                main.runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           Toast.makeText(main,
+                                                   "Remote server could not be reached. "
+                                                   ,Toast.LENGTH_LONG).show();
+                                       }
+                                   }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "Authentication failed.",
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                    else{
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "An unspecified networking error has occurred\n" +
+                                                                   "Error Code: " + response.code(),
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                }
+                else {
+
+                    // Run view-related code back on the main thread
+                    main.runOnUiThread(new Runnable() {
+                                           @Override
+                                           public void run() {
+
+                                               Toast.makeText(main, "Request successfully undone", Toast.LENGTH_SHORT).show();
+                                               btn.setText("Request Join");
+                                               btn.setOnClickListener(btnListener(targ,btn));
+                                           }
+                                       }
+                    );
+                }
+            }
+
+        });
     }
 
     public Filter getFilter() {
