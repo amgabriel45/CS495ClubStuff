@@ -91,7 +91,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
             //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/all";
-        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + currId;
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs?groupId=" + currId;
 
             Request request = new Request.Builder()
                     .url(url)

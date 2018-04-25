@@ -478,28 +478,30 @@ public class MainActivity extends AppCompatActivity
 
     private void initDrawers(Toolbar toolbar){ //sets up the drawers
 
+        if(navDrawer == null) {
+            AccountHeader headerResult = new AccountHeaderBuilder()
+                    .withActivity(this)
+                    .withHeaderBackground(R.drawable.side_nav_bar)
+                    .addProfiles(
+                            new ProfileDrawerItem()
+                                    .withName(getIntent().getStringExtra("name"))
+                                    .withEmail(getIntent().getStringExtra("email"))
+                    )
+                    .build();
 
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.side_nav_bar)
-                .addProfiles(
-                        new ProfileDrawerItem()
-                                .withName(getIntent().getStringExtra("name"))
-                                .withEmail(getIntent().getStringExtra("email"))
-                )
-                .build();
+            navDrawer = new DrawerBuilder()
+                    .withActivity(this)
+                    .withToolbar(toolbar)
+                    .withActionBarDrawerToggle(true)
+                    .withActionBarDrawerToggleAnimated(true)
+                    .withHeader(R.layout.nav_header_main)
+                    .withDisplayBelowStatusBar(true)
+                    .withAccountHeader(headerResult)
+                    .withCloseOnClick(false)
+                    .withDrawerGravity(GravityCompat.START)
+                    .build();
 
-        navDrawer = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withActionBarDrawerToggle(true)
-                .withActionBarDrawerToggleAnimated(true)
-                .withHeader(R.layout.nav_header_main)
-                .withDisplayBelowStatusBar(true)
-                .withAccountHeader(headerResult)
-                .withCloseOnClick(false)
-                .withDrawerGravity(GravityCompat.START)
-                .build();
+        }
 
     }
 
