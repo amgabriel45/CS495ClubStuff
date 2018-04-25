@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
@@ -125,7 +125,7 @@
         fancy:fb_defaultColor="@color/crimson_light"
         fancy:fb_iconPosition="right"
         fancy:fb_radius="5dp"
-        fancy:fb_text="Edit"
+        fancy:fb_text="Manage Club"
         fancy:fb_textColor="#FFFFFF"
         fancy:fb_textSize="20dp" />
 
