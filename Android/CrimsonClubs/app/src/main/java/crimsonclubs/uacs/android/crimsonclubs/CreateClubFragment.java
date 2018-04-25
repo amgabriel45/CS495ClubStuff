@@ -237,7 +237,7 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
     }
 
 
-    public void sendClub(AddClubDto newClub) {
+    public void sendClub(final AddClubDto newClub) {
         String token;
         token = getActivity().getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
@@ -291,15 +291,8 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
 
                     //change to view detailed club for club just created when finished
                     BrowseClubsFragment nextFrag = new BrowseClubsFragment();
-                    FragmentTransaction fragTrans = getActivity().getFragmentManager().beginTransaction();
-                    fragTrans
-                            .setCustomAnimations(
-                                    R.animator.card_flip_right_in,
-                                    R.animator.card_flip_right_out,
-                                    R.animator.card_flip_left_in,
-                                    R.animator.card_flip_left_out)
-                            .replace(R.id.container, nextFrag)
-                            .commit();
+                    nextFrag.currId = newClub.groupId;
+                    main.goToFragment(nextFrag);
 
                 } catch (IOException e) {
                     e.printStackTrace();

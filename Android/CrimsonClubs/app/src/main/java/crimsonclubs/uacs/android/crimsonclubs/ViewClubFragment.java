@@ -201,6 +201,21 @@ public class ViewClubFragment extends BaseFragment {
                                                                        }
                                                                    });
 
+                                                                   btnInput = (FancyButton) getActivity().findViewById(R.id.btn_join);
+
+                                                                   btnInput.setText(currClub.isAccepted ? "Leave" : "Join");
+                                                                   btnInput.setOnClickListener(new View.OnClickListener() {
+                                                                       @Override
+                                                                       public void onClick(View view) {
+                                                                           if(currClub.isAccepted){
+                                                                               tryLeave(currClub.id);
+                                                                           }
+                                                                           else{
+                                                                               tryJoin(currClub.id);
+                                                                           }
+                                                                       }
+                                                                   });
+
                                                                }
                                                            }
                         );
@@ -209,6 +224,162 @@ public class ViewClubFragment extends BaseFragment {
 
             });
         }
+
+        public void tryJoin(int clubId){
+            final Gson gson = new GsonBuilder().serializeNulls().create();
+
+            String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + clubId + "/join";
+
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                    .build();
+
+
+            MainActivity.client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    main.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(main,
+                                                                    "Remote server could not be reached. "
+                                                                    ,Toast.LENGTH_LONG).show();
+                                                        }
+                                                    }
+
+                    );
+                }
+
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+
+                    if (!response.isSuccessful()) {
+                        if (response.code() == 401) {
+                            main.runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(main,
+                                                                            "Authentication failed.",
+                                                                            Toast.LENGTH_LONG).show();
+
+                                                                }
+                                                            }
+
+                            );
+                        }
+                        else{
+                            main.runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    Toast.makeText(main,
+                                                                            "An unspecified networking error has occurred\n" +
+                                                                                    "Error Code: " + response.code(),
+                                                                            Toast.LENGTH_LONG).show();
+
+                                                                }
+                                                            }
+
+                            );
+                        }
+                    }
+                    else {
+
+                        // Run view-related code back on the main thread
+                        main.runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+
+                                                                Toast.makeText(main, "Successfully joined club", Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        }
+                        );
+                    }
+                }
+
+            });
+        }
+
+    public void tryLeave(int clubId){
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + clubId + "/leave";
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .build();
+
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                main.runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           Toast.makeText(main,
+                                                   "Remote server could not be reached. "
+                                                   ,Toast.LENGTH_LONG).show();
+                                       }
+                                   }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "Authentication failed.",
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                    else{
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "An unspecified networking error has occurred\n" +
+                                                                   "Error Code: " + response.code(),
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                }
+                else {
+
+                    // Run view-related code back on the main thread
+                    main.runOnUiThread(new Runnable() {
+                                           @Override
+                                           public void run() {
+
+                                               Toast.makeText(main, "Successfully left club", Toast.LENGTH_SHORT).show();
+
+                                           }
+                                       }
+                    );
+                }
+            }
+
+        });
+    }
 
 
 }

@@ -117,7 +117,7 @@ public class EditEventFragment extends BaseFragment {
         return view;
     }
 
-    public void sendEvent(EditEventDto newEvent){
+    public void sendEvent(final EditEventDto newEvent){
         String id = this.getArguments().getString("id");
         String token;
         token = getActivity().getIntent().getStringExtra("bearerToken");
@@ -190,15 +190,9 @@ public class EditEventFragment extends BaseFragment {
 
                     //change to view detailed event for event just created when finished
                     BrowseEventsFragment nextFrag = new BrowseEventsFragment();
-                    FragmentTransaction fragTrans = getActivity().getFragmentManager().beginTransaction();
-                    fragTrans
-                            .setCustomAnimations(
-                                    R.animator.card_flip_right_in,
-                                    R.animator.card_flip_right_out,
-                                    R.animator.card_flip_left_in,
-                                    R.animator.card_flip_left_out)
-                            .replace(R.id.container, nextFrag)
-                            .commit();
+
+                    nextFrag.clubId = newEvent.clubId;
+                    main.goToFragment(nextFrag);
 
 
                 } catch (IOException e) {

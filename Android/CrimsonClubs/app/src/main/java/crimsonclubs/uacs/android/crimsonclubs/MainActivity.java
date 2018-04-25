@@ -43,10 +43,8 @@ import okhttp3.OkHttpClient;
 
 import okhttp3.Request;
 import okhttp3.Response;
-import permissions.dispatcher.RuntimePermissions;
 
-@Keep
-@RuntimePermissions
+
 public class MainActivity extends AppCompatActivity
 
 {

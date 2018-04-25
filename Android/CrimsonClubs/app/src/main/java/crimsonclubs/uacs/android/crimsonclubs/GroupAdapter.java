@@ -61,14 +61,14 @@ public class GroupAdapter extends BaseAdapter implements Filterable {
 
         TextView groupName = (TextView) row.findViewById(R.id.groupName);
         TextView groupDesc = (TextView) row.findViewById(R.id.groupDesc);
-        TextView numMembers = (TextView) row.findViewById(R.id.numClubs);
+        TextView numClubs = (TextView) row.findViewById(R.id.numClubs);
 
         FancyButton selectBtn = (FancyButton) row.findViewById(R.id.btn_select);
 
         groupName.setText(targ.name);
 
         groupDesc.setText(targ.description);
-        numMembers.setText(targ.clubCount + " clubs");
+        numClubs.setText(targ.clubCount + " clubs");
 
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
