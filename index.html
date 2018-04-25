@@ -21,6 +21,45 @@
         background-size: cover;
         background-color: black;
     }
+    .center {
+        margin-left: auto;
+        margin-right: auto;
+        display: block
+    }
+    /* Style the video: 100% width and height to cover the entire window */
+    #myVideo {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    /* Add some content at the bottom of the video/page */
+    .content {
+        position: fixed;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: #f1f1f1;
+        width: 100%;
+        padding: 20px;
+    }
+
+    /* Style the button used to pause/play the video */
+    #myBtn {
+        width: 200px;
+        font-size: 18px;
+        padding: 10px;
+        border: none;
+        background: #000;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        #myBtn:hover {
+            background: #ddd;
+            color: black;
+        }
 </style>
 <body>
 
@@ -31,7 +70,9 @@
         <div class="w3-display-topleft w3-container w3-xlarge">
             <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('about').style.display='block'" class="w3-button w3-crimson">about</button></p>
             <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('devliverables').style.display='block'" class="w3-button w3-crimson">deliverables</button></p>
+            <p style="color: rgb(158,27,50)"><button id="showVideo" class="w3-button w3-crimson">video</button></p>
         </div>
+
     </div>
 
     <!-- Menu Modal -->
@@ -71,13 +112,79 @@
             <div class="w3-container">
                 <h3><a href="https://docs.google.com/presentation/d/1DDpo8haAouh-JplWAHgw5aQCIlgLs8moonC0YF7iXwM/edit#slide=id.p3" target="_blank">Shark Tank Presentation</a></h3>
                 <h3><a href="https://docs.google.com/presentation/d/1D3Tq1_ewx7ha2O0QzI2ajGgdHqC4pcxEmSLmvbXRCrQ/edit" target="_blank">Requirements Presentation</a></h3>
-                <h3><a href=https://docs.google.com/presentation/d/1qyApWWQ2LLCiyY1faRy8MfkZqg2isGzm-svSHCoKXaE/edit#slide=id.p3" target="_blank">Design Presentation</a></h3>
+                <h3><a href=https://docs.google.com/presentation/d/1qyApWWQ2LLCiyY1faRy8MfkZqg2isGzm-svSHCoKXaE/edit#slide =id.p3" target="_blank">Design Presentation</a></h3>
                 <h3><a href="ProjectReq.pdf" target="_blank">Requirements Document</a></h3>
                 <h3><a href="ProjectDesign.pdf" target="_blank">Design Document</a></h3>
             </div>
         </div>
     </div>
+    <div id="vidBig" hidden>
+    <video id="myVideo"  width="800" height="700" class="center">
+            <source src="CrimsonClubsVideo.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+        </div>
+    <!-- Optional: some overlay text to describe the video -->
+    <div class="content" id="buttons" hidden>
+
+        <!-- Use a button to pause/play the video with JavaScript -->
+        <button id="myBtn" class="w3-button w3-crimson" onclick="myFunction()">Pause</button>
+        <button id="myBtnExit" class="w3-button w3-crimson" hidden >Close</button>
+    </div>
+
+    <div id="video" class="w3-modal">
+        <div class="w3-modal-content w3-animate-zoom">
+            <div class="w3-container w3-black">
+                <span onclick="document.getElementById('video').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
+                <h1 style="color: rgb(158,27,50)">Video</h1>
+            </div>
+            <div class="w3-container">
+                <br>
+                <video id="myVideo" width="800" height="700" class="center">
+                    <source src="CrimsonClubsVideo.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+                <p style="color: rgb(158,27,50)"><button onclick="playVid()" class="w3-button w3-crimson">play</button></p>
+                <p style="color: rgb(158,27,50)"><button onclick="pauseVid()" class="w3-button w3-crimson">pause</button></p>
+            </div>
+        </div>
+    </div>
+    </div>
 
 </body>
 </html>
+<script>
+    document.getElementById("showVideo").addEventListener("click", function (event) {
+        // display the current click count inside the clicked div
+        document.getElementById("vidBig").removeAttribute("hidden");
+        document.getElementById("buttons").removeAttribute("hidden");
+        document.getElementById("myBtn").click();
+    }, false);
+
+    document.getElementById("myBtnExit").addEventListener("click", function (event) {
+        // display the current click count inside the clicked div
+        document.getElementById("vidBig").setAttribute("hidden", "");
+        document.getElementById("buttons").setAttribute("hidden", "");
+        var video = document.getElementById("myVideo");
+        video.pause();
+    }, false);
+
+        // Get the video
+        var video = document.getElementById("myVideo");
+
+// Get the button
+var btn = document.getElementById("myBtn");
+
+// Pause and play the video, and change the button text
+function myFunction() {
+    if (video.paused) {
+            video.play();
+        btn.innerHTML = "Pause";
+    } else {
+            video.pause();
+        btn.innerHTML = "Play";
+    }
+}
+</script>
+
 
