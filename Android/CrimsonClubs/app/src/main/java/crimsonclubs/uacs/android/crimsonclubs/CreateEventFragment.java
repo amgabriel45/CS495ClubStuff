@@ -13,15 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -41,9 +45,14 @@ public class CreateEventFragment extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private Spinner spinner;
+    public ArrayList<ClubDto> clubList = new ArrayList<ClubDto>();
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    public ArrayList<ClubDto> objs = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,47 +68,14 @@ public class CreateEventFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    /*
-    btnInput.setOnClickListener(new View.OnClickListener() {
-        @Override
-                public void onClick(View view) {
-                    String eventName = inputName.getText().toString();
-                    String eventDesc = inputDesc.getText().toString();
-                    String eventStart = inputStart.getText().toString();
-                    String eventFinish = inputFinish.getText().toString();
-
-                    //Pass to Database
-        }
-    });
-    */
-
-   /*
-    public static CreateEventFragment newInstance(String param1, String param2) {
-        CreateEventFragment fragment = new CreateEventFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    */
-
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-    */
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_create_event, container, false);
+
+        addClubsSpinner();
+
         FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
 
         // Inflate the layout for this fragment
@@ -115,17 +91,20 @@ public class CreateEventFragment extends BaseFragment {
                 String eventDesc = inputDesc.getText().toString();
                 String eventStart = inputStart.getText().toString();
                 String eventFinish = inputFinish.getText().toString();
+                String eventClub = String.valueOf(spinner.getSelectedItem());
 
                 ArrayList<Integer> clubs = new ArrayList<>();
                 clubs.add(1);
                 clubs.add(2);
+
+                int clubId = getClubId(eventClub);
 
                 AddEventDto newEvent = new AddEventDto();
                 newEvent.name = eventName;
                 newEvent.description = eventDesc;
                 newEvent.start = eventStart;
                 newEvent.finish = eventFinish;
-                newEvent.clubId = 1;
+                newEvent.clubId = clubId;
                 newEvent.isGroupEvent = true;
                 newEvent.clubIds = clubs;
 
@@ -143,6 +122,122 @@ public class CreateEventFragment extends BaseFragment {
         return view;
     }
 
+    public void addClubsSpinner() {
+        spinner = (Spinner) getActivity().findViewById(R.id.club_spinner);
+
+        String token;
+        token = getActivity().getIntent().getStringExtra("bearerToken");
+        Log.e("token=", token);
+
+        final Gson gson = new GsonBuilder().serializeNulls().create();
+        //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/events?token=" + token;
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/all";
+
+        Log.e("url", url);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .build();
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(getActivity(),
+                                                            "Remote server could not be reached. "
+                                                            , Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        System.out.println("Response: " + response.toString());
+                        getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getActivity(),
+                                                                    "Authentication failed.",
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(getActivity(),
+                                                                    "An unspecified networking error has occurred\n" +
+                                                                            "Error Code: " + response.code(),
+                                                                    Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    }
+
+                        );
+                    }
+                } else {
+                    String body = response.body().string();
+                    boolean isNull = false;
+
+                    try {
+                        clubList = new ArrayList<ClubDto>(Arrays.asList(gson.fromJson(body, ClubDto[].class)));
+                    } catch (JsonSyntaxException e) {
+                        clubList.add(gson.fromJson(body, ClubDto.class));
+                    }
+
+                    if (clubList.get(0) == null) { //read failed
+                        isNull = true;
+                    }
+
+                    objs.clear();
+                    objs.addAll(clubList);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Context context = getActivity();
+                            spinner = (Spinner) getActivity().findViewById(R.id.club_spinner);
+
+                            ArrayList<String> clubNameList = new ArrayList<>();
+
+                            for (int i = 0; i < clubList.size(); i++) {
+                                clubNameList.add(clubList.get(i).name);
+                            }
+
+                            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context,
+                                    android.R.layout.simple_spinner_item, clubNameList);
+                            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinner.setAdapter(dataAdapter);
+
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public int getClubId(String clubName) {
+        for (int i = 0; i < clubList.size(); i++) {
+            if (clubList.get(i).name.compareTo(clubName) == 0)
+                return clubList.get(i).id;
+        }
+
+        return -1;
+    }
+
     public void sendEvent(final AddEventDto newEvent){
         String token;
         token = getActivity().getIntent().getStringExtra("bearerToken");
@@ -154,13 +249,15 @@ public class CreateEventFragment extends BaseFragment {
 
         Log.e("url",url);
 
+        String cname = String.valueOf(newEvent.clubId);
+
         RequestBody requestBody = new FormBody.Builder()
                 .add("name", newEvent.name)
                 .add("description", newEvent.description)
                 .add("start", newEvent.start)
                 .add("finish", newEvent.finish)
                 .add("isGroupEvent", "true")
-                .add("clubId", "1")
+                .add("clubId", cname)
                 .add("clubIds", "2")
                 .build();
 
@@ -230,38 +327,8 @@ public class CreateEventFragment extends BaseFragment {
             }
         });
 
-        /*
-        try {
-            Response response = MainActivity.client.newCall(request).enqueue(new Callback());
+    }
 
-            Log.e("response", response.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-        /*
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                MainActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MainActivity.this,
-                                    "Remote server could not be reached. ",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                });
-            }
-        });
-        */
-    }
-    /*
-    public void showSuccessDialog() {
-        DialogFragment newFragment = new SuccessEventDialogFragment();
-        newFragment.show();
-    }
-    */
     @Override
     public void onResume(){
         super.onResume();
@@ -269,35 +336,6 @@ public class CreateEventFragment extends BaseFragment {
         //updateList();
     }
 
-    /*
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-    */
-
-    /*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-    */
-
-    /*
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-    */
 
     /**
      * This interface must be implemented by activities that contain this
@@ -314,3 +352,4 @@ public class CreateEventFragment extends BaseFragment {
         void onFragmentInteraction(Uri uri);
     }
 }
+
