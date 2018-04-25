@@ -327,10 +327,10 @@ public class MainActivity extends AppCompatActivity
 
 
         item = new SecondaryDrawerItem()
-                .withName("Browse Clubs")
+                .withName("Browse Groups")
                 .withIcon(R.drawable.ic_info_black_24dp)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BrowseClubsFragment()))
+                .withOnDrawerItemClickListener(listener(new BrowseGroupsFragment()))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -349,7 +349,9 @@ public class MainActivity extends AppCompatActivity
     public void onResume(){
         super.onResume();
 
-       getAuthToken();
+
+        getAuthToken();
+
 
 
     }
@@ -444,7 +446,7 @@ public class MainActivity extends AppCompatActivity
                     MainActivity.this.runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-
+                                                        Log.e("bearer token:",resp.token);
                                                         bearerToken = resp.token;
                                                         currUser = resp.user;
                                                         getUserClubs();

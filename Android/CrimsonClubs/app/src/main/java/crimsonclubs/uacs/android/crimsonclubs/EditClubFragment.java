@@ -164,7 +164,6 @@ public class EditClubFragment extends BaseFragment {
                                     R.animator.card_flip_left_in,
                                     R.animator.card_flip_left_out)
                             .replace(R.id.container, nextFrag)
-                            .addToBackStack(null)
                             .commit();
 
                 } catch (IOException e) {

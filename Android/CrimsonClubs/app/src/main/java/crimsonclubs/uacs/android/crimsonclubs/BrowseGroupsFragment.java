@@ -2,18 +2,14 @@ package crimsonclubs.uacs.android.crimsonclubs;
 
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -24,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import mehdi.sakout.fancybuttons.FancyButton;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -34,17 +29,15 @@ import okhttp3.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewClubFragment extends BaseFragment {
+public class BrowseGroupsFragment extends BaseFragment implements SearchView.OnQueryTextListener  {
 
+    public ArrayList<GroupDto> objs = new ArrayList<>();
+    public GroupAdapter adapter;
 
-    public int currId;
+    public SearchView mSearchView;
+    public ListView mListView;
 
-    public ClubDto currClub;
-
-    public ArrayList<MemberDto> members = new ArrayList<>();
-    public ArrayList<EventDto> events = new ArrayList<>();
-
-    public ViewClubFragment() {
+    public BrowseGroupsFragment() {
 
     }
 
@@ -54,10 +47,9 @@ public class ViewClubFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        // Set listener for edit button and launch edit club fragment if clicked
-        View view = inflater.inflate(R.layout.fragment_view_club, container, false);
 
-        return view;
+
+        return inflater.inflate(R.layout.fragment_browse_groups, container, false);
     }
 
     @Override
@@ -65,18 +57,36 @@ public class ViewClubFragment extends BaseFragment {
         super.onResume();
 
 
-        updateUI();
+
+        updateList();
 
     }
 
+    private void setupSearchView()
+    {
+        mSearchView = (SearchView) getActivity().findViewById(R.id.searchBar);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setSubmitButtonEnabled(true);
+        mSearchView.setQueryHint("Search for groups...");
 
-    public void updateUI(){
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused) {
+                if(!queryTextFocused) {
+                    mSearchView.setQuery("", false);
+                }
+            }
+        });
+    }
+
+    public void updateList(){
 
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
-            String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + Integer.toString(currId);
-            Log.e("url",url);
+            //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/all";
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/groups";
 
             Request request = new Request.Builder()
                     .url(url)
@@ -135,23 +145,23 @@ public class ViewClubFragment extends BaseFragment {
                     else {
                         boolean isNull = false;
 
-                        ArrayList<ClubDto> temp = new ArrayList<ClubDto>();
+                        ArrayList<GroupDto> temp = new ArrayList<GroupDto>();
 
                         String body = response.body().string();
 
 
                         try {
-                            temp = new ArrayList<ClubDto>(Arrays.asList(gson.fromJson(body, ClubDto[].class)));
+                            temp = new ArrayList<GroupDto>(Arrays.asList(gson.fromJson(body, GroupDto[].class)));
                         } catch (JsonSyntaxException e) {
-                            temp.add(gson.fromJson(body, ClubDto.class));
+                            temp.add(gson.fromJson(body, GroupDto.class));
                         }
 
                         if (temp.get(0) == null) { //read failed
                             isNull = true;
                         }
-                        else{
-                            currClub = temp.get(0);
-                        }
+
+                        objs.clear();
+                        objs.addAll(temp);
 
 
                         // Run view-related code back on the main thread
@@ -159,48 +169,16 @@ public class ViewClubFragment extends BaseFragment {
                                                                @Override
                                                                public void run() {
 
+                                                                   adapter = new GroupAdapter(objs, (MainActivity) getActivity());
+                                                                   mListView = (ListView) getActivity().findViewById(R.id.groupsList);
 
-                                                                   Log.e("name",currClub.name);
-                                                                   Log.e("num",Integer.toString(currClub.members.size()));
+                                                                   //lv.setOnItemClickListener( infoItemClickListener());
 
-                                                                   TextView name = (TextView) getActivity().findViewById(R.id.name);
-                                                                   name.setText(currClub.name);
-                                                                   TextView desc = (TextView) getActivity().findViewById(R.id.description);
-                                                                   desc.setText(currClub.description);
-                                                                   TextView numMembers = (TextView) getActivity().findViewById(R.id.numMembers);
+                                                                   mListView.setAdapter(adapter);
+                                                                   //mListView.setTextFilterEnabled(true);
+                                                                   setupSearchView();
 
-                                                                   numMembers.setText(currClub.memberCount + " members");
-
-                                                                   BrowseEventsFragment f = new BrowseEventsFragment();
-                                                                   f.clubId = currClub.id;
-
-                                                                   getFragmentManager()
-                                                                           .beginTransaction()
-
-
-
-                                                                           .replace(R.id.eventsContainer, f, "curr")
-
-                                                                           .commit();
-
-                                                                   FancyButton btnInput = (FancyButton) getActivity().findViewById(R.id.btn_edit);
-
-                                                                   if (currClub.isAdmin){
-                                                                       btnInput.setVisibility(View.VISIBLE);
-                                                                   }
-
-                                                                   btnInput.setOnClickListener(new View.OnClickListener() {
-                                                                       @Override
-                                                                       public void onClick(View view) {
-                                                                           Bundle bundle = new Bundle();
-                                                                           bundle.putInt("id",currClub.id);
-                                                                           EditClubFragment editClub = new EditClubFragment();
-                                                                           editClub.setArguments(bundle);
-
-                                                                           main.goToFragment(editClub);
-                                                                       }
-                                                                   });
-
+                                                                   adapter.notifyDataSetChanged();
                                                                }
                                                            }
                         );
@@ -210,7 +188,34 @@ public class ViewClubFragment extends BaseFragment {
             });
         }
 
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
 
-}
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+
+        GroupAdapter adapter = (GroupAdapter) mListView.getAdapter();
+        Filter filter = adapter.getFilter();
+
+        if(TextUtils.isEmpty(query)){
+
+            mListView.clearTextFilter();
+        }
+        else{
+            mListView.setFilterText(query);
+            filter.filter(query);
+        }
+
+
+        return false;
+    }
+
+        }
 
 
