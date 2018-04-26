@@ -99,6 +99,16 @@ public class EditClubFragment extends BaseFragment {
             }
         });
 
+        FancyButton btnInput2 = (FancyButton) main.findViewById(R.id.btn_approve_member);
+
+        btnInput2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AcceptUsersFragment acceptUsers = new AcceptUsersFragment();
+                main.goToFragment(acceptUsers);
+            }
+        });
+
         return view;
     }
 
