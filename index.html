@@ -9,11 +9,9 @@
     body, h1, h5 {
         font-family: "Raleway", sans-serif
     }
-
     body, html {
         height: 100%
     }
-
     .bgimg {
         /*background-image: url('/w3images/onepage_restaurant.jpg');*/
         min-height: 100%;
@@ -57,14 +55,14 @@
         cursor: pointer;
     }
 
-        #myBtn:hover {
-            background: #ddd;
-            color: black;
-        }
+    #myBtn:hover {
+        background: #ddd;
+        color: black;
+    }
 </style>
+
 <html>
 <body>
-
     <div class="bgimg w3-display-container w3-text-white">
         <div class="w3-display-middle w3-jumbo">
             <a href="http://cclubs.us-east-2.elasticbeanstalk.com/#" style="color: rgb(158,27,50); text-decoration:none">crimson clubs</a>
@@ -74,7 +72,6 @@
             <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('devliverables').style.display='block'" class="w3-button w3-crimson">deliverables</button></p>
             <p style="color: rgb(158,27,50)"><button id="showVideo" class="w3-button w3-crimson">video</button></p>
         </div>
-
     </div>
 
     <!-- Menu Modal -->
@@ -91,7 +88,7 @@
                 </h5>
             </div>
             <div class="w3-container w3-black">
-                <h1 style="color: rgb(158,27,50)">Developer Bios</h3>
+                <h1 style="color: rgb(158,27,50)">Developer Bios</h1>
             </div>
             <div class="w3-container">
                 <ul>
@@ -120,20 +117,20 @@
             </div>
         </div>
     </div>
+
     <div id="vidBig" hidden>
         <video id="myVideo" width="800" height="700" class="center">
             <source src="CrimsonClubsVideo.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
         </video>
     </div>
+
     <!-- Optional: some overlay text to describe the video -->
     <div class="content" id="buttons" hidden>
-
         <!-- Use a button to pause/play the video with JavaScript -->
         <button id="myBtn" class="w3-button w3-crimson" onclick="myFunction()">Pause</button>
         <button id="myBtnExit" class="w3-button w3-crimson" hidden>Close</button>
     </div>
-
     <div id="video" class="w3-modal">
         <div class="w3-modal-content w3-animate-zoom">
             <div class="w3-container w3-black">
@@ -146,13 +143,14 @@
                     <source src="CrimsonClubsVideo.mp4" type="video/mp4">
                     Your browser does not support HTML5 video.
                 </video>
-                <p style="color: rgb(158,27,50)"><button onclick="playVid()" class="w3-button w3-crimson">play</button></p>
-                <p style="color: rgb(158,27,50)"><button onclick="pauseVid()" class="w3-button w3-crimson">pause</button></p>
+                <p style="color: rgb(158,27,50)"><button onclick="playVid()" class="w3-button w3-crimson">Play</button></p>
+                <p style="color: rgb(158,27,50)"><button onclick="pauseVid()" class="w3-button w3-crimson">Pause</button></p>
             </div>
         </div>
     </div>
 </body>
 </html>
+
 <script>
     document.getElementById("showVideo").addEventListener("click", function (event) {
         // display the current click count inside the clicked div
