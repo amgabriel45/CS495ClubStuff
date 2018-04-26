@@ -7,17 +7,13 @@
     android:orientation="vertical"
     tools:context="crimsonclubs.uacs.android.crimsonclubs.CalendarFragment">
 
-    <FrameLayout
-        android:id="@+id/calendarContainer"
+    <ListView
+        android:id="@+id/calendarList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="0dp">
+        android:layout_height="match_parent"
 
-
-
-    </FrameLayout>
+        >
+    </ListView>
 
 
 </FrameLayout>

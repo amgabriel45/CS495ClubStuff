@@ -123,8 +123,7 @@ public class ViewClubFragment extends BaseFragment {
                                                                    @Override
                                                                    public void run() {
                                                                        Toast.makeText(main,
-                                                                               "An unspecified networking error has occurred\n" +
-                                                                                       "Error Code: " + response.code(),
+                                                                               "You are already a member of a club in this group!",
                                                                                Toast.LENGTH_LONG).show();
 
                                                                    }

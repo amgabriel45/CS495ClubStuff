@@ -51,15 +51,6 @@ public class SignInActivity extends AppCompatActivity { //Just a splash screen t
 
     @Override
     protected void onStart(){
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this); //check if user is already signed in
-
-        if(account == null){
-            //null
-        }
-        else{
-
-            proceedToMainActivity(account); //if successful, proceed
-        }
 
         super.onStart();
     }

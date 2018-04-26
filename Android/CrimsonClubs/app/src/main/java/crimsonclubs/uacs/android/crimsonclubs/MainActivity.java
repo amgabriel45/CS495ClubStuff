@@ -344,6 +344,15 @@ public class MainActivity extends AppCompatActivity
         navDrawer.addItem(item);
 
         item = new SecondaryDrawerItem()
+                .withName("Create a Group")
+                .withIcon(android.R.drawable.ic_menu_add)
+                .withIdentifier(1)
+                .withOnDrawerItemClickListener(listener(new CreateGroupFragment()))
+                .withSelectedBackgroundAnimated(false);
+
+        navDrawer.addItem(item);
+
+        item = new SecondaryDrawerItem()
                 .withName("Create a Club")
                 .withIcon(android.R.drawable.ic_menu_add)
                 .withIdentifier(1)
