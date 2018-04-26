@@ -134,7 +134,6 @@ public class ViewClubFragment extends BaseFragment {
                         }
                     }
                     else {
-                        boolean isNull = false;
 
                         ArrayList<ClubDto> temp = new ArrayList<ClubDto>();
 
@@ -147,12 +146,10 @@ public class ViewClubFragment extends BaseFragment {
                             temp.add(gson.fromJson(body, ClubDto.class));
                         }
 
-                        if (temp.get(0) == null) { //read failed
-                            isNull = true;
-                        }
-                        else{
+                        if(temp.get(0) != null) {
                             currClub = temp.get(0);
                         }
+
 
 
                         // Run view-related code back on the main thread
@@ -387,7 +384,7 @@ public class ViewClubFragment extends BaseFragment {
 
                                                Toast.makeText(main, "Successfully left club", Toast.LENGTH_SHORT).show();
                                                main.refreshUserClubs();
-                                               main.goToLastFragment();
+
                                            }
                                        }
                     );

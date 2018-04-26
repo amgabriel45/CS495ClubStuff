@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,9 +58,11 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
         super.onResume();
 
         if(clubId == -1) {
+
             updateList();
         }
         else{
+
             getEventsForClubId();
         }
 
@@ -308,7 +311,6 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
                     }
                 }
                 else {
-                    boolean isNull = false;
 
                     ArrayList<EventDto> temp = new ArrayList<EventDto>();
 
@@ -321,10 +323,6 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
                         temp.add(gson.fromJson(body, EventDto.class));
                     }
 
-                    if (temp.size() > 0 && temp.get(0) == null) { //read failed
-                        isNull = true;
-                    }
-
                     objs.clear();
                     objs.addAll(temp);
 
@@ -335,12 +333,12 @@ public class BrowseEventsFragment extends BaseFragment implements SearchView.OnQ
                                                     public void run() {
 
                                                         adapter = new EventAdapter(objs, (MainActivity) main);
-                                                        final ListView lv = (ListView) main.findViewById(R.id.eventsList);
+                                                        mListView = (ListView) main.findViewById(R.id.eventsList);
                                                         //final TextView tv = main.findViewById(R.id.eventsList);
 
                                                         //lv.setOnItemClickListener( infoItemClickListener());
 
-                                                        lv.setAdapter(adapter);
+                                                        mListView.setAdapter(adapter);
                                                         //tv.setAdapter(adapter);
 
                                                         adapter.notifyDataSetChanged();

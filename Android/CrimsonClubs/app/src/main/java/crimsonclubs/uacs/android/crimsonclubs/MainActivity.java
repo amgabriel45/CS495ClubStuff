@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity
 
         initDrawers(toolbar); //build nav drawer and bookmark drawer
 
-        refreshUserClubs();
 
     }
 
@@ -310,11 +309,14 @@ public class MainActivity extends AppCompatActivity
 
         navDrawer.addItem(item);
 
+        BrowseEventsFragment e = new BrowseEventsFragment();
+        e.clubId = -1; //set to get all club events
+
         item = new SecondaryDrawerItem()
                 .withName("Browse Events")
                 .withIcon(R.drawable.ic_info_black_24dp)
                 .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BrowseEventsFragment()))
+                .withOnDrawerItemClickListener(listener(e))
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
@@ -358,8 +360,12 @@ public class MainActivity extends AppCompatActivity
 
         getAuthToken();
 
+        refreshUserClubs();
 
+    }
 
+    public BaseFragment getCurrentFragment(){
+        return currFragment;
     }
 
     public void getAuthToken(){
