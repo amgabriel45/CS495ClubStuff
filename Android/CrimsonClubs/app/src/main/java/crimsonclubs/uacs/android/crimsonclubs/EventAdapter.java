@@ -115,9 +115,7 @@ public class EventAdapter extends BaseAdapter implements Filterable{
             protected void publishResults(CharSequence constraint,
                                           FilterResults results) {
 
-                for(EventDto a : (ArrayList<EventDto>) results.values){
-                    Log.e("arr",a.name);
-                }
+
                 mData = (ArrayList<EventDto>) results.values;
                 notifyDataSetChanged();
             }

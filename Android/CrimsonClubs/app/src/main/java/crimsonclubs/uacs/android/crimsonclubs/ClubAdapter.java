@@ -118,11 +118,12 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
             @Override
             public void onClick(View view) {
 
-                if(targ.hasRequested && targ.isAccepted){
+
+                if(targ.hasRequested && !targ.isAccepted){
                     requestLeave(targ,btn);
                 }
 
-                if(targ.isRequestToJoin && !targ.isAccepted){
+                else if(targ.isRequestToJoin && !targ.isAccepted){
                     requestJoin(targ,btn);
                 }
                 else {
@@ -138,7 +139,7 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
         String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + targ.id + "/join";
-
+        Log.e("jurl",url);
         RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
 
         Request request = new Request.Builder()
@@ -204,8 +205,8 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
                                            public void run() {
 
                                                Toast.makeText(main, "Request successful", Toast.LENGTH_SHORT).show();
-                                               btn.setText("Undo Request");
-                                               btn.setOnClickListener(btnListener(targ,btn));
+                                               BrowseClubsFragment f = (BrowseClubsFragment) main.getCurrentFragment();
+                                               f.updateList();
                                            }
                                        }
                     );
@@ -219,7 +220,7 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
         final Gson gson = new GsonBuilder().serializeNulls().create();
 
         String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + targ.id + "/leave";
-
+        Log.e("lurl",url);
         RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
 
         Request request = new Request.Builder()
@@ -285,8 +286,8 @@ public class ClubAdapter extends BaseAdapter implements Filterable {
                                            public void run() {
 
                                                Toast.makeText(main, "Request successfully undone", Toast.LENGTH_SHORT).show();
-                                               btn.setText("Request Join");
-                                               btn.setOnClickListener(btnListener(targ,btn));
+                                               BrowseClubsFragment f = (BrowseClubsFragment) main.getCurrentFragment();
+                                               f.updateList();
                                            }
                                        }
                     );

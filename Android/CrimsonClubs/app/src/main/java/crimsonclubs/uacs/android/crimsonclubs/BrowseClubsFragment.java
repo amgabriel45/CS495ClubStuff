@@ -67,6 +67,7 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
 
     }
 
+
     private void setupSearchView()
     {
         mSearchView = (SearchView) main.findViewById(R.id.searchBar);
@@ -148,7 +149,6 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                         }
                     }
                     else {
-                        boolean isNull = false;
 
                         ArrayList<ClubDto> temp = new ArrayList<ClubDto>();
 
@@ -161,9 +161,6 @@ public class BrowseClubsFragment extends BaseFragment implements SearchView.OnQu
                             temp.add(gson.fromJson(body, ClubDto.class));
                         }
 
-                        if (temp.get(0) == null) { //read failed
-                            isNull = true;
-                        }
 
                         objs.clear();
                         objs.addAll(temp);

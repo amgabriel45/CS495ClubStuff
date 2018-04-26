@@ -189,7 +189,6 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
                         );
                     }
                 } else {
-                    boolean isNull = false;
 
                     //ArrayList<GroupDto> temp = new ArrayList<GroupDto>();
 
@@ -200,10 +199,6 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
                         groupList = new ArrayList<GroupDto>(Arrays.asList(gson.fromJson(body, GroupDto[].class)));
                     } catch (JsonSyntaxException e) {
                         groupList.add(gson.fromJson(body, GroupDto.class));
-                    }
-
-                    if (groupList.get(0) == null) { //read failed
-                        isNull = true;
                     }
 
                     objs.clear();
