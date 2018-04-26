@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -83,11 +84,12 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
                 final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
                 final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
                 spinner = (Spinner) main.findViewById(R.id.group_spinner);
+                CheckBox check1 = (CheckBox) main.findViewById(R.id.checkPrivate);
 
                 String clubName = inputName.getText().toString();
                 String clubDesc = inputDesc.getText().toString();
                 String groupName = String.valueOf(spinner.getSelectedItem());
-                System.out.println(groupName);
+                //System.out.println(groupName);
 
                 //This could be -1 do errors
                 int groupId = getGroupId(groupName);
@@ -95,7 +97,12 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
                 AddClubDto newClub = new AddClubDto();
                 newClub.name = clubName;
                 newClub.description = clubDesc;
-                newClub.isRequestToJoin = true;
+
+                if(check1.isChecked())
+                    newClub.isRequestToJoin = true;
+                else
+                    newClub.isRequestToJoin = false;
+
                 newClub.groupId = groupId;
 
                 View view2 = main.getCurrentFocus();
@@ -242,13 +249,14 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
         String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs";
 
         String gname = String.valueOf(newClub.groupId);
+        String isRequest = String.valueOf(newClub.isRequestToJoin);
 
         Log.e("url",url);
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("name", newClub.name)
                 .add("description", newClub.description)
-                .add("isRequestToJoin", "true")
+                .add("isRequestToJoin", isRequest)
                 .add("groupId", gname)
                 .build();
 

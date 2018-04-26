@@ -47,6 +47,12 @@
                             android:layout_width="fill_parent"
                             android:layout_height="38dp"></Spinner>
 
+                        <CheckBox
+                            android:id="@+id/checkPrivate"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:text="Is this a Private Club?" />
+
                         <mehdi.sakout.fancybuttons.FancyButton
                             android:id="@+id/btn_select"
                             android:layout_width="wrap_content"
