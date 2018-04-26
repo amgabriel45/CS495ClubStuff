@@ -22,7 +22,7 @@ namespace CrimsonClubs.Extensions
 
             var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());
             ticket.Properties.IssuedUtc = currentUtc;
-            ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromDays(1));
+            ticket.Properties.ExpiresUtc = currentUtc.Add(TimeSpan.FromDays(30));
 
             string token = AuthConfig.OAuthBearerOptions.AccessTokenFormat.Protect(ticket);
 

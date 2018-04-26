@@ -32,7 +32,7 @@ namespace CrimsonClubs.Controllers.Api
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            var events = club.MM_Club_Event.Select(m => new DetailedEventDto(m, CurrentUser.Id));
+            var events = club.MM_Club_Event.Select(m => new DetailedEventDto(m, CurrentUser.Id)).OrderBy(e => e.Start);
 
             return Ok(events);
         }
@@ -45,7 +45,8 @@ namespace CrimsonClubs.Controllers.Api
                 .MM_User_Club
                 .Where(m => m.IsAccepted)
                 .SelectMany(m => m.Club.MM_Club_Event)
-                .Select(m => new DetailedEventDto(m, CurrentUser.Id));
+                .Select(m => new DetailedEventDto(m, CurrentUser.Id))
+                .OrderBy(e => e.Start);
 
             return Ok(events);
         }
