@@ -72,42 +72,6 @@ public class EditClubFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_club, container, false);
-        FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
-
-        btnInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
-                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
-
-                String clubName = inputName.getText().toString();
-                String clubDesc = inputDesc.getText().toString();
-
-                EditClubDto newClub = new EditClubDto();
-                newClub.name = clubName;
-                newClub.description = clubDesc;
-                newClub.isRequestToJoin = true;
-                newClub.groupId = 1;
-
-                View view2 = main.getCurrentFocus();
-                if (view2 != null){
-                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
-                }
-
-                sendClub(newClub);
-            }
-        });
-
-        FancyButton btnInput2 = (FancyButton) main.findViewById(R.id.btn_approve_member);
-
-        btnInput2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AcceptUsersFragment acceptUsers = new AcceptUsersFragment();
-                main.goToFragment(acceptUsers);
-            }
-        });
 
         return view;
     }
@@ -179,6 +143,43 @@ public class EditClubFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        FancyButton btnInput = (FancyButton) main.findViewById(R.id.btn_select);
+
+        btnInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
+                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
+
+                String clubName = inputName.getText().toString();
+                String clubDesc = inputDesc.getText().toString();
+
+                EditClubDto newClub = new EditClubDto();
+                newClub.name = clubName;
+                newClub.description = clubDesc;
+                newClub.isRequestToJoin = true;
+                newClub.groupId = 1;
+
+                View view2 = main.getCurrentFocus();
+                if (view2 != null){
+                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+                }
+
+                sendClub(newClub);
+            }
+        });
+
+        FancyButton btnInput2 = (FancyButton) main.findViewById(R.id.btn_approve_member);
+
+        btnInput2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AcceptUsersFragment acceptUsers = new AcceptUsersFragment();
+                main.goToFragment(acceptUsers);
+            }
+        });
 
         //updateList();
     }
