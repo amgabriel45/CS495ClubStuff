@@ -293,6 +293,7 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
                     });
 
                     //change to view detailed club for club just created when finished
+                    main.refreshUserClubs();
                     BrowseClubsFragment nextFrag = new BrowseClubsFragment();
                     nextFrag.currId = newClub.groupId;
                     main.goToFragment(nextFrag);

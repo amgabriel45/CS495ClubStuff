@@ -22,9 +22,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <mehdi.sakout.fancybuttons.FancyButton
                         android:id="@+id/btn_select"
@@ -39,17 +40,42 @@
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         android:paddingTop="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         fancy:fb_borderColor="#FFFFFF"
                         fancy:fb_borderWidth="1dp"
                         fancy:fb_defaultColor="@color/crimson_light"
                         fancy:fb_iconPosition="left"
                         fancy:fb_radius="18dp"
                         fancy:fb_text="Save Changes"
-                        fancy:fb_textColor="#FFFFFF" />
-                </FrameLayout>
+                        fancy:fb_textColor="#FFFFFF">
+
+                    </mehdi.sakout.fancybuttons.FancyButton>
+
+                    <mehdi.sakout.fancybuttons.FancyButton
+                        android:id="@+id/btn_approve_member"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        android:foregroundGravity="center_vertical|center"
+                        android:gravity="center"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="10dp"
+                        fancy:fb_borderColor="#FFFFFF"
+                        fancy:fb_borderWidth="1dp"
+                        fancy:fb_defaultColor="@color/crimson_light"
+                        fancy:fb_iconPosition="left"
+                        fancy:fb_radius="18dp"
+                        fancy:fb_text="Approve Member"
+                        fancy:fb_textColor="#FFFFFF"
+                        fancy:layout_constraintBottom_toBottomOf="parent"
+                        fancy:layout_constraintEnd_toEndOf="parent"
+                        fancy:layout_constraintTop_toTopOf="parent">
+
+                    </mehdi.sakout.fancybuttons.FancyButton>
+                </LinearLayout>
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/inputDesc"
@@ -57,6 +83,7 @@
                     android:layout_height="125dp"
                     android:hint="Club Description"
                     android:inputType="textMultiLine" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputEditText
@@ -64,6 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Club Name" />
+
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 </FrameLayout>

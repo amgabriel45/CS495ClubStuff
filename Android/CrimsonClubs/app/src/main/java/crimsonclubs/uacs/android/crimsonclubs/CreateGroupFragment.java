@@ -1,23 +1,27 @@
 package crimsonclubs.uacs.android.crimsonclubs;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 import okhttp3.Call;
@@ -29,95 +33,114 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
-public class EditClubFragment extends BaseFragment {
+public class CreateGroupFragment extends BaseFragment implements AdapterView.OnItemSelectedListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private Spinner spinner;
+    public ArrayList<GroupDto> groupList = new ArrayList<GroupDto>();
+    //public List<GroupDto> groupList = new ArrayList<GroupDto>();
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    public ArrayList<GroupDto> objs = new ArrayList<>();
+
     private OnFragmentInteractionListener mListener;
 
-    public EditClubFragment() {
+    public CreateGroupFragment() {
         // Required empty public constructor
     }
 
-    /*
-    public static CreateClubFragment newInstance(String param1, String param2) {
-        CreateClubFragment fragment = new CreateClubFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        //parent.getItemAtPosition(pos);
     }
-    */
-
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onNothingSelected(AdapterView<?> parent) {
+        //Do stuff
     }
-    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_edit_club, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_group, container, false);
+
+
+        FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
+
+        btnInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
+                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
+                
+                String groupName = inputName.getText().toString();
+                String groupDesc = inputDesc.getText().toString();
+
+
+
+                AddGroupDto newGroup = new AddGroupDto();
+                newGroup.name = groupName;
+                newGroup.description = groupDesc;
+
+                View view2 = main.getCurrentFocus();
+                if (view2 != null){
+                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+                }
+
+                sendGroup(newGroup);
+            }
+        });
 
         return view;
     }
 
 
-    public void sendClub(final EditClubDto newClub) {
-        String id = this.getArguments().getString("id");
+
+
+    public void sendGroup(final AddGroupDto newGroup) {
         String token;
         token = main.getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
 
         final Gson gson = new GsonBuilder().serializeNulls().create();
-        //String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/events?token=" + token;
-        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs";
+        //String url = "http://cgroups.us-east-2.elasticbeanstalk.com/api/events?token=" + token;
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/groups";
+
 
         Log.e("url",url);
 
         RequestBody requestBody = new FormBody.Builder()
-                .add("name", newClub.name)
-                .add("description", newClub.description)
-                .add("isRequestToJoin", "true")
-                .add("Id", id)
+                .add("name", newGroup.name)
+                .add("description", newGroup.description)
                 .build();
 
         Request request = new Request.Builder()
                 .url(url)
                 .header("Authorization", "Bearer " + MainActivity.bearerToken)
-                .put(requestBody)
+                .post(requestBody)
                 .build();
 
         MainActivity.client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+               e.printStackTrace();
 
-                main.runOnUiThread(new Runnable() {
+               main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(main, "Fail", Toast.LENGTH_LONG).show();
                     }
-                });
+               });
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    ResponseBody responseBody = response.body();
+
 
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
@@ -128,9 +151,8 @@ public class EditClubFragment extends BaseFragment {
                         }
                     });
 
-                    //change to view detailed club for club just created when finished
-                    BrowseClubsFragment nextFrag = new BrowseClubsFragment();
-                    nextFrag.currId = newClub.groupId;
+
+                    BrowseGroupsFragment nextFrag = new BrowseGroupsFragment();
                     main.goToFragment(nextFrag);
 
                 } catch (IOException e) {
@@ -141,45 +163,8 @@ public class EditClubFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
-
-        FancyButton btnInput = (FancyButton) main.findViewById(R.id.btn_select);
-
-        btnInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
-                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
-
-                String clubName = inputName.getText().toString();
-                String clubDesc = inputDesc.getText().toString();
-
-                EditClubDto newClub = new EditClubDto();
-                newClub.name = clubName;
-                newClub.description = clubDesc;
-                newClub.isRequestToJoin = true;
-                newClub.groupId = 1;
-
-                View view2 = main.getCurrentFocus();
-                if (view2 != null){
-                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
-                }
-
-                sendClub(newClub);
-            }
-        });
-
-        FancyButton btnInput2 = (FancyButton) main.findViewById(R.id.btn_approve_member);
-
-        btnInput2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AcceptUsersFragment acceptUsers = new AcceptUsersFragment();
-                main.goToFragment(acceptUsers);
-            }
-        });
 
         //updateList();
     }
