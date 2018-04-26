@@ -3,6 +3,7 @@ package crimsonclubs.uacs.android.crimsonclubs;
 import android.app.DialogFragment;
 import android.app.DownloadManager;
 import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +53,9 @@ public class CreateEventFragment extends BaseFragment {
     private String mParam1;
     private String mParam2;
 
+    private String start;
+    private String finish;
+
     public ArrayList<ClubDto> objs = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
@@ -67,6 +71,18 @@ public class CreateEventFragment extends BaseFragment {
     public CreateEventFragment() {
         // Required empty public constructor
     }
+    /*
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        //newFragment.show(main.getSupportFragmentManager(), "timePicker");
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+    */
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +92,34 @@ public class CreateEventFragment extends BaseFragment {
 
         addClubsSpinner();
 
+        final DialogFragment newFragment = new TimePickerFragment();
+        final DialogFragment newDateFrag = new DatePickerFragment();
+        //newFragment.show(main.getSupportFragmentManager(), "timePicker");
+
         FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
+        final FancyButton btnStart = (FancyButton) view.findViewById(R.id.btnStartDate);
+        final FancyButton btnFinish = (FancyButton) view.findViewById(R.id.btnFinishDate);
+
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(view);
+
+                //start = btnStart.getText().toString();
+                //System.out.println(start);
+                //showTimePickerDialog(view);
+            }
+        });
+
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start = btnStart.getText().toString();
+                System.out.println(start);
+
+                showDatePickerDialog(view);
+            }
+        });
 
         // Inflate the layout for this fragment
         btnInput.setOnClickListener(new View.OnClickListener() {
@@ -84,13 +127,13 @@ public class CreateEventFragment extends BaseFragment {
             public void onClick(View view) {
                 final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
                 final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
-                final EditText inputStart = (EditText) getView().findViewById(R.id.inputStartDate);
-                final EditText inputFinish = (EditText) getView().findViewById(R.id.inputFinishDate);
+                //final EditText inputStart = (EditText) getView().findViewById(R.id.inputStartDate);
+                //final EditText inputFinish = (EditText) getView().findViewById(R.id.inputFinishDate);
 
                 String eventName = inputName.getText().toString();
                 String eventDesc = inputDesc.getText().toString();
-                String eventStart = inputStart.getText().toString();
-                String eventFinish = inputFinish.getText().toString();
+                //String eventStart = inputStart.getText().toString();
+                //String eventFinish = inputFinish.getText().toString();
                 String eventClub = String.valueOf(spinner.getSelectedItem());
 
                 ArrayList<Integer> clubs = new ArrayList<>();
@@ -102,8 +145,10 @@ public class CreateEventFragment extends BaseFragment {
                 AddEventDto newEvent = new AddEventDto();
                 newEvent.name = eventName;
                 newEvent.description = eventDesc;
-                newEvent.start = eventStart;
-                newEvent.finish = eventFinish;
+                System.out.println(start);
+                newEvent.start = start;
+
+                newEvent.finish = btnStart.getText().toString();
                 newEvent.clubId = clubId;
                 newEvent.isGroupEvent = true;
                 newEvent.clubIds = clubs;
@@ -251,15 +296,20 @@ public class CreateEventFragment extends BaseFragment {
 
         String cname = String.valueOf(newEvent.clubId);
 
+        System.out.println(start);
+        System.out.println(newEvent.finish);
+
         RequestBody requestBody = new FormBody.Builder()
                 .add("name", newEvent.name)
                 .add("description", newEvent.description)
-                .add("start", newEvent.start)
+                .add("start", start)
                 .add("finish", newEvent.finish)
                 .add("isGroupEvent", "true")
                 .add("clubId", cname)
                 .add("clubIds", "2")
                 .build();
+
+        System.out.println(requestBody.toString());
 
         Request request = new Request.Builder()
                 .url(url)
