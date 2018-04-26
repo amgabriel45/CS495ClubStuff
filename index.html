@@ -68,9 +68,9 @@
             <a href="http://cclubs.us-east-2.elasticbeanstalk.com/#" style="color: rgb(158,27,50); text-decoration:none">crimson clubs</a>
         </div>
         <div class="w3-display-topleft w3-container w3-xlarge">
-            <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('about').style.display='block'" class="w3-button w3-crimson">about</button></p>
-            <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('devliverables').style.display='block'" class="w3-button w3-crimson">deliverables</button></p>
-            <p style="color: rgb(158,27,50)"><button id="showVideo" class="w3-button w3-crimson">video</button></p>
+            <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('about').style.display='block'" class="w3-button w3-crimson">About</button></p>
+            <p style="color: rgb(158,27,50)"><button onclick="document.getElementById('deliverables').style.display='block'" class="w3-button w3-crimson">Deliverables</button></p>
+            <p style="color: rgb(158,27,50)"><button id="showVideo" class="w3-button w3-crimson">Video</button></p>
         </div>
     </div>
 
@@ -102,26 +102,29 @@
         </div>
     </div>
 
-    <div id="devliverables" class="w3-modal">
+    <div id="deliverables" class="w3-modal">
         <div class="w3-modal-content w3-animate-zoom">
             <div class="w3-container w3-black">
-                <span onclick="document.getElementById('devliverables').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
+                <span onclick="document.getElementById('deliverables').style.display='none'" class="w3-button w3-display-topright w3-large">x</span>
                 <h1 style="color: rgb(158,27,50)">Deliverables</h1>
             </div>
             <div class="w3-container">
-                <h3><a href="SharktankPP.pptx">Shark Tank Presentation</a></h3>
-                <h3><a href="RequirementsPP.pptx">Requirements Presentation</a></h3>
-                <h3><a href="DesignPP.pptx">Design Presentation</a></h3>
-                <h3><a href="FinalPP.pptx">Final Presentation</a></h3>
-                <h3><a href="ProjectReq.pdf" target="_blank">Requirements Document</a></h3>
-                <h3><a href="ProjectDesign.pdf" target="_blank">Design Document</a></h3>
+                <h3><a href="Presentations/PRS_SharkTank.pptx">Shark Tank Presentation</a></h3>
+                <h3><a href="Presentations/PRS-I_Requirements.pptx">(PRS-I) Requirements Presentation</a></h3>
+                <h3><a href="Presentations/PRS-II_Design.pptx">(PRS-II) Design Presentation</a></h3>
+                <h3><a href="Presentations/PRS-III_Implementation.pptx">(PRS-III) Implementation Presentation</a></h3>
+                <h3><a href="Document/ProjectReq.pdf" target="_blank">(P1) Requirements Document</a></h3>
+                <h3><a href="Document/ProjectDesign.pdf" target="_blank">(P2) Design Document</a></h3>
+                <h3><a href="https://github.com/mdlivingston/CS495ClubStuff" target="_blank">(P4) Code</a></h3>
+                <h3><a href="http://cclubs.us-east-2.elasticbeanstalk.com/#" target="_blank">(P4) Website</a></h3>
+                <h3><a href="CrimsonClubs.apk" target="_blank">(P4) .APK</a></h3>
             </div>
         </div>
     </div>
 
     <div id="vidBig" hidden>
         <video id="myVideo" width="800" height="700" class="center">
-            <source src="CrimsonClubsVideo.mp4" type="video/mp4">
+            <source src="PVIDEO.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
         </video>
     </div>
@@ -141,7 +144,7 @@
             <div class="w3-container">
                 <br>
                 <video id="myVideo" width="800" height="700" class="center">
-                    <source src="CrimsonClubsVideo.mp4" type="video/mp4">
+                    <source src="PVIDEO.mp4" type="video/mp4">
                     Your browser does not support HTML5 video.
                 </video>
                 <p style="color: rgb(158,27,50)"><button onclick="playVid()" class="w3-button w3-crimson">Play</button></p>
