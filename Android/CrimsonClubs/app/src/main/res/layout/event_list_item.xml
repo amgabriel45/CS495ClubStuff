@@ -24,18 +24,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--
-    <ImageView
-        android:id="@+id/isLocked"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+
+    <TextView
+        android:id="@+id/startTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
-        android:src="@drawable/lock"
-        android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/numMembers" />
-    -->
+        android:layout_marginBottom="8dp"
+
+        android:textSize="12sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_select" />
+
 
     <TextView
         android:id="@+id/description"

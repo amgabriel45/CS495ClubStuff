@@ -74,6 +74,9 @@ public class EventAdapter extends BaseAdapter implements Filterable{
             }
         });
 
+        tv = (TextView) row.findViewById(R.id.startTime);
+        tv.setText(targ.start);
+
 
         return row;
     }

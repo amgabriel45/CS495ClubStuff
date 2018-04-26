@@ -351,10 +351,20 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
 
+
+
         getAuthToken();
 
         refreshUserClubs();
 
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        BaseFragment f = new BaseFragment();
+        goToFragment(f);
     }
 
     public BaseFragment getCurrentFragment(){
