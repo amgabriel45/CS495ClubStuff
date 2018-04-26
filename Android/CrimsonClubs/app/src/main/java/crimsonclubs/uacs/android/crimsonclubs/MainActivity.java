@@ -117,17 +117,7 @@ public class MainActivity extends AppCompatActivity
 
                 if (!response.isSuccessful()) {
                     if (response.code() == 401) {
-                        MainActivity.this.runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            Toast.makeText(MainActivity.this,
-                                                                    "Authentication failed.",
-                                                                    Toast.LENGTH_LONG).show();
-
-                                                        }
-                                                    }
-
-                        );
+                        // do nothing
                     }
                     else{
                         MainActivity.this.runOnUiThread(new Runnable() {
@@ -298,39 +288,7 @@ public class MainActivity extends AppCompatActivity
             navDrawer.addItem(item);
         }
 
-        navDrawer.addItem( new SectionDrawerItem().withName("Calendar and Events").withDivider(true));
-
-        item = new SecondaryDrawerItem()
-                .withName("My Calendar")
-                .withIcon(R.drawable.calendar)
-                .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new BaseFragment()))
-                .withSelectedBackgroundAnimated(false);
-
-        navDrawer.addItem(item);
-
-        BrowseEventsFragment e = new BrowseEventsFragment();
-        e.clubId = -1; //set to get all club events
-
-        item = new SecondaryDrawerItem()
-                .withName("Browse Events")
-                .withIcon(R.drawable.ic_info_black_24dp)
-                .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(e))
-                .withSelectedBackgroundAnimated(false);
-
-        navDrawer.addItem(item);
-
-        item = new SecondaryDrawerItem()
-                .withName("Create an Event")
-                .withIcon(android.R.drawable.ic_menu_add)
-                .withIdentifier(1)
-                .withOnDrawerItemClickListener(listener(new CreateEventFragment()))
-                .withSelectedBackgroundAnimated(false);
-
-        navDrawer.addItem(item);
-
-        navDrawer.addItem( new SectionDrawerItem().withName("Clubs").withDivider(true));
+        navDrawer.addItem( new SectionDrawerItem().withName("Organizations").withDivider(true));
 
 
 
@@ -360,6 +318,32 @@ public class MainActivity extends AppCompatActivity
                 .withSelectedBackgroundAnimated(false);
 
         navDrawer.addItem(item);
+
+        navDrawer.addItem( new SectionDrawerItem().withName("Events").withDivider(true));
+
+        BrowseEventsFragment e = new BrowseEventsFragment();
+        e.clubId = -1; //set to get all club events
+
+        item = new SecondaryDrawerItem()
+                .withName("My Upcoming Events")
+                .withIcon(R.drawable.calendar)
+                .withIdentifier(1)
+                .withOnDrawerItemClickListener(listener(e))
+                .withSelectedBackgroundAnimated(false);
+
+        navDrawer.addItem(item);
+
+
+        item = new SecondaryDrawerItem()
+                .withName("Create an Event")
+                .withIcon(android.R.drawable.ic_menu_add)
+                .withIdentifier(1)
+                .withOnDrawerItemClickListener(listener(new CreateEventFragment()))
+                .withSelectedBackgroundAnimated(false);
+
+        navDrawer.addItem(item);
+
+
     }
 
     @Override

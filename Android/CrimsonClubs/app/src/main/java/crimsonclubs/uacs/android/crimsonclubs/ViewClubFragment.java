@@ -191,12 +191,13 @@ public class ViewClubFragment extends BaseFragment {
                                                                        public void onClick(View view) {
                                                                            Bundle bundle = new Bundle();
                                                                            bundle.putInt("id",currClub.id);
+                                                                           bundle.putBoolean("isRequestToJoin",currClub.isRequestToJoin);
+                                                                           bundle.putString("name",currClub.name);
+                                                                           bundle.putString("desc",currClub.description);
+                                                                           bundle.putInt("groupId",currClub.groupId);
                                                                            EditClubFragment editClub = new EditClubFragment();
                                                                            editClub.setArguments(bundle);
 
-                                                                           //AcceptUsersFragment a = new AcceptUsersFragment();
-                                                                           //a.currId= currId;
-                                                                           //main.goToFragment(a);
 
                                                                            main.goToFragment(editClub);
                                                                        }

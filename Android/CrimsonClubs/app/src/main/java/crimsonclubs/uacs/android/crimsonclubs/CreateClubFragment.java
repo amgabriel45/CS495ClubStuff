@@ -44,7 +44,7 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
     private static final String ARG_PARAM2 = "param2";
 
     private Spinner spinner;
-    public ArrayList<GroupDto> groupList = new ArrayList<GroupDto>();
+    public ArrayList<GroupDto> groupList = new ArrayList<>();
     //public List<GroupDto> groupList = new ArrayList<GroupDto>();
 
     // TODO: Rename and change types of parameters
@@ -73,47 +73,7 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_club, container, false);
 
-        //Add items to spinner dropdown
-        addItemsSpinner();
 
-        FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
-
-        btnInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
-                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
-                spinner = (Spinner) main.findViewById(R.id.group_spinner);
-                CheckBox check1 = (CheckBox) main.findViewById(R.id.checkPrivate);
-
-                String clubName = inputName.getText().toString();
-                String clubDesc = inputDesc.getText().toString();
-                String groupName = String.valueOf(spinner.getSelectedItem());
-                //System.out.println(groupName);
-
-                //This could be -1 do errors
-                int groupId = getGroupId(groupName);
-
-                AddClubDto newClub = new AddClubDto();
-                newClub.name = clubName;
-                newClub.description = clubDesc;
-
-                if(check1.isChecked())
-                    newClub.isRequestToJoin = true;
-                else
-                    newClub.isRequestToJoin = false;
-
-                newClub.groupId = groupId;
-
-                View view2 = main.getCurrentFocus();
-                if (view2 != null){
-                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
-                }
-
-                sendClub(newClub);
-            }
-        });
 
         return view;
     }
@@ -308,6 +268,48 @@ public class CreateClubFragment extends BaseFragment implements AdapterView.OnIt
     @Override
     public void onResume(){
         super.onResume();
+
+        //Add items to spinner dropdown
+        addItemsSpinner();
+
+        FancyButton btnInput = (FancyButton) main.findViewById(R.id.btn_select);
+
+        btnInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
+                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
+                spinner = (Spinner) main.findViewById(R.id.group_spinner);
+                CheckBox check1 = (CheckBox) main.findViewById(R.id.checkPrivate);
+
+                String clubName = inputName.getText().toString();
+                String clubDesc = inputDesc.getText().toString();
+                String groupName = String.valueOf(spinner.getSelectedItem());
+                //System.out.println(groupName);
+
+                //This could be -1 do errors
+                int groupId = getGroupId(groupName);
+
+                AddClubDto newClub = new AddClubDto();
+                newClub.name = clubName;
+                newClub.description = clubDesc;
+
+                if(check1.isChecked())
+                    newClub.isRequestToJoin = true;
+                else
+                    newClub.isRequestToJoin = false;
+
+                newClub.groupId = groupId;
+
+                View view2 = main.getCurrentFocus();
+                if (view2 != null){
+                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+                }
+
+                sendClub(newClub);
+            }
+        });
 
         //updateList();
     }

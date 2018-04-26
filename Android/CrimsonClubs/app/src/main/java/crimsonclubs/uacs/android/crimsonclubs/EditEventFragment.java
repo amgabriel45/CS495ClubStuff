@@ -74,45 +74,7 @@ public class EditEventFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_event, container, false);
-        FancyButton btnInput = (FancyButton) view.findViewById(R.id.btn_select);
 
-        // Inflate the layout for this fragment
-        btnInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
-                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
-                final EditText inputStart = (EditText) getView().findViewById(R.id.inputStartDate);
-                final EditText inputFinish = (EditText) getView().findViewById(R.id.inputFinishDate);
-
-                String eventName = inputName.getText().toString();
-                String eventDesc = inputDesc.getText().toString();
-                String eventStart = inputStart.getText().toString();
-                String eventFinish = inputFinish.getText().toString();
-
-                ArrayList<Integer> clubs = new ArrayList<>();
-                clubs.add(1);
-                clubs.add(2);
-
-                EditEventDto newEvent = new EditEventDto();
-                newEvent.name = eventName;
-                newEvent.description = eventDesc;
-                newEvent.start = eventStart;
-                newEvent.finish = eventFinish;
-                newEvent.clubId = 1;
-                newEvent.isGroupEvent = true;
-                newEvent.clubIds = clubs;
-
-                View view2 = main.getCurrentFocus();
-                if (view2 != null) {
-                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
-                }
-
-                //Pass to Database
-                sendEvent(newEvent);
-            }
-        });
 
         return view;
     }
@@ -237,51 +199,142 @@ public class EditEventFragment extends BaseFragment {
     public void onResume(){
         super.onResume();
 
+        FancyButton btnInput = (FancyButton) main.findViewById(R.id.btn_select);
+
+        // Inflate the layout for this fragment
+        btnInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText inputName = (EditText) getView().findViewById(R.id.inputName);
+                final EditText inputDesc = (EditText) getView().findViewById(R.id.inputDesc);
+                final EditText inputStart = (EditText) getView().findViewById(R.id.inputStartDate);
+                final EditText inputFinish = (EditText) getView().findViewById(R.id.inputFinishDate);
+
+                String eventName = inputName.getText().toString();
+                String eventDesc = inputDesc.getText().toString();
+                String eventStart = inputStart.getText().toString();
+                String eventFinish = inputFinish.getText().toString();
+
+                ArrayList<Integer> clubs = new ArrayList<>();
+                clubs.add(1);
+                clubs.add(2);
+
+                EditEventDto newEvent = new EditEventDto();
+                newEvent.name = eventName;
+                newEvent.description = eventDesc;
+                newEvent.start = eventStart;
+                newEvent.finish = eventFinish;
+                newEvent.clubId = 1;
+                newEvent.isGroupEvent = true;
+                newEvent.clubIds = clubs;
+
+                View view2 = main.getCurrentFocus();
+                if (view2 != null) {
+                    InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+                }
+
+                //Pass to Database
+                sendEvent(newEvent);
+            }
+        });
+
+
+
+        FancyButton del = (FancyButton) main.findViewById(R.id.btn_delete);
+
+        final int eventId = getArguments().getInt("id");
+
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteEvent(eventId);
+            }
+        });
         //updateList();
     }
 
-    /*
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-    */
+    public void deleteEvent(int eventId){
+        final Gson gson = new GsonBuilder().serializeNulls().create();
 
-    /*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-    */
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/events/" + eventId ;
 
-    /*
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-    */
+        RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .delete()
+                .build();
+
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                main.runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           Toast.makeText(main,
+                                                   "Remote server could not be reached. "
+                                                   ,Toast.LENGTH_LONG).show();
+                                       }
+                                   }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "Authentication failed.",
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                    else{
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "An unspecified networking error has occurred\n" +
+                                                                   "Error Code: " + response.code(),
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                }
+                else {
+
+                    // Run view-related code back on the main thread
+                    main.runOnUiThread(new Runnable() {
+                                           @Override
+                                           public void run() {
+
+                                               Toast.makeText(main, "Successfully deleted event", Toast.LENGTH_SHORT).show();
+
+                                               BrowseEventsFragment f = new BrowseEventsFragment();
+
+                                               main.goToFragment(f);
+
+                                           }
+                                       }
+                    );
+                }
+            }
+
+        });
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -144,6 +145,17 @@ public class ViewEventFragment extends BaseFragment {
                                     main.goToFragment(editEvent);
                                 }
                             });
+
+
+                            ClubAdapter adapter = new ClubAdapter(currEvent.clubs, (MainActivity) main);
+                            ListView mListView = (ListView) main.findViewById(R.id.clubsList);
+
+                            //lv.setOnItemClickListener( infoItemClickListener());
+
+                            mListView.setAdapter(adapter);
+
+
+                            adapter.notifyDataSetChanged();
 
                         }
                     });

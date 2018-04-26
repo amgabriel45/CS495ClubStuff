@@ -4,6 +4,7 @@ package crimsonclubs.uacs.android.crimsonclubs;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,7 +149,7 @@ public class AcceptUsersFragment extends BaseFragment implements SearchView.OnQu
                         ArrayList<JoinRequestDto> temp = new ArrayList<JoinRequestDto>();
 
                         String body = response.body().string();
-
+                        Log.e("users",body);
 
                         try {
                             temp = new ArrayList<JoinRequestDto>(Arrays.asList(gson.fromJson(body, JoinRequestDto[].class)));

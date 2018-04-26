@@ -78,7 +78,8 @@ public class EditClubFragment extends BaseFragment {
 
 
     public void sendClub(final EditClubDto newClub) {
-        String id = this.getArguments().getString("id");
+
+        int id = this.getArguments().getInt("id");
         String token;
         token = main.getIntent().getStringExtra("bearerToken");
         Log.e("token=",token);
@@ -89,11 +90,13 @@ public class EditClubFragment extends BaseFragment {
 
         Log.e("url",url);
 
+
+
         RequestBody requestBody = new FormBody.Builder()
-                .add("name", newClub.name)
-                .add("description", newClub.description)
-                .add("isRequestToJoin", "true")
-                .add("Id", id)
+                .add("name", (newClub.name.length() == 0 ? this.getArguments().getString("name") : newClub.name))
+                .add("description", (newClub.description.length() == 0 ? this.getArguments().getString("desc") : newClub.description))
+                .add("isRequestToJoin", Boolean.toString(this.getArguments().getBoolean("isRequestToJoin")))
+                .add("id", Integer.toString(id))
                 .build();
 
         Request request = new Request.Builder()
@@ -181,51 +184,105 @@ public class EditClubFragment extends BaseFragment {
             }
         });
 
-        //updateList();
+        FancyButton btnInput3 = (FancyButton) main.findViewById(R.id.btn_delete);
+
+        final int clubId = getArguments().getInt("id");
+
+        btnInput3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteClub(clubId);
+            }
+        });
+
     }
 
-    /*
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-    */
+    public void deleteClub(int clubId){
+        final Gson gson = new GsonBuilder().serializeNulls().create();
 
-    /*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-    */
+        String url = "http://cclubs.us-east-2.elasticbeanstalk.com/api/clubs/" + clubId ;
 
-    /*
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-    */
+        RequestBody body = RequestBody.create(null, new byte[]{}); // empty POST request
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + MainActivity.bearerToken)
+                .delete()
+                .build();
+
+
+        MainActivity.client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                main.runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           Toast.makeText(main,
+                                                   "Remote server could not be reached. "
+                                                   ,Toast.LENGTH_LONG).show();
+                                       }
+                                   }
+
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    if (response.code() == 401) {
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "Authentication failed.",
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                    else{
+                        main.runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   Toast.makeText(main,
+                                                           "An unspecified networking error has occurred\n" +
+                                                                   "Error Code: " + response.code(),
+                                                           Toast.LENGTH_LONG).show();
+
+                                               }
+                                           }
+
+                        );
+                    }
+                }
+                else {
+
+                    // Run view-related code back on the main thread
+                    main.runOnUiThread(new Runnable() {
+                                           @Override
+                                           public void run() {
+
+                                               Toast.makeText(main, "Successfully deleted club", Toast.LENGTH_SHORT).show();
+                                               main.refreshUserClubs();
+
+                                               BrowseClubsFragment f = new BrowseClubsFragment();
+                                               f.currId = getArguments().getInt("groupId");
+
+                                               main.goToFragment(f);
+
+                                           }
+                                       }
+                    );
+                }
+            }
+
+        });
     }
+
+
+
 }
