@@ -32,17 +32,18 @@ namespace CrimsonClubs.Models.Dtos
 
             e.MM_Club_Event.Add(relation);
 
-            if(ClubIds == null)
-            {
-                return e;
-            }
-            foreach (var id in ClubIds)
-            {
-                relation = new MM_Club_Event();
-                relation.ClubId = id;
+            // Front ends do not support yet
+            //if(ClubIds == null)
+            //{
+            //    return e;
+            //}
+            //foreach (var id in ClubIds)
+            //{
+            //    relation = new MM_Club_Event();
+            //    relation.ClubId = id;
 
-                e.MM_Club_Event.Add(relation);
-            }
+            //    e.MM_Club_Event.Add(relation);
+            //}
 
             return e;
         }
